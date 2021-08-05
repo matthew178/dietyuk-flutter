@@ -10,7 +10,9 @@ class Transaksibelipaket {
       keterangan,
       durasi,
       totalharga,
-      status;
+      status,
+      namapaket,
+      namakonsultan;
 
   Transaksibelipaket(
       this.id,
@@ -22,5 +24,7 @@ class Transaksibelipaket {
       this.keterangan,
       this.durasi,
       this.totalharga,
-      this.status);
+      this.status,
+      this.namapaket,
+      this.namakonsultan);
 }

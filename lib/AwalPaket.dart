@@ -1,3 +1,4 @@
+import 'package:dietyuk/ClassPerkembangan.dart';
 import 'package:dietyuk/JadwalHarian.dart';
 
 import 'session.dart' as session;
@@ -26,6 +27,7 @@ class AwalPaketState extends State<AwalPaket> {
   String id, paket;
   List<DetailBeli> detail = new List();
   List<DetailBeli> tempDetail = new List();
+  List<ClassPerkembangan> arrLaporan = new List();
   int durasi = 5;
 
   AwalPaketState(this.id, this.paket);
@@ -35,6 +37,36 @@ class AwalPaketState extends State<AwalPaket> {
     super.initState();
     getPaket();
     getDetail();
+    getLaporan();
+  }
+
+  Future<List<ClassPerkembangan>> getLaporan() async {
+    List<ClassPerkembangan> tempLaporan = List();
+    Map paramData = {'idbeli': id};
+    var parameter = json.encode(paramData);
+    ClassPerkembangan databaru = new ClassPerkembangan(
+        "id", "idbeli", "username", "berat", "status", "harike");
+    http
+        .post(session.ipnumber + "/getlaporanperkembangan",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      var data = json.decode(res.body);
+      data = data[0]['laporan'];
+      for (int i = 0; i < data.length; i++) {
+        databaru = ClassPerkembangan(
+            data[0]['id'].toString(),
+            data[0]['idbeli'].toString(),
+            data[0]['username'].toString(),
+            data[0]['berat'].toString(),
+            data[0]['status'].toString(),
+            data[0]['harike'].toString());
+        tempLaporan.add(databaru);
+      }
+      setState(() => this.arrLaporan = tempLaporan);
+      return tempLaporan;
+    }).catchError((err) {
+      print(err);
+    });
   }
 
   Future<List<DetailBeli>> getDetail() async {
@@ -49,16 +81,14 @@ class AwalPaketState extends State<AwalPaket> {
         .then((res) {
       var data = json.decode(res.body);
       data = data[0]['detail'];
-      print("res.body = " + res.body);
       for (int i = 0; i < data.length; i++) {
-        week = ((int.parse(data[i]['hari'].toString()) - 1) / 7).toInt() + 1;
+        week = ((int.parse(data[i]['hari'].toString()) - 1) ~/ 7).toInt() + 1;
         databaru = DetailBeli("0", data[i]['hari'].toString(),
             data[i]['tanggal'].toString(), week.toString());
         arrDetail.add(databaru);
       }
       setState(() => this.detail = arrDetail);
       sesuaikanHari(1);
-      print("detail length = " + arrDetail.length.toString());
       return arrDetail;
     }).catchError((err) {
       print(err);
@@ -76,7 +106,6 @@ class AwalPaketState extends State<AwalPaket> {
       }
     }
     setState(() => this.tempDetail = tempDetail);
-    print(tempDetail.length.toString() + " data");
     return tempDetail;
   }
 
@@ -112,14 +141,11 @@ class AwalPaketState extends State<AwalPaket> {
           data[0]['deskripsi'].toString(),
           data[0]['gambar'].toString());
       if (int.parse(data[0]['durasi'].toString()) % 7 == 0) {
-        // durasi = (int.parse(data[0]['durasi'].toString()) / 7).toInt();
         durasi = int.parse(data[0]['durasi'].toString()) ~/ 7;
       } else {
-        // durasi = (int.parse(data[0]['durasi'].toString()) / 7).toInt() + 1;
         durasi = int.parse(data[0]['durasi'].toString()) ~/ 7 + 1;
       }
       setState(() => this.paketsekarang = arrPaket);
-      print("durasi = " + durasi.toString());
       return arrPaket;
     }).catchError((err) {
       print(err);

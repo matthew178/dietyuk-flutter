@@ -1,4 +1,5 @@
 import 'package:dietyuk/AwalPaket.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import 'session.dart' as session;
@@ -51,7 +52,9 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
             data[i]['keterangan'].toString(),
             data[i]['durasi'].toString(),
             data[i]['totalharga'].toString(),
-            data[i]['status'].toString());
+            data[i]['status'].toString(),
+            data[i]['nama_paket'].toString(),
+            data[i]['nama'].toString());
         arrTrans.add(databaru);
       }
       setState(() => this.arrTransaksi = arrTrans);
@@ -82,7 +85,9 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
             data[i]['keterangan'].toString(),
             data[i]['durasi'].toString(),
             data[i]['totalharga'].toString(),
-            data[i]['status'].toString());
+            data[i]['status'].toString(),
+            data[i]['nama_paket'].toString(),
+            data[i]['nama'].toString());
         arrTrans.add(databaru);
       }
       setState(() => this.onProses = arrTrans);
@@ -113,7 +118,9 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
             data[i]['keterangan'].toString(),
             data[i]['durasi'].toString(),
             data[i]['totalharga'].toString(),
-            data[i]['status'].toString());
+            data[i]['status'].toString(),
+            data[i]['nama_paket'].toString(),
+            data[i]['nama'].toString());
         arrTrans.add(databaru);
       }
       setState(() => this.selesai = arrTrans);
@@ -144,7 +151,9 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
             data[i]['keterangan'].toString(),
             data[i]['durasi'].toString(),
             data[i]['totalharga'].toString(),
-            data[i]['status'].toString());
+            data[i]['status'].toString(),
+            data[i]['nama_paket'].toString(),
+            data[i]['nama'].toString());
         arrTrans.add(databaru);
       }
       setState(() => this.batal = arrTrans);
@@ -246,7 +255,14 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                           ? Container(
                                               child: Row(
                                                 children: [
-                                                  SizedBox(width: 75),
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 10, 0, 10),
+                                                    child: Image.asset(
+                                                        'assets/images/waiting.png'),
+                                                  ),
+                                                  SizedBox(width: 30),
                                                   Container(
                                                     child: RaisedButton(
                                                       shape:
@@ -285,11 +301,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                                                 .circular(2),
                                                       ),
                                                       onPressed: () {
-                                                        aktivasiPaket(
-                                                            arrTransaksi[index]
-                                                                .id,
-                                                            arrTransaksi[index]
-                                                                .idpaket);
+                                                        print("batal");
                                                       },
                                                       color: Colors
                                                           .lightBlueAccent,
@@ -367,11 +379,48 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                                     onProses[index].idpaket)));
                                   },
                                   child: Card(
-                                      child: Column(
+                                      child: Row(
                                     children: [
                                       Container(
-                                        child: Text(
-                                            "Paket " + onProses[index].idpaket),
+                                          padding: EdgeInsets.fromLTRB(
+                                              10, 10, 0, 10),
+                                          child: Image.asset(
+                                              'assets/images/progress.png')),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      Container(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                child: Text(
+                                              onProses[index].namapaket,
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
+                                            )),
+                                            Container(
+                                                child: Text(onProses[index]
+                                                    .namakonsultan))
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(width: 50),
+                                      Container(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                child: Text(
+                                              "Tanggal Selesai",
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                              ),
+                                            )),
+                                            Container(
+                                                child: Text(onProses[index]
+                                                    .tanggalselesai))
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   )));
@@ -390,11 +439,31 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                               return GestureDetector(
                                   onTap: () {},
                                   child: Card(
-                                      child: Column(
+                                      child: Row(
                                     children: [
                                       Container(
-                                        child: Text(
-                                            "Paket " + selesai[index].idpaket),
+                                          padding: EdgeInsets.fromLTRB(
+                                              10, 10, 0, 10),
+                                          child: Image.asset(
+                                              'assets/images/done.png')),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      Container(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                child: Text(
+                                              selesai[index].namapaket,
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
+                                            )),
+                                            Container(
+                                                child: Text(selesai[index]
+                                                    .namakonsultan))
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   )));
@@ -413,11 +482,31 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                               return GestureDetector(
                                   onTap: () {},
                                   child: Card(
-                                      child: Column(
+                                      child: Row(
                                     children: [
                                       Container(
-                                        child: Text(
-                                            "Paket " + batal[index].idpaket),
+                                          padding: EdgeInsets.fromLTRB(
+                                              10, 10, 0, 10),
+                                          child: Image.asset(
+                                              'assets/images/cancel.png')),
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+                                      Container(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                child: Text(
+                                              batal[index].namapaket,
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
+                                            )),
+                                            Container(
+                                                child: Text(
+                                                    batal[index].namakonsultan))
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   )));

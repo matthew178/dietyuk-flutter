@@ -77,6 +77,10 @@ flutter:
     - assets/images/header.png
     - assets/images/report.png
     - assets/images/gambarproduk.jpg
+    - assets/images/cancel.png
+    - assets/images/done.png
+    - assets/images/progress.png
+    - assets/images/waiting.png
 
 
 
