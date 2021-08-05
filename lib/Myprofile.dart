@@ -1,0 +1,447 @@
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'session.dart' as session;
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+import 'ClassUser.dart';
+import 'package:imagebutton/imagebutton.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+class Myprofile extends StatefulWidget {
+  @override
+  MyprofileState createState() => MyprofileState();
+}
+
+class MyprofileState extends State<Myprofile> {
+  String foto = session.ipnumber + "/gambar/wanita.png";
+  ClassUser userprofile = new ClassUser(
+      "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+
+  void initState() {
+    super.initState();
+    getProfile();
+  }
+
+  Future<ClassUser> getProfile() async {
+    ClassUser userlog = new ClassUser(
+        "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+    Map paramData = {'id': session.userlogin};
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/getprofile",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      print(res.body);
+      var data = json.decode(res.body);
+      data = data[0]['profile'];
+      userlog = ClassUser(
+          data[0]["id"].toString(),
+          data[0]["username"].toString(),
+          data[0]["email"].toString(),
+          data[0]["password"].toString(),
+          data[0]["nama"].toString(),
+          data[0]["jeniskelamin"].toString(),
+          data[0]["nomorhp"].toString(),
+          data[0]["tanggallahir"].toString(),
+          data[0]["berat"].toString(),
+          data[0]["tinggi"].toString(),
+          data[0]["role"].toString(),
+          data[0]["saldo"].toString(),
+          data[0]["rating"].toString(),
+          data[0]["status"].toString(),
+          data[0]["foto"].toString());
+      setState(() => this.userprofile = userlog);
+      print("foto : " + userprofile.foto);
+      if (userprofile.jeniskelamin == "pria" && userprofile.foto == "pria.png")
+        foto = session.ipnumber + "/gambar/pria.jpg";
+      else if (userprofile.jeniskelamin == "wanita" &&
+          userprofile.foto == "wanita.png")
+        foto = session.ipnumber + "/gambar/wanita.png";
+      else
+        foto = session.ipnumber + "/gambar/" + userprofile.foto;
+      return userlog;
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+  Widget cetakbintang(x, y) {
+    if (x <= y) {
+      return Image.asset("assets/images/bfull.png",
+          width: 20, height: 20, fit: BoxFit.cover);
+    } else if (x > y && x < y + 1) {
+      return Image.asset("assets/images/bstengah.png",
+          width: 20, height: 20, fit: BoxFit.cover);
+    } else {
+      return Image.asset("assets/images/bkosong.png",
+          width: 20, height: 20, fit: BoxFit.cover);
+    }
+  }
+
+  void evtLogout() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.remove("user");
+    pref.remove("role");
+    session.Cart.clear();
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     title: Text("Profile Page"),
+    //     backgroundColor: session.warna,
+    //   ),
+    //   body: Center(
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.start,
+    //       children: <Widget>[
+    //         SizedBox(height: 50),
+    //         ClipRRect(
+    //           borderRadius: BorderRadius.circular(100.0),
+    //           child: Image.network(
+    //             this.foto,
+    //             width: 150,
+    //             height: 150,
+    //             fit: BoxFit.cover,
+    //           ),
+    //         ),
+    //         Container(
+    //           padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
+    //           child: Center(
+    //               child: Text(
+    //             "@" + userprofile.username,
+    //             style: TextStyle(color: Colors.grey, fontSize: 15),
+    //           )),
+    //         ),
+    //         Container(
+    //           padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
+    //           child: Center(
+    //               child: Text(
+    //             userprofile.nama,
+    //             style: TextStyle(fontSize: 20),
+    //           )),
+    //         ),
+    //         Container(
+    //           padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
+    //           child: Center(
+    //             child: Row(
+    //               mainAxisAlignment: MainAxisAlignment.center,
+    //               children: [
+    //                 cetakbintang(1, double.parse(userprofile.rating)),
+    //                 cetakbintang(2, double.parse(userprofile.rating)),
+    //                 cetakbintang(3, double.parse(userprofile.rating)),
+    //                 cetakbintang(4, double.parse(userprofile.rating)),
+    //                 cetakbintang(5, double.parse(userprofile.rating))
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //         Container(
+    //           padding: EdgeInsets.fromLTRB(20, 30, 10, 30),
+    //           margin: EdgeInsets.all(15.0),
+    //           decoration:
+    //               BoxDecoration(border: Border.all(color: Colors.black)),
+    //           child: Row(
+    //             children: [
+    //               Expanded(
+    //                 flex: 1,
+    //                 child: Column(
+    //                   children: [
+    //                     Container(
+    //                       padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+    //                       child: Center(
+    //                         child: Text("Berat",
+    //                             style: TextStyle(
+    //                                 color: Colors.grey, fontSize: 15)),
+    //                       ),
+    //                     ),
+    //                     Container(
+    //                       child: Center(
+    //                         child: Text(userprofile.berat + " kg",
+    //                             style: TextStyle(
+    //                                 color: Colors.black, fontSize: 20)),
+    //                       ),
+    //                     )
+    //                   ],
+    //                 ),
+    //               ),
+    //               Expanded(
+    //                 flex: 1,
+    //                 child: Column(
+    //                   children: [
+    //                     Container(
+    //                       padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+    //                       child: Center(
+    //                         child: Text("Tinggi",
+    //                             style: TextStyle(
+    //                                 color: Colors.grey, fontSize: 15)),
+    //                       ),
+    //                     ),
+    //                     Container(
+    //                       child: Center(
+    //                         child: Text(userprofile.tinggi + " cm",
+    //                             style: TextStyle(
+    //                                 color: Colors.black, fontSize: 20)),
+    //                       ),
+    //                     )
+    //                   ],
+    //                 ),
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //         Container(
+    //           padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
+    //           child: Center(
+    //               child: Text(
+    //             "Rp. " + userprofile.saldo,
+    //             style: TextStyle(color: Colors.black, fontSize: 20),
+    //           )),
+    //         ),
+    //         Container(
+    //           padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
+    //           child: Center(
+    //             child: Row(
+    //               mainAxisAlignment: MainAxisAlignment.center,
+    //               children: [
+    //                 IconButton(
+    //                   icon: Image.asset('assets/images/edit.png'),
+    //                   iconSize: 50,
+    //                   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+    //                   onPressed: () {
+    //                     Navigator.pushNamed(context, "/editprofile");
+    //                   },
+    //                 ),
+    //                 IconButton(
+    //                   icon: Image.asset('assets/images/saldo.png'),
+    //                   iconSize: 50,
+    //                   padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
+    //                   onPressed: () {
+    //                     Navigator.pushNamed(context, "/saldo");
+    //                   },
+    //                 ),
+    //                 IconButton(
+    //                   icon: Image.asset('assets/images/withdraw.png'),
+    //                   iconSize: 50,
+    //                   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+    //                   onPressed: () {},
+    //                 )
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [
+                    Color.fromRGBO(128, 101, 22, 1),
+                    Color.fromRGBO(235, 185, 52, 1),
+                  ],
+                      begin: FractionalOffset.bottomCenter,
+                      end: FractionalOffset.topCenter)),
+            ),
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 34),
+                  child: Column(
+                    children: [
+                      // Text(
+                      //   "My\nProfile",
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //       color: Colors.white,
+                      //       fontSize: 30,
+                      //       // fontWeight: FontWeight.bold,
+                      //       fontFamily: 'Nisebuschgardens'),
+                      // ),
+                      // SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(
+                            AntDesign.arrowleft,
+                            color: Colors.white,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              evtLogout();
+                            },
+                            icon: Icon(
+                              AntDesign.logout,
+                              color: Colors.white,
+                            ),
+                          ),
+                          // Icon(
+                          //   AntDesign.logout,
+                          //   color: Colors.white,
+                          // ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: size.height * 0.45,
+                        child: LayoutBuilder(builder: (context, constraints) {
+                          double innerHeight = constraints.maxHeight;
+                          double innerWidth = constraints.maxWidth;
+                          return Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Container(
+                                  height: innerHeight * 0.75,
+                                  width: innerWidth,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.white),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 80),
+                                      Text(
+                                        userprofile.nama,
+                                        style: TextStyle(
+                                            color:
+                                                Color.fromRGBO(128, 101, 22, 1),
+                                            fontSize: 20),
+                                      ),
+                                      Container(
+                                        padding:
+                                            EdgeInsets.fromLTRB(20, 10, 10, 0),
+                                        child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              cetakbintang(
+                                                  1,
+                                                  double.parse(
+                                                      userprofile.rating)),
+                                              cetakbintang(
+                                                  2,
+                                                  double.parse(
+                                                      userprofile.rating)),
+                                              cetakbintang(
+                                                  3,
+                                                  double.parse(
+                                                      userprofile.rating)),
+                                              cetakbintang(
+                                                  4,
+                                                  double.parse(
+                                                      userprofile.rating)),
+                                              cetakbintang(
+                                                  5,
+                                                  double.parse(
+                                                      userprofile.rating))
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Tinggi',
+                                                style: TextStyle(
+                                                    color: Colors.grey[500],
+                                                    fontSize: 15),
+                                              ),
+                                              Text(
+                                                userprofile.tinggi + " cm",
+                                                style: TextStyle(
+                                                    color: Color.fromRGBO(
+                                                        128, 101, 22, 1),
+                                                    fontSize: 20),
+                                              )
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 8),
+                                            child: Container(
+                                              height: 50,
+                                              width: 5,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100),
+                                                  color: Colors.grey),
+                                            ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Berat',
+                                                style: TextStyle(
+                                                    color: Colors.grey[500],
+                                                    fontSize: 15),
+                                              ),
+                                              Text(
+                                                userprofile.berat + " kg",
+                                                style: TextStyle(
+                                                    color: Color.fromRGBO(
+                                                        128, 101, 22, 1),
+                                                    fontSize: 20),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: Center(
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(100.0),
+                                      child: Image.network(
+                                        this.foto,
+                                        width: 150,
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )),
+                            ],
+                          );
+                        }),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ));
+  }
+}
