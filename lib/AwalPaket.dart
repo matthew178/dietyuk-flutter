@@ -25,7 +25,7 @@ class AwalPaketState extends State<AwalPaket> {
   ClassPaket paketsekarang = new ClassPaket("id", "estimasi", "0", "durasi",
       "status", "", "konsultan", "namapaket1", "deskripsi", "default.jpg");
   String id, paket;
-  List<DetailBeli> detail = new List();
+  // List<DetailBeli> detail = new List();
   // List<DetailBeli> tempDetail = new List();
   // List<ClassPerkembangan> arrLaporan = new List();
   List<ClassAwalPaket> arrAwal = new List();
@@ -73,6 +73,7 @@ class AwalPaketState extends State<AwalPaket> {
   Future<List<ClassAwalPaket>> getLaporan() async {
     Map paramData = {'idbeli': id};
     var parameter = json.encode(paramData);
+    int week = 0;
     ClassAwalPaket databaru =
         new ClassAwalPaket("id", "idbeli", "username", "berat", "status");
     http
@@ -82,8 +83,9 @@ class AwalPaketState extends State<AwalPaket> {
       var data = json.decode(res.body);
       data = data[0]['laporan'];
       for (int i = 0; i < data.length; i++) {
+        week = ((int.parse(data[i]['harike'].toString()) - 1) ~/ 7).toInt() + 1;
         databaru = ClassAwalPaket(
-            "0", data[i]['harike'].toString(), "0", "0", "laporan");
+            "0", data[i]['harike'].toString(), "0", week.toString(), "laporan");
         databaru.setberat(data[i]['berat'].toString());
         databaru.setidbeli(data[i]['idbeli'].toString());
 
@@ -149,18 +151,38 @@ class AwalPaketState extends State<AwalPaket> {
     });
   }
 
-  Future<List<DetailBeli>> sesuaikanHari(int week) async {
-    List<DetailBeli> tempDetail = new List();
-    DetailBeli databaru = new DetailBeli("id", "id_paket", "hari", "waktu");
-    for (int i = 0; i < detail.length; i++) {
-      if (detail[i].week == week.toString()) {
-        databaru = DetailBeli(
-            detail[i].id, detail[i].hari, detail[i].tanggal, detail[i].week);
+  // Future<List<DetailBeli>> sesuaikanHari(int week) async {
+  //   List<DetailBeli> tempDetail = new List();
+  //   DetailBeli databaru = new DetailBeli("id", "id_paket", "hari", "waktu");
+  //   for (int i = 0; i < detail.length; i++) {
+  //     if (detail[i].week == week.toString()) {
+  //       databaru = DetailBeli(
+  //           detail[i].id, detail[i].hari, detail[i].tanggal, detail[i].week);
+  //       tempDetail.add(databaru);
+  //     }
+  //   }
+  //   // setState(() => this.tempDetail = tempDetail);
+  //   return tempDetail;
+  // }
+
+  Future<List<ClassAwalPaket>> sesuaikanHari(int week) async {
+    List<ClassAwalPaket> tempDetail = new List();
+    ClassAwalPaket databaru =
+        new ClassAwalPaket("id", "id_paket", "hari", "waktu", "");
+    for (int i = 0; i < arrAwal.length; i++) {
+      if (arrAwal[i].week == week.toString()) {
+        if (arrAwal[i].tipe == "hari") {
+          databaru = ClassAwalPaket(arrAwal[i].id, arrAwal[i].hari,
+              arrAwal[i].tanggal, arrAwal[i].week, "hari");
+        } else {
+          databaru = ClassAwalPaket(arrAwal[i].id, arrAwal[i].hari,
+              arrAwal[i].tanggal, arrAwal[i].week, "laporan");
+        }
         tempDetail.add(databaru);
       }
     }
-    // setState(() => this.tempDetail = tempDetail);
-    return tempDetail;
+    setState(() => this.arrAwal = tempDetail);
+    return arrAwal;
   }
 
   Future<ClassPaket> getPaket() async {
@@ -306,51 +328,81 @@ class AwalPaketState extends State<AwalPaket> {
                     mainAxisSpacing: 10.0,
                     children: List.generate(arrAwal.length, (index) {
                       return GestureDetector(
-                        onTap: () {
-                          arrAwal[index].tipe == "hari"
-                              ? Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => JadwalHarian(
-                                          week: week,
-                                          idbeli: id,
-                                          hari: arrAwal[index].hari)))
-                              : Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => JadwalHarian(
-                                          week: week,
-                                          idbeli: id,
-                                          hari: arrAwal[index].hari)));
-                        },
-                        child: Card(
-                            color: Colors.grey,
-                            elevation: 10.0,
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        "Hari " + arrAwal[index].hari,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Biryani'),
-                                      )),
-                                  Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        arrAwal[index].tanggal,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Biryani'),
-                                      ))
-                                ],
-                              ),
-                            )),
-                      );
+                          onTap: () {
+                            arrAwal[index].tipe == "hari"
+                                ? print("hari")
+                                : print("laporan");
+                            // ? Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => JadwalHarian(
+                            //             week: week,
+                            //             idbeli: id,
+                            //             hari: arrAwal[index].hari)))
+                            // : Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => JadwalHarian(
+                            //             week: week,
+                            //             idbeli: id,
+                            //             hari: arrAwal[index].hari)));
+                          },
+                          child: arrAwal[index].tipe == "hari"
+                              ? Card(
+                                  color: Colors.grey,
+                                  elevation: 10.0,
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              "Hari " + arrAwal[index].hari,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Biryani'),
+                                            )),
+                                        Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              arrAwal[index].tanggal,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Biryani'),
+                                            ))
+                                      ],
+                                    ),
+                                  ))
+                              : Card(
+                                  color: Colors.red,
+                                  elevation: 10.0,
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                              "Hari " + arrAwal[index].hari,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Biryani'),
+                                            )),
+                                        Expanded(
+                                            flex: 2,
+                                            child: Text(
+                                              arrAwal[index].berat,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 30,
+                                                  fontFamily: 'Biryani'),
+                                            ))
+                                      ],
+                                    ),
+                                  )));
                     })))
           ],
         ),

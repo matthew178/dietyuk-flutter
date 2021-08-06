@@ -31,38 +31,22 @@ class LoginState extends State<Login> {
     user = preference.getString("user") ?? "0";
     role = preference.getString("role") ?? "";
     berat = preference.getString("berat") ?? "0";
-    // print(preference.getString("cart 1"));
-    // var temp = jsonDecode(('cart ' + session.userlogin.toString()) ?? "[]");
-    // for (var i = 0; i < temp.length; i++) {
-    //   session.Cart.add(new shoppingcart(
-    //       temp[i]["kodeproduk"].toString(),
-    //       temp[i]["username"].toString(),
-    //       temp[i]["jumlah"].toString(),
-    //       temp[i]["konsultan"].toString(),
-    //       temp[i]["harga"].toString()));
-    // }
-    // void cekcobacoba() async {
-    //   pre = await SharedPreferences.getInstance();
-    //   print("isi shared pref");
-    //   print(pre.getString("cobacoba3") ?? "[]");
-
-    //   var tempcoba = jsonDecode(pre.getString("cobacoba3") ?? "[]");
-    //   print(tempcoba.length);
-    //   for (var i = 0; i < tempcoba.length; i++) {
-    //     print(tempcoba[i]['namasalon']);
-    //     // print("namasalon " + (tempcoba[i] as ClassSalon).namasalon);
-    //   }
-    //   print("sampe sini ");
-    // }
-
-    // session.Cart = jsonDecode(
-    //         preference.getString('cart ' + session.userlogin.toString())) ??
-    //     new List();
     session.userlogin = int.parse(user);
     session.role = role;
     session.berat = int.parse(berat);
     if (role != "") {
       if (role == "member") {
+        var temp = jsonDecode(
+            preference.getString('cart ' + session.userlogin.toString()) ??
+                "[]");
+        for (var i = 0; i < temp.length; i++) {
+          session.Cart.add(new shoppingcart(
+              temp[i]["kodeproduk"].toString(),
+              temp[i]["username"].toString(),
+              temp[i]["jumlah"].toString(),
+              temp[i]["konsultan"].toString(),
+              temp[i]["harga"].toString()));
+        }
         Navigator.of(this.context).pushNamedAndRemoveUntil(
             '/member', (Route<dynamic> route) => false);
       } else if (role == "konsultan") {
@@ -94,6 +78,17 @@ class LoginState extends State<Login> {
         preference.setString("berat", data[0]['berat']);
 
         if (data[0]['role'] == "member") {
+          var temp = jsonDecode(
+              preference.getString('cart ' + session.userlogin.toString()) ??
+                  "[]");
+          for (var i = 0; i < temp.length; i++) {
+            session.Cart.add(new shoppingcart(
+                temp[i]["kodeproduk"].toString(),
+                temp[i]["username"].toString(),
+                temp[i]["jumlah"].toString(),
+                temp[i]["konsultan"].toString(),
+                temp[i]["harga"].toString()));
+          }
           Navigator.pushNamed(this.context, "/member");
         } else if (data[0]['role'] == "konsultan") {
           Navigator.pushNamed(this.context, "/konsultan");
