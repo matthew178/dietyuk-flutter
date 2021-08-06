@@ -1,6 +1,6 @@
 import 'package:dietyuk/ClassPerkembangan.dart';
 import 'package:dietyuk/JadwalHarian.dart';
-
+import 'ClassAwalPaket.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -26,8 +26,9 @@ class AwalPaketState extends State<AwalPaket> {
       "status", "", "konsultan", "namapaket1", "deskripsi", "default.jpg");
   String id, paket;
   List<DetailBeli> detail = new List();
-  List<DetailBeli> tempDetail = new List();
-  List<ClassPerkembangan> arrLaporan = new List();
+  // List<DetailBeli> tempDetail = new List();
+  // List<ClassPerkembangan> arrLaporan = new List();
+  List<ClassAwalPaket> arrAwal = new List();
   int durasi = 5;
 
   AwalPaketState(this.id, this.paket);
@@ -40,12 +41,40 @@ class AwalPaketState extends State<AwalPaket> {
     getLaporan();
   }
 
-  Future<List<ClassPerkembangan>> getLaporan() async {
-    List<ClassPerkembangan> tempLaporan = List();
+  // Future<List<ClassPerkembangan>> getLaporan() async {
+  //   List<ClassPerkembangan> tempLaporan = List();
+  //   Map paramData = {'idbeli': id};
+  //   var parameter = json.encode(paramData);
+  //   ClassPerkembangan databaru = new ClassPerkembangan(
+  //       "id", "idbeli", "username", "berat", "status", "harike");
+  //   http
+  //       .post(session.ipnumber + "/getlaporanperkembangan",
+  //           headers: {"Content-Type": "application/json"}, body: parameter)
+  //       .then((res) {
+  //     var data = json.decode(res.body);
+  //     data = data[0]['laporan'];
+  //     for (int i = 0; i < data.length; i++) {
+  //       databaru = ClassPerkembangan(
+  //           data[i]['id'].toString(),
+  //           data[i]['idbeli'].toString(),
+  //           data[i]['username'].toString(),
+  //           data[i]['berat'].toString(),
+  //           data[i]['status'].toString(),
+  //           data[i]['harike'].toString());
+  //       tempLaporan.add(databaru);
+  //     }
+  //     setState(() => this.arrLaporan = tempLaporan);
+  //     return tempLaporan;
+  //   }).catchError((err) {
+  //     print(err);
+  //   });
+  // }
+
+  Future<List<ClassAwalPaket>> getLaporan() async {
     Map paramData = {'idbeli': id};
     var parameter = json.encode(paramData);
-    ClassPerkembangan databaru = new ClassPerkembangan(
-        "id", "idbeli", "username", "berat", "status", "harike");
+    ClassAwalPaket databaru =
+        new ClassAwalPaket("id", "idbeli", "username", "berat", "status");
     http
         .post(session.ipnumber + "/getlaporanperkembangan",
             headers: {"Content-Type": "application/json"}, body: parameter)
@@ -53,27 +82,51 @@ class AwalPaketState extends State<AwalPaket> {
       var data = json.decode(res.body);
       data = data[0]['laporan'];
       for (int i = 0; i < data.length; i++) {
-        databaru = ClassPerkembangan(
-            data[0]['id'].toString(),
-            data[0]['idbeli'].toString(),
-            data[0]['username'].toString(),
-            data[0]['berat'].toString(),
-            data[0]['status'].toString(),
-            data[0]['harike'].toString());
-        tempLaporan.add(databaru);
+        databaru = ClassAwalPaket(
+            "0", data[i]['harike'].toString(), "0", "0", "laporan");
+        databaru.setberat(data[i]['berat'].toString());
+        databaru.setidbeli(data[i]['idbeli'].toString());
+
+        arrAwal.add(databaru);
       }
-      setState(() => this.arrLaporan = tempLaporan);
-      return tempLaporan;
+      print("laporan : " + arrAwal.length.toString());
+      return this.arrAwal;
     }).catchError((err) {
       print(err);
     });
   }
 
-  Future<List<DetailBeli>> getDetail() async {
-    List<DetailBeli> arrDetail = new List();
+  // Future<List<DetailBeli>> getDetail() async {
+  //   List<DetailBeli> arrDetail = new List();
+  //   Map paramData = {'id': id};
+  //   var parameter = json.encode(paramData);
+  //   DetailBeli databaru = new DetailBeli("id", "hari", "tanggal", "week");
+  //   int week = 0;
+  //   http
+  //       .post(session.ipnumber + "/getdetailbeli",
+  //           headers: {"Content-Type": "application/json"}, body: parameter)
+  //       .then((res) {
+  //     var data = json.decode(res.body);
+  //     data = data[0]['detail'];
+  //     for (int i = 0; i < data.length; i++) {
+  //       week = ((int.parse(data[i]['hari'].toString()) - 1) ~/ 7).toInt() + 1;
+  //       databaru = DetailBeli("0", data[i]['hari'].toString(),
+  //           data[i]['tanggal'].toString(), week.toString());
+  //       arrDetail.add(databaru);
+  //     }
+  //     setState(() => this.detail = arrDetail);
+  //     sesuaikanHari(1);
+  //     return arrDetail;
+  //   }).catchError((err) {
+  //     print(err);
+  //   });
+  // }
+
+  Future<List<ClassAwalPaket>> getDetail() async {
     Map paramData = {'id': id};
     var parameter = json.encode(paramData);
-    DetailBeli databaru = new DetailBeli("id", "hari", "tanggal", "week");
+    ClassAwalPaket databaru =
+        new ClassAwalPaket("id", "hari", "tanggal", "week", "status");
     int week = 0;
     http
         .post(session.ipnumber + "/getdetailbeli",
@@ -83,13 +136,14 @@ class AwalPaketState extends State<AwalPaket> {
       data = data[0]['detail'];
       for (int i = 0; i < data.length; i++) {
         week = ((int.parse(data[i]['hari'].toString()) - 1) ~/ 7).toInt() + 1;
-        databaru = DetailBeli("0", data[i]['hari'].toString(),
-            data[i]['tanggal'].toString(), week.toString());
-        arrDetail.add(databaru);
+        databaru = ClassAwalPaket("0", data[i]['hari'].toString(),
+            data[i]['tanggal'].toString(), week.toString(), "hari");
+        arrAwal.add(databaru);
       }
-      setState(() => this.detail = arrDetail);
       sesuaikanHari(1);
-      return arrDetail;
+      print("detail : " + arrAwal.length.toString());
+
+      return arrAwal;
     }).catchError((err) {
       print(err);
     });
@@ -105,7 +159,7 @@ class AwalPaketState extends State<AwalPaket> {
         tempDetail.add(databaru);
       }
     }
-    setState(() => this.tempDetail = tempDetail);
+    // setState(() => this.tempDetail = tempDetail);
     return tempDetail;
   }
 
@@ -250,16 +304,24 @@ class AwalPaketState extends State<AwalPaket> {
                     crossAxisCount: 3,
                     crossAxisSpacing: 10.0,
                     mainAxisSpacing: 10.0,
-                    children: List.generate(tempDetail.length, (index) {
+                    children: List.generate(arrAwal.length, (index) {
                       return GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => JadwalHarian(
-                                      week: week,
-                                      idbeli: id,
-                                      hari: tempDetail[index].hari)));
+                          arrAwal[index].tipe == "hari"
+                              ? Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => JadwalHarian(
+                                          week: week,
+                                          idbeli: id,
+                                          hari: arrAwal[index].hari)))
+                              : Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => JadwalHarian(
+                                          week: week,
+                                          idbeli: id,
+                                          hari: arrAwal[index].hari)));
                         },
                         child: Card(
                             color: Colors.grey,
@@ -270,7 +332,7 @@ class AwalPaketState extends State<AwalPaket> {
                                   Expanded(
                                       flex: 1,
                                       child: Text(
-                                        "Hari " + tempDetail[index].hari,
+                                        "Hari " + arrAwal[index].hari,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
@@ -279,7 +341,7 @@ class AwalPaketState extends State<AwalPaket> {
                                   Expanded(
                                       flex: 1,
                                       child: Text(
-                                        tempDetail[index].tanggal,
+                                        arrAwal[index].tanggal,
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,

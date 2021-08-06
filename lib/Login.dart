@@ -1,4 +1,5 @@
 import 'package:dietyuk/session.dart';
+import 'package:dietyuk/shoppingcart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,6 +31,29 @@ class LoginState extends State<Login> {
     user = preference.getString("user") ?? "0";
     role = preference.getString("role") ?? "";
     berat = preference.getString("berat") ?? "0";
+    // print(preference.getString("cart 1"));
+    // var temp = jsonDecode(('cart ' + session.userlogin.toString()) ?? "[]");
+    // for (var i = 0; i < temp.length; i++) {
+    //   session.Cart.add(new shoppingcart(
+    //       temp[i]["kodeproduk"].toString(),
+    //       temp[i]["username"].toString(),
+    //       temp[i]["jumlah"].toString(),
+    //       temp[i]["konsultan"].toString(),
+    //       temp[i]["harga"].toString()));
+    // }
+    // void cekcobacoba() async {
+    //   pre = await SharedPreferences.getInstance();
+    //   print("isi shared pref");
+    //   print(pre.getString("cobacoba3") ?? "[]");
+
+    //   var tempcoba = jsonDecode(pre.getString("cobacoba3") ?? "[]");
+    //   print(tempcoba.length);
+    //   for (var i = 0; i < tempcoba.length; i++) {
+    //     print(tempcoba[i]['namasalon']);
+    //     // print("namasalon " + (tempcoba[i] as ClassSalon).namasalon);
+    //   }
+    //   print("sampe sini ");
+    // }
 
     // session.Cart = jsonDecode(
     //         preference.getString('cart ' + session.userlogin.toString())) ??
