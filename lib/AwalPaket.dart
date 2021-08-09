@@ -1,5 +1,6 @@
 import 'package:dietyuk/ClassPerkembangan.dart';
 import 'package:dietyuk/JadwalHarian.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'ClassAwalPaket.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'ClassPaket.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'ClassDetailPaket.dart';
+import 'dart:math';
 
 class AwalPaket extends StatefulWidget {
   final String id;
@@ -28,8 +30,11 @@ class AwalPaketState extends State<AwalPaket> {
   // List<DetailBeli> detail = new List();
   // List<DetailBeli> tempDetail = new List();
   // List<ClassPerkembangan> arrLaporan = new List();
+  List<ClassAwalPaket> arrTemp = new List();
   List<ClassAwalPaket> arrAwal = new List();
+  TextEditingController berat = new TextEditingController();
   int durasi = 5;
+  String foto = "assets/images/awalpage.png";
 
   AwalPaketState(this.id, this.paket);
 
@@ -38,93 +43,21 @@ class AwalPaketState extends State<AwalPaket> {
     super.initState();
     getPaket();
     getDetail();
-    getLaporan();
+    var listImagesnotFound = [
+      "assets/images/awalpage.png",
+      "assets/images/awalpage2.png",
+      "assets/images/awalpage3.png",
+      "assets/images/awalpage4.png",
+      "assets/images/awalpage5.png"
+    ];
+    var _random = Random();
+    var hasil = _random.nextInt(listImagesnotFound.length);
+    foto = listImagesnotFound[hasil];
+    print("random = " + hasil.toString());
   }
-
-  // Future<List<ClassPerkembangan>> getLaporan() async {
-  //   List<ClassPerkembangan> tempLaporan = List();
-  //   Map paramData = {'idbeli': id};
-  //   var parameter = json.encode(paramData);
-  //   ClassPerkembangan databaru = new ClassPerkembangan(
-  //       "id", "idbeli", "username", "berat", "status", "harike");
-  //   http
-  //       .post(session.ipnumber + "/getlaporanperkembangan",
-  //           headers: {"Content-Type": "application/json"}, body: parameter)
-  //       .then((res) {
-  //     var data = json.decode(res.body);
-  //     data = data[0]['laporan'];
-  //     for (int i = 0; i < data.length; i++) {
-  //       databaru = ClassPerkembangan(
-  //           data[i]['id'].toString(),
-  //           data[i]['idbeli'].toString(),
-  //           data[i]['username'].toString(),
-  //           data[i]['berat'].toString(),
-  //           data[i]['status'].toString(),
-  //           data[i]['harike'].toString());
-  //       tempLaporan.add(databaru);
-  //     }
-  //     setState(() => this.arrLaporan = tempLaporan);
-  //     return tempLaporan;
-  //   }).catchError((err) {
-  //     print(err);
-  //   });
-  // }
-
-  Future<List<ClassAwalPaket>> getLaporan() async {
-    Map paramData = {'idbeli': id};
-    var parameter = json.encode(paramData);
-    int week = 0;
-    ClassAwalPaket databaru =
-        new ClassAwalPaket("id", "idbeli", "username", "berat", "status");
-    http
-        .post(session.ipnumber + "/getlaporanperkembangan",
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      var data = json.decode(res.body);
-      data = data[0]['laporan'];
-      for (int i = 0; i < data.length; i++) {
-        week = ((int.parse(data[i]['harike'].toString()) - 1) ~/ 7).toInt() + 1;
-        databaru = ClassAwalPaket(
-            "0", data[i]['harike'].toString(), "0", week.toString(), "laporan");
-        databaru.setberat(data[i]['berat'].toString());
-        databaru.setidbeli(data[i]['idbeli'].toString());
-
-        arrAwal.add(databaru);
-      }
-      print("laporan : " + arrAwal.length.toString());
-      return this.arrAwal;
-    }).catchError((err) {
-      print(err);
-    });
-  }
-
-  // Future<List<DetailBeli>> getDetail() async {
-  //   List<DetailBeli> arrDetail = new List();
-  //   Map paramData = {'id': id};
-  //   var parameter = json.encode(paramData);
-  //   DetailBeli databaru = new DetailBeli("id", "hari", "tanggal", "week");
-  //   int week = 0;
-  //   http
-  //       .post(session.ipnumber + "/getdetailbeli",
-  //           headers: {"Content-Type": "application/json"}, body: parameter)
-  //       .then((res) {
-  //     var data = json.decode(res.body);
-  //     data = data[0]['detail'];
-  //     for (int i = 0; i < data.length; i++) {
-  //       week = ((int.parse(data[i]['hari'].toString()) - 1) ~/ 7).toInt() + 1;
-  //       databaru = DetailBeli("0", data[i]['hari'].toString(),
-  //           data[i]['tanggal'].toString(), week.toString());
-  //       arrDetail.add(databaru);
-  //     }
-  //     setState(() => this.detail = arrDetail);
-  //     sesuaikanHari(1);
-  //     return arrDetail;
-  //   }).catchError((err) {
-  //     print(err);
-  //   });
-  // }
 
   Future<List<ClassAwalPaket>> getDetail() async {
+    arrAwal.clear();
     Map paramData = {'id': id};
     var parameter = json.encode(paramData);
     ClassAwalPaket databaru =
@@ -134,16 +67,27 @@ class AwalPaketState extends State<AwalPaket> {
         .post(session.ipnumber + "/getdetailbeli",
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
-      var data = json.decode(res.body);
-      data = data[0]['detail'];
+      var returndata = json.decode(res.body);
+      var data = returndata[0]['detail'];
       for (int i = 0; i < data.length; i++) {
         week = ((int.parse(data[i]['hari'].toString()) - 1) ~/ 7).toInt() + 1;
         databaru = ClassAwalPaket("0", data[i]['hari'].toString(),
             data[i]['tanggal'].toString(), week.toString(), "hari");
         arrAwal.add(databaru);
       }
+      data = returndata[0]['laporan'];
+      for (int i = 0; i < data.length; i++) {
+        week = ((int.parse(data[i]['harike'].toString()) - 1) ~/ 7).toInt() + 1;
+        databaru = ClassAwalPaket(data[i]['id'].toString(),
+            data[i]['harike'].toString(), "0", week.toString(), "laporan");
+        databaru.setberat(int.parse(data[i]['berat'].toString()));
+        databaru.setidbeli(data[i]['idbeli'].toString());
+        databaru.setketerangan(data[i]['status'].toString());
+        arrAwal.add(databaru);
+      }
+      arrAwal.sort((a, b) => int.parse(a.hari).compareTo(int.parse(b.hari)));
+
       sesuaikanHari(1);
-      print("detail : " + arrAwal.length.toString());
 
       return arrAwal;
     }).catchError((err) {
@@ -151,38 +95,16 @@ class AwalPaketState extends State<AwalPaket> {
     });
   }
 
-  // Future<List<DetailBeli>> sesuaikanHari(int week) async {
-  //   List<DetailBeli> tempDetail = new List();
-  //   DetailBeli databaru = new DetailBeli("id", "id_paket", "hari", "waktu");
-  //   for (int i = 0; i < detail.length; i++) {
-  //     if (detail[i].week == week.toString()) {
-  //       databaru = DetailBeli(
-  //           detail[i].id, detail[i].hari, detail[i].tanggal, detail[i].week);
-  //       tempDetail.add(databaru);
-  //     }
-  //   }
-  //   // setState(() => this.tempDetail = tempDetail);
-  //   return tempDetail;
-  // }
-
-  Future<List<ClassAwalPaket>> sesuaikanHari(int week) async {
+  void sesuaikanHari(int week) {
     List<ClassAwalPaket> tempDetail = new List();
     ClassAwalPaket databaru =
         new ClassAwalPaket("id", "id_paket", "hari", "waktu", "");
     for (int i = 0; i < arrAwal.length; i++) {
       if (arrAwal[i].week == week.toString()) {
-        if (arrAwal[i].tipe == "hari") {
-          databaru = ClassAwalPaket(arrAwal[i].id, arrAwal[i].hari,
-              arrAwal[i].tanggal, arrAwal[i].week, "hari");
-        } else {
-          databaru = ClassAwalPaket(arrAwal[i].id, arrAwal[i].hari,
-              arrAwal[i].tanggal, arrAwal[i].week, "laporan");
-        }
-        tempDetail.add(databaru);
+        tempDetail.add(arrAwal[i]);
       }
     }
-    setState(() => this.arrAwal = tempDetail);
-    return arrAwal;
+    setState(() => this.arrTemp = tempDetail);
   }
 
   Future<ClassPaket> getPaket() async {
@@ -226,6 +148,101 @@ class AwalPaketState extends State<AwalPaket> {
     }).catchError((err) {
       print(err);
     });
+  }
+
+  Future<ClassPerkembangan> tambahPerkembangan(String id, berat, status) async {
+    Map paramData = {'id': id, 'berat': berat, 'status': status};
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/tambahPerkembangan",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      getDetail();
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+  void cetakdialog(String idsaatini, beratsaatini, statussaatini) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)), //this right here
+              child: Container(
+                // color: Colors.red,
+                height: 200,
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: Text(
+                          "Berat Badan Saat Ini ? ",
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      Container(
+                          padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 150,
+                                child: TextField(
+                                    controller: berat,
+                                    keyboardType: TextInputType.number),
+                              ),
+                              SizedBox(width: 25),
+                              Container(
+                                child: Text(
+                                  "kg",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              )
+                            ],
+                          )),
+                      SizedBox(height: 10),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: new RaisedButton(
+                          onPressed: () {
+                            tambahPerkembangan(
+                                idsaatini, beratsaatini, statussaatini);
+                            print("idsaatini : " +
+                                idsaatini +
+                                " berat : " +
+                                beratsaatini +
+                                " keterangan " +
+                                statussaatini);
+                            berat.text = "";
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(true);
+                          },
+                          padding: new EdgeInsets.all(16.0),
+                          color: Colors.green,
+                          child: new Text(
+                            'Submit',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontFamily: 'helvetica_neue_light',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+        });
   }
 
   Future<void> evtSebelum() async {
@@ -316,7 +333,7 @@ class AwalPaketState extends State<AwalPaket> {
             Expanded(
               flex: 3,
               child: Image.asset(
-                "assets/images/awalpage.png",
+                this.foto,
                 fit: BoxFit.cover,
               ),
             ),
@@ -326,28 +343,21 @@ class AwalPaketState extends State<AwalPaket> {
                     crossAxisCount: 3,
                     crossAxisSpacing: 10.0,
                     mainAxisSpacing: 10.0,
-                    children: List.generate(arrAwal.length, (index) {
+                    children: List.generate(arrTemp.length, (index) {
                       return GestureDetector(
                           onTap: () {
-                            arrAwal[index].tipe == "hari"
-                                ? print("hari")
-                                : print("laporan");
-                            // ? Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => JadwalHarian(
-                            //             week: week,
-                            //             idbeli: id,
-                            //             hari: arrAwal[index].hari)))
-                            // : Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => JadwalHarian(
-                            //             week: week,
-                            //             idbeli: id,
-                            //             hari: arrAwal[index].hari)));
+                            arrTemp[index].tipe == "hari"
+                                ? Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => JadwalHarian(
+                                            week: week,
+                                            idbeli: id,
+                                            hari: arrAwal[index].hari)))
+                                : cetakdialog(arrTemp[index].id, berat.text,
+                                    arrTemp[index].keterangan);
                           },
-                          child: arrAwal[index].tipe == "hari"
+                          child: arrTemp[index].tipe == "hari"
                               ? Card(
                                   color: Colors.grey,
                                   elevation: 10.0,
@@ -357,7 +367,7 @@ class AwalPaketState extends State<AwalPaket> {
                                         Expanded(
                                             flex: 1,
                                             child: Text(
-                                              "Hari " + arrAwal[index].hari,
+                                              "Hari " + arrTemp[index].hari,
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
@@ -366,7 +376,7 @@ class AwalPaketState extends State<AwalPaket> {
                                         Expanded(
                                             flex: 1,
                                             child: Text(
-                                              arrAwal[index].tanggal,
+                                              arrTemp[index].tanggal,
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
@@ -375,34 +385,156 @@ class AwalPaketState extends State<AwalPaket> {
                                       ],
                                     ),
                                   ))
-                              : Card(
-                                  color: Colors.red,
-                                  elevation: 10.0,
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                            flex: 1,
-                                            child: Text(
-                                              "Hari " + arrAwal[index].hari,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'Biryani'),
-                                            )),
-                                        Expanded(
-                                            flex: 2,
-                                            child: Text(
-                                              arrAwal[index].berat,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 30,
-                                                  fontFamily: 'Biryani'),
-                                            ))
-                                      ],
-                                    ),
-                                  )));
+                              : arrTemp[index].keterangan == "0"
+                                  ? Card(
+                                      color: Colors.white,
+                                      elevation: 10.0,
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  "Hari " + arrTemp[index].hari,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily: 'Biryani'),
+                                                )),
+                                            Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  arrTemp[index]
+                                                      .berat
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 30,
+                                                      fontFamily: 'Biryani'),
+                                                ))
+                                          ],
+                                        ),
+                                      ))
+                                  : arrTemp[index].keterangan == "1"
+                                      ? Card(
+                                          color: Colors.green,
+                                          elevation: 10.0,
+                                          child: Center(
+                                            child: Column(
+                                              children: [
+                                                Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      "Hari " +
+                                                          arrTemp[index].hari,
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              'Biryani'),
+                                                    )),
+                                                Expanded(
+                                                    flex: 2,
+                                                    child: Text(
+                                                      arrTemp[index]
+                                                          .berat
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 30,
+                                                          fontFamily:
+                                                              'Biryani'),
+                                                    ))
+                                              ],
+                                            ),
+                                          ))
+                                      : arrTemp[index].keterangan == "2"
+                                          ? Card(
+                                              color: Colors.red,
+                                              elevation: 10.0,
+                                              child: Center(
+                                                child: Column(
+                                                  children: [
+                                                    Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          "Hari " +
+                                                              arrTemp[index]
+                                                                  .hari,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  'Biryani'),
+                                                        )),
+                                                    Expanded(
+                                                        flex: 2,
+                                                        child: Text(
+                                                          arrTemp[index]
+                                                              .berat
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 30,
+                                                              fontFamily:
+                                                                  'Biryani'),
+                                                        ))
+                                                  ],
+                                                ),
+                                              ))
+                                          : Card(
+                                              color: Colors.blue,
+                                              elevation: 10.0,
+                                              child: Center(
+                                                child: Column(
+                                                  children: [
+                                                    Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          "Hari " +
+                                                              arrTemp[index]
+                                                                  .hari,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  'Biryani'),
+                                                        )),
+                                                    Expanded(
+                                                        flex: 2,
+                                                        child: Text(
+                                                          arrTemp[index]
+                                                              .berat
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 30,
+                                                              fontFamily:
+                                                                  'Biryani'),
+                                                        ))
+                                                  ],
+                                                ),
+                                              )));
                     })))
           ],
         ),

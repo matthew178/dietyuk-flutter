@@ -37,7 +37,7 @@ class LoginState extends State<Login> {
     if (role != "") {
       if (role == "member") {
         var temp = jsonDecode(
-            preference.getString('cart ' + session.userlogin.toString()) ??
+            preference.getString('cart' + session.userlogin.toString()) ??
                 "[]");
         for (var i = 0; i < temp.length; i++) {
           session.Cart.add(new shoppingcart(
@@ -47,6 +47,7 @@ class LoginState extends State<Login> {
               temp[i]["konsultan"].toString(),
               temp[i]["harga"].toString()));
         }
+        print("jumlah cart : " + session.Cart.length.toString());
         Navigator.of(this.context).pushNamedAndRemoveUntil(
             '/member', (Route<dynamic> route) => false);
       } else if (role == "konsultan") {
@@ -67,7 +68,6 @@ class LoginState extends State<Login> {
         .post(session.ipnumber + "/login",
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
-      print("hasil = " + res.body);
       if (res.body.contains("sukses")) {
         var data = json.decode(res.body);
         session.userlogin = data[0]['id'];
@@ -79,7 +79,7 @@ class LoginState extends State<Login> {
 
         if (data[0]['role'] == "member") {
           var temp = jsonDecode(
-              preference.getString('cart ' + session.userlogin.toString()) ??
+              preference.getString('cart' + session.userlogin.toString()) ??
                   "[]");
           for (var i = 0; i < temp.length; i++) {
             session.Cart.add(new shoppingcart(
@@ -89,6 +89,7 @@ class LoginState extends State<Login> {
                 temp[i]["konsultan"].toString(),
                 temp[i]["harga"].toString()));
           }
+          print("jumlah cart : " + session.Cart.length.toString());
           Navigator.pushNamed(this.context, "/member");
         } else if (data[0]['role'] == "konsultan") {
           Navigator.pushNamed(this.context, "/konsultan");

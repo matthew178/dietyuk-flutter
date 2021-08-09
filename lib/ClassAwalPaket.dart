@@ -6,9 +6,10 @@ class ClassAwalPaket {
       idperkembangan,
       idbeli,
       username,
-      berat,
       status,
-      tipe;
+      tipe,
+      keterangan;
+  int berat;
 
   ClassAwalPaket(this.id, this.hari, this.tanggal, this.week, this.tipe);
 
@@ -24,8 +25,8 @@ class ClassAwalPaket {
     this.username = uname;
   }
 
-  void setberat(String berat) {
-    this.berat = berat;
+  void setberat(int brt) {
+    this.berat = brt;
   }
 
   void setstatus(String status) {
@@ -34,5 +35,9 @@ class ClassAwalPaket {
 
   void settipe(String tipe) {
     this.tipe = tipe;
+  }
+
+  void setketerangan(String ket) {
+    this.keterangan = ket;
   }
 }

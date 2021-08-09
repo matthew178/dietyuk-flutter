@@ -449,7 +449,7 @@ class ProdukDetailState extends State<ProdukDetail> {
                                 if (jumlah > 0) {
                                   if (session.Cart.length > 0) {
                                     if (session.Cart[0].konsultan ==
-                                        produk.konsultan) {
+                                        produk.idkonsultan) {
                                       flag = 1;
                                       print("sana");
                                       for (int i = 0;
@@ -465,6 +465,10 @@ class ProdukDetailState extends State<ProdukDetail> {
                                         }
                                       }
                                     } else {
+                                      print("session " +
+                                          session.Cart[0].konsultan +
+                                          " produk " +
+                                          produk.idkonsultan);
                                       showAlert();
                                       print("sanasini");
                                     }
@@ -488,9 +492,6 @@ class ProdukDetailState extends State<ProdukDetail> {
                                         produk.harga.toString());
                                     jumlahCart++;
                                     session.Cart.add(cart);
-                                    preferences.setString(
-                                        'cart ' + session.userlogin.toString(),
-                                        jsonEncode(session.Cart));
                                   });
                                   Fluttertoast.showToast(
                                       msg: "Berhasil tambah ke Keranjang!");

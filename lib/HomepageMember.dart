@@ -154,14 +154,26 @@ class HomePageMemberState extends State<HomePageMember> {
                                 children: [
                                   Container(
                                       margin: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        " Rp. " +
-                                            frmt.format(
-                                                int.parse(userprofile.saldo)),
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.grey),
-                                      )),
-                                  SizedBox(width: 135),
+                                      child: int.parse(userprofile.saldo) > 1000
+                                          ? Text(
+                                              " Rp. " +
+                                                  frmt.format(int.parse(
+                                                      userprofile.saldo)),
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.grey),
+                                            )
+                                          : Container(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  0, 0, 50, 0),
+                                              child: Text(
+                                                " Rp. " + userprofile.saldo,
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.grey),
+                                              ),
+                                            )),
+                                  SizedBox(width: 120),
                                   Container(
                                     margin: EdgeInsets.only(right: 0),
                                     // padding: EdgeInsets.fromLTRB(0, 0, 20, 0),

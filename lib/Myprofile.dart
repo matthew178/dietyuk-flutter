@@ -85,7 +85,11 @@ class MyprofileState extends State<Myprofile> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.remove("user");
     pref.remove("role");
+    String data = jsonEncode(session.Cart);
+    print("jumlah cart sebelum clear: " + session.Cart.length.toString());
+    pref.setString(("cart" + session.userlogin.toString()), data);
     session.Cart.clear();
+    print("jumlah cart : " + session.Cart.length.toString());
     Navigator.of(context)
         .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
   }
