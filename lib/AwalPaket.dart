@@ -150,8 +150,8 @@ class AwalPaketState extends State<AwalPaket> {
     });
   }
 
-  Future<ClassPerkembangan> tambahPerkembangan(String id, berat, status) async {
-    Map paramData = {'id': id, 'berat': berat, 'status': status};
+  Future<ClassPerkembangan> tambahPerkembangan(String id, brt, stts) async {
+    Map paramData = {'id': id, 'berat': brt, 'status': stts};
     var parameter = json.encode(paramData);
     http
         .post(session.ipnumber + "/tambahPerkembangan",
@@ -219,7 +219,8 @@ class AwalPaketState extends State<AwalPaket> {
                                 beratsaatini +
                                 " keterangan " +
                                 statussaatini);
-                            berat.text = "";
+                            // berat.text = "";
+
                             Navigator.of(context, rootNavigator: true)
                                 .pop(true);
                           },

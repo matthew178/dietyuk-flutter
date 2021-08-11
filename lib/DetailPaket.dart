@@ -1,4 +1,5 @@
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
@@ -302,6 +303,7 @@ class DetailPaketState extends State<DetailPaket> {
               SizedBox(
                 height: 50,
                 child: AppBar(
+                  backgroundColor: session.warna,
                   bottom: TabBar(
                     tabs: [
                       Tab(

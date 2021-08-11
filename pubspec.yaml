@@ -40,6 +40,7 @@ dependencies:
   google_fonts: ^1.1.1
   badges: ^2.0.1
   flutter_screenutil: ^1.0.2
+  hexcolor: ^2.0.4
 
 
 dev_dependencies:
@@ -85,7 +86,9 @@ flutter:
     - assets/images/done.png
     - assets/images/progress.png
     - assets/images/waiting.png
-
+    - assets/images/bni.jpg
+    - assets/images/bca.png
+    - assets/images/mandiri.png
 
 
   # The following line ensures that the Material Icons font is

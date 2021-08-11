@@ -5,6 +5,7 @@ import 'package:dietyuk/PilihProduk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'session.dart' as session;
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -147,7 +148,7 @@ class HomePageMemberState extends State<HomePageMember> {
                             height: size.height * 0.1,
                             width: size.width * 0.9,
                             decoration: BoxDecoration(
-                                color: Colors.amber.shade100,
+                                color: HexColor("#81c3d7"),
                                 borderRadius: BorderRadius.circular(16)),
                             child: Center(
                               child: Row(
@@ -161,7 +162,7 @@ class HomePageMemberState extends State<HomePageMember> {
                                                       userprofile.saldo)),
                                               style: TextStyle(
                                                   fontSize: 20,
-                                                  color: Colors.grey),
+                                                  color: Colors.white),
                                             )
                                           : Container(
                                               padding: EdgeInsets.fromLTRB(
@@ -179,10 +180,10 @@ class HomePageMemberState extends State<HomePageMember> {
                                     // padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(16),
-                                        color: Colors.blue[200]),
+                                        color: HexColor("#1e96fc")),
                                     child: FlatButton(
                                       onPressed: () {
-                                        // evtLogin();
+                                        Navigator.pushNamed(context, "/saldo");
                                       },
                                       child: Text(
                                         'Top Up',

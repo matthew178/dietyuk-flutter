@@ -1,5 +1,6 @@
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'dart:convert';
 import 'ClassUser.dart';
 import 'package:imagebutton/imagebutton.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class Myprofile extends StatefulWidget {
   @override
@@ -253,10 +255,7 @@ class MyprofileState extends State<Myprofile> {
             Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(
-                      colors: [
-                    Color.fromRGBO(128, 101, 22, 1),
-                    Color.fromRGBO(235, 185, 52, 1),
-                  ],
+                      colors: [HexColor("#1b4965"), HexColor("#62b6cb")],
                       begin: FractionalOffset.bottomCenter,
                       end: FractionalOffset.topCenter)),
             ),
@@ -268,41 +267,40 @@ class MyprofileState extends State<Myprofile> {
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 34),
                   child: Column(
                     children: [
-                      // Text(
-                      //   "My\nProfile",
-                      //   textAlign: TextAlign.center,
-                      //   style: TextStyle(
-                      //       color: Colors.white,
-                      //       fontSize: 30,
-                      //       // fontWeight: FontWeight.bold,
-                      //       fontFamily: 'Nisebuschgardens'),
-                      // ),
-                      // SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(
-                            AntDesign.arrowleft,
+                      Text(
+                        "My\nProfile",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
                             color: Colors.white,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              evtLogout();
-                            },
-                            icon: Icon(
-                              AntDesign.logout,
-                              color: Colors.white,
-                            ),
-                          ),
-                          // Icon(
-                          //   AntDesign.logout,
-                          //   color: Colors.white,
-                          // ),
-                        ],
+                            fontSize: 30,
+                            // fontWeight: FontWeight.bold,
+                            fontFamily: 'Nisebuschgardens'),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SizedBox(height: 10),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     IconButton(
+                      //       onPressed: () {},
+                      //       icon: Icon(
+                      //         AntDesign.arrowleft,
+                      //         color: Colors.white,
+                      //       ),
+                      //     ),
+                      //     IconButton(
+                      //       onPressed: () {
+                      //         evtLogout();
+                      //       },
+                      //       icon: Icon(
+                      //         AntDesign.logout,
+                      //         color: Colors.white,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
                       Container(
                         height: size.height * 0.45,
                         child: LayoutBuilder(builder: (context, constraints) {
@@ -425,14 +423,55 @@ class MyprofileState extends State<Myprofile> {
                                   left: 0,
                                   right: 0,
                                   child: Center(
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(100.0),
-                                      child: Image.network(
-                                        this.foto,
-                                        width: 150,
-                                        height: 150,
-                                        fit: BoxFit.cover,
+                                    child: SizedBox(
+                                      height: 115,
+                                      width: 115,
+                                      child: Stack(
+                                        fit: StackFit.expand,
+                                        overflow: Overflow.visible,
+                                        children: [
+                                          Container(
+                                            child: CircleAvatar(
+                                              // borderRadius:
+                                              //     BorderRadius.circular(100.0),
+                                              radius: 75,
+                                              // child: Image.network(
+                                              //   this.foto,
+                                              //   width: 150,
+                                              //   height: 150,
+                                              //   fit: BoxFit.cover,
+                                              // ),
+                                              backgroundImage:
+                                                  NetworkImage(this.foto),
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                            ),
+                                          ),
+                                          // Positioned(
+                                          //   bottom: 0,
+                                          //   right: -10,
+                                          //   child: SizedBox(
+                                          //     height: 46,
+                                          //     width: 46,
+                                          //     child: FlatButton(
+                                          //         padding: EdgeInsets.zero,
+                                          //         shape: RoundedRectangleBorder(
+                                          //             borderRadius:
+                                          //                 BorderRadius.circular(
+                                          //                     50),
+                                          //             side: BorderSide(
+                                          //                 color: Colors.white)),
+                                          //         color: Color(0xFFF5F6F9),
+                                          //         onPressed: () {
+                                          //           // Navigator.pushNamed(context,
+                                          //           //     "/editprofile");
+                                          //         },
+                                          //         child: Icon(
+                                          //           AntDesign.edit,
+                                          //         )),
+                                          //   ),
+                                          // )
+                                        ],
                                       ),
                                     ),
                                   )),
@@ -440,6 +479,96 @@ class MyprofileState extends State<Myprofile> {
                           );
                         }),
                       ),
+                      SizedBox(height: 20),
+                      Container(
+                          child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            child: FlatButton(
+                                padding: EdgeInsets.all(20),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                color: Colors.white,
+                                onPressed: () {
+                                  Navigator.pushNamed(context, "/editprofile");
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      AntDesign.edit,
+                                      size: 22,
+                                      color: Colors.yellow[900],
+                                    ),
+                                    SizedBox(width: 20),
+                                    Expanded(
+                                        child: Text("Edit Profile",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1)),
+                                    Icon(Icons.arrow_forward_ios)
+                                  ],
+                                )),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            child: FlatButton(
+                                padding: EdgeInsets.all(20),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                color: Colors.white,
+                                onPressed: () {
+                                  Fluttertoast.showToast(msg: "Dompet saya");
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      AntDesign.wallet,
+                                      size: 22,
+                                      color: Colors.yellow[900],
+                                    ),
+                                    SizedBox(width: 20),
+                                    Expanded(
+                                        child: Text("Dompet Saya",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1)),
+                                    Icon(Icons.arrow_forward_ios)
+                                  ],
+                                )),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            child: FlatButton(
+                                padding: EdgeInsets.all(20),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                color: Colors.white,
+                                onPressed: () {
+                                  evtLogout();
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      AntDesign.logout,
+                                      size: 22,
+                                      color: Colors.yellow[900],
+                                    ),
+                                    SizedBox(width: 20),
+                                    Expanded(
+                                        child: Text("Logout",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1)),
+                                    Icon(Icons.arrow_forward_ios)
+                                  ],
+                                )),
+                          )
+                        ],
+                      )),
                     ],
                   ),
                 ),

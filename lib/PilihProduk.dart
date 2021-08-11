@@ -53,7 +53,7 @@ class PilihProdukState extends State<PilihProduk> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: Colors.yellow[700],
+        backgroundColor: session.warna,
         // drawer: Drawer(),
         // appBar: AppBar(),
         body: Container(

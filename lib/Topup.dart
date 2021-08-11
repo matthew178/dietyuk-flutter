@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'ClassUser.dart';
+import 'ClassBank.dart';
 
 class Topup extends StatefulWidget {
   @override
@@ -12,7 +13,8 @@ class Topup extends StatefulWidget {
 
 class TopupState extends State<Topup> {
   TextEditingController saldo = new TextEditingController();
-  String bankygdipilih = "BNI";
+  List<ClassBank> arrBank = new List();
+  ClassBank bankyangdipilih = null;
 
   ClassUser userprofile = new ClassUser(
       "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
@@ -20,6 +22,10 @@ class TopupState extends State<Topup> {
   void initState() {
     super.initState();
     getProfile();
+    arrBank.add(new ClassBank("BNI", "norek", "assets/images/bni.jpg"));
+    arrBank.add(new ClassBank("BCA", "norek", "assets/images/bca.png"));
+    arrBank.add(
+        new ClassBank("Bank Mandiri", "norek", "assets/images/mandiri.png"));
   }
 
   Future<String> evtTopup() async {
@@ -83,28 +89,34 @@ class TopupState extends State<Topup> {
           children: [
             Expanded(
               flex: 1,
-              child: DropdownButton<String>(
+              child: DropdownButton<ClassBank>(
                 style: Theme.of(context).textTheme.title,
                 hint: Text("Pilih Bank"),
-                value: bankygdipilih,
-                onChanged: (String Value) {
+                value: bankyangdipilih,
+                onChanged: (ClassBank Value) {
                   setState(() {
-                    bankygdipilih = Value;
+                    bankyangdipilih = Value;
                   });
                 },
-                items:
-                    <String>['BNI', 'BRI', 'Mandiri', 'BCA'].map((String bank) {
-                  return DropdownMenuItem<String>(
+                items: arrBank.map((ClassBank bank) {
+                  return DropdownMenuItem<ClassBank>(
                     value: bank,
                     child: Row(
                       children: <Widget>[
                         SizedBox(
+                          width: 5,
+                        ),
+                        SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: Image.asset(
+                              bank.foto,
+                              fit: BoxFit.contain,
+                            )),
+                        SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          bank,
-                          style: TextStyle(color: Colors.black),
-                        ),
+                        new Text(bank.nama)
                       ],
                     ),
                   );
