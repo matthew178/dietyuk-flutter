@@ -1,3 +1,6 @@
+import 'package:dietyuk/Topup2.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -5,6 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'ClassUser.dart';
 import 'ClassBank.dart';
+import 'package:intl/intl.dart';
 
 class Topup extends StatefulWidget {
   @override
@@ -15,6 +19,8 @@ class TopupState extends State<Topup> {
   TextEditingController saldo = new TextEditingController();
   List<ClassBank> arrBank = new List();
   ClassBank bankyangdipilih = null;
+  NumberFormat fmrt = new NumberFormat(",000");
+  TextEditingController nominaltopup = new TextEditingController();
 
   ClassUser userprofile = new ClassUser(
       "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
@@ -22,10 +28,13 @@ class TopupState extends State<Topup> {
   void initState() {
     super.initState();
     getProfile();
-    arrBank.add(new ClassBank("BNI", "norek", "assets/images/bni.jpg"));
-    arrBank.add(new ClassBank("BCA", "norek", "assets/images/bca.png"));
-    arrBank.add(
-        new ClassBank("Bank Mandiri", "norek", "assets/images/mandiri.png"));
+    arrBank.add(new ClassBank("", "", "", ""));
+    arrBank.add(new ClassBank("BNI", "8712998210", "assets/images/bni.jpg",
+        "Matthew Hendry Sudarto"));
+    arrBank.add(new ClassBank(
+        "BCA", "731287821", "assets/images/bca.png", "Matthew Hendry Sudarto"));
+    arrBank.add(new ClassBank("Mandiri", "31312231",
+        "assets/images/mandiri.png", "Matthew Hendry Sudarto"));
   }
 
   Future<String> evtTopup() async {
@@ -82,47 +91,161 @@ class TopupState extends State<Topup> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Top up Saldo"),
+        title: Text("TOP UP SALDO"),
+        backgroundColor: session.warna,
       ),
       body: Center(
         child: ListView(
           children: [
-            Expanded(
-              flex: 1,
-              child: DropdownButton<ClassBank>(
-                style: Theme.of(context).textTheme.title,
-                hint: Text("Pilih Bank"),
-                value: bankyangdipilih,
-                onChanged: (ClassBank Value) {
-                  setState(() {
-                    bankyangdipilih = Value;
-                  });
-                },
-                items: arrBank.map((ClassBank bank) {
-                  return DropdownMenuItem<ClassBank>(
-                    value: bank,
-                    child: Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 5,
-                        ),
-                        SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: Image.asset(
-                              bank.foto,
-                              fit: BoxFit.contain,
-                            )),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        new Text(bank.nama)
-                      ],
+            SizedBox(height: 30),
+            Container(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Icon(
+                        AntDesign.wallet,
+                        color: Colors.blue[900],
+                        size: 50,
+                      ),
                     ),
-                  );
-                }).toList(),
+                    Expanded(
+                      flex: 6,
+                      child: Text(
+                        "Disarankan untuk menghindari top up antara pukul 21.00 s/d 03.00 dikarenakan adanya cut off mutasi internet banking sehingga proses validasi pembayaran memerlukan waktu yang lama.",
+                        style: TextStyle(fontSize: 15),
+                        textAlign: TextAlign.justify,
+                      ),
+                    )
+                  ],
+                ),
               ),
-            )
+            ),
+            SizedBox(height: 30),
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1),
+                    borderRadius: BorderRadius.circular(15)),
+                child: SizedBox(
+                  height: 50,
+                  width: 200,
+                  child: DropdownButton<ClassBank>(
+                    style: Theme.of(context).textTheme.title,
+                    hint: Text("Pilih Bank"),
+                    value: bankyangdipilih,
+                    onChanged: (ClassBank Value) {
+                      setState(() {
+                        bankyangdipilih = Value;
+                      });
+                    },
+                    items: arrBank.map((ClassBank bank) {
+                      return DropdownMenuItem<ClassBank>(
+                        value: bank,
+                        child: Row(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 5,
+                            ),
+                            bank.foto != ""
+                                ? SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: Image.asset(
+                                      bank.foto,
+                                      fit: BoxFit.contain,
+                                    ))
+                                : SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                  ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            new Text(bank.nama)
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
+            Container(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                  height: 50,
+                  // width: 200,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey, width: 1),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: TextField(
+                    cursorColor: Colors.black,
+                    // onChanged: (content) {
+                    //   if (int.parse(nominaltopup.text) > 999) {
+                    //     nominaltopup.text =
+                    //         fmrt.format(int.parse(nominaltopup.text));
+                    //   }
+                    // },
+                    controller: nominaltopup,
+                    decoration: InputDecoration(
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        border: InputBorder.none,
+                        hintText: "Nominal",
+                        hintStyle: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w500)),
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.done,
+                  ),
+                )),
+            SizedBox(height: 30),
+            Container(
+                child: Center(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.08,
+                // width: MediaQuery.of(context).size.width * 0.8,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: session.kBlue),
+                child: FlatButton(
+                  onPressed: () {
+                    if (nominaltopup.text != "" && bankyangdipilih.nama != "") {
+                      if (int.parse(nominaltopup.text) > 20000) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Topup2(
+                                    bank: bankyangdipilih,
+                                    nominal: nominaltopup.text.toString())));
+                      } else {
+                        Fluttertoast.showToast(
+                            msg:
+                                "Mohon maaf, anda tidak bisa melakukan TopUp dibawah nominal Rp. 20.000");
+                      }
+                    } else {
+                      Fluttertoast.showToast(
+                          msg:
+                              "Mohon pilih bank dan isi saldo yang akan diTopUp");
+                    }
+                  },
+                  child: Text(
+                    'Top Up Saldo',
+                    style:
+                        session.kBodyText.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ))
           ],
         ),
       ),

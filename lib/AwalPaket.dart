@@ -32,8 +32,9 @@ class AwalPaketState extends State<AwalPaket> {
   // List<ClassPerkembangan> arrLaporan = new List();
   List<ClassAwalPaket> arrTemp = new List();
   List<ClassAwalPaket> arrAwal = new List();
-  TextEditingController berat = new TextEditingController();
+  TextEditingController timbang = new TextEditingController();
   int durasi = 5;
+  int tmp = 1;
   String foto = "assets/images/awalpage.png";
 
   AwalPaketState(this.id, this.paket);
@@ -151,7 +152,12 @@ class AwalPaketState extends State<AwalPaket> {
   }
 
   Future<ClassPerkembangan> tambahPerkembangan(String id, brt, stts) async {
-    Map paramData = {'id': id, 'berat': brt, 'status': stts};
+    Map paramData = {
+      'id': id,
+      'berat': brt,
+      'status': stts,
+      'user': session.userlogin
+    };
     var parameter = json.encode(paramData);
     http
         .post(session.ipnumber + "/tambahPerkembangan",
@@ -163,7 +169,7 @@ class AwalPaketState extends State<AwalPaket> {
     });
   }
 
-  void cetakdialog(String idsaatini, beratsaatini, statussaatini) {
+  void cetakdialog(String idsaatini, statussaatini) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -194,7 +200,7 @@ class AwalPaketState extends State<AwalPaket> {
                               Container(
                                 width: 150,
                                 child: TextField(
-                                    controller: berat,
+                                    controller: timbang,
                                     keyboardType: TextInputType.number),
                               ),
                               SizedBox(width: 25),
@@ -212,15 +218,16 @@ class AwalPaketState extends State<AwalPaket> {
                         child: new RaisedButton(
                           onPressed: () {
                             tambahPerkembangan(
-                                idsaatini, beratsaatini, statussaatini);
+                                idsaatini, timbang.text, statussaatini);
                             print("idsaatini : " +
                                 idsaatini +
                                 " berat : " +
-                                beratsaatini +
+                                timbang.text +
                                 " keterangan " +
                                 statussaatini);
                             // berat.text = "";
-
+                            Fluttertoast.showToast(
+                                msg: "Berhasil tambah perkembangan");
                             Navigator.of(context, rootNavigator: true)
                                 .pop(true);
                           },
@@ -355,7 +362,7 @@ class AwalPaketState extends State<AwalPaket> {
                                             week: week,
                                             idbeli: id,
                                             hari: arrAwal[index].hari)))
-                                : cetakdialog(arrTemp[index].id, berat.text,
+                                : cetakdialog(arrTemp[index].id,
                                     arrTemp[index].keterangan);
                           },
                           child: arrTemp[index].tipe == "hari"
@@ -388,7 +395,7 @@ class AwalPaketState extends State<AwalPaket> {
                                   ))
                               : arrTemp[index].keterangan == "0"
                                   ? Card(
-                                      color: Colors.white,
+                                      color: Colors.grey,
                                       elevation: 10.0,
                                       child: Center(
                                         child: Column(
@@ -398,7 +405,7 @@ class AwalPaketState extends State<AwalPaket> {
                                                 child: Text(
                                                   "Hari " + arrTemp[index].hari,
                                                   style: TextStyle(
-                                                      color: Colors.black,
+                                                      color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontFamily: 'Biryani'),
@@ -410,7 +417,7 @@ class AwalPaketState extends State<AwalPaket> {
                                                       .berat
                                                       .toString(),
                                                   style: TextStyle(
-                                                      color: Colors.black,
+                                                      color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 30,

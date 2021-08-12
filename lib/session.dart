@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dietyuk/shoppingcart.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-String ipnumber = "http://192.168.1.116/dietyuk/public";
+String ipnumber = "http://192.168.54.172/dietyuk/public";
 int userlogin = 0;
 String role = "";
 int berat = 0;

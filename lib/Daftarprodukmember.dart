@@ -74,7 +74,7 @@ class DaftarprodukmemberState extends State<Daftarprodukmember> {
 
   Future<List<ClassProduk>> searchProduk(String cari) async {
     List<ClassProduk> tempProduk = new List();
-    Map paramData = {'cari': cari};
+    Map paramData = {'cari': cari, 'id': kategori};
     var parameter = json.encode(paramData);
     http
         .post(session.ipnumber + "/searchProduk",
@@ -125,7 +125,7 @@ class DaftarprodukmemberState extends State<Daftarprodukmember> {
                         ColorFilter.mode(Colors.black54, BlendMode.darken))),
           )),
       Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white70,
         body: ListView(
           children: [
             Row(
