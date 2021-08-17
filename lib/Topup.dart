@@ -38,7 +38,11 @@ class TopupState extends State<Topup> {
   }
 
   Future<String> evtTopup() async {
-    Map paramData = {'saldo': saldo.text, 'id': session.userlogin};
+    Map paramData = {
+      'saldo': nominaltopup.text,
+      'id_user': session.userlogin.toString(),
+      'bank': bankyangdipilih.nama
+    };
     var parameter = json.encode(paramData);
 
     http
@@ -220,7 +224,8 @@ class TopupState extends State<Topup> {
                 child: FlatButton(
                   onPressed: () {
                     if (nominaltopup.text != "" && bankyangdipilih.nama != "") {
-                      if (int.parse(nominaltopup.text) > 20000) {
+                      if (int.parse(nominaltopup.text) >= 20000) {
+                        // evtTopup();
                         Navigator.push(
                             context,
                             MaterialPageRoute(

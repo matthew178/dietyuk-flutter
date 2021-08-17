@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'session.dart' as session;
@@ -8,6 +9,9 @@ import 'dart:convert';
 import 'ClassUser.dart';
 import 'ClassBank.dart';
 import 'package:intl/intl.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 
 class Topup2 extends StatefulWidget {
   final ClassBank bank;
@@ -27,6 +31,9 @@ class Topup2State extends State<Topup2> {
   String nominal;
   ClassUser userprofile = new ClassUser(
       "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+  File _image;
+  String namaFile = "";
+  String basenamegallery = "";
 
   Topup2State(this.bank, this.nominal);
 
@@ -36,8 +43,33 @@ class Topup2State extends State<Topup2> {
     print(nominal);
   }
 
-  Future<String> evtTopup() async {
-    Map paramData = {'saldo': nominal, 'id': session.userlogin};
+  Future getImageFromGallery() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = image;
+      this.namaFile = image.path;
+      this.basenamegallery = basename(namaFile);
+    });
+  }
+
+  Future<String> evtConfirm() async {
+    String base64Image = "";
+    String namaFile = "";
+
+    if (_image != null) {
+      base64Image = base64Encode(_image.readAsBytesSync()); //mimage
+      namaFile = _image.path.split("/").last; //mfile
+      print("not null");
+    } else {
+      print("image is null");
+    }
+    Map paramData = {
+      'saldo': nominal,
+      'id_user': session.userlogin.toString(),
+      'bank': bank.nama,
+      'm_filename': namaFile,
+      'm_image': base64Image
+    };
     var parameter = json.encode(paramData);
 
     http
@@ -125,7 +157,7 @@ class Topup2State extends State<Topup2> {
               ),
               SizedBox(height: 30),
               Container(
-                height: 250,
+                height: 350,
                 width: 375,
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 decoration: BoxDecoration(
@@ -166,7 +198,60 @@ class Topup2State extends State<Topup2> {
                           "> Saldo anda akan masuk maksimal dalam waktu 30 menit",
                           style:
                               TextStyle(fontSize: 16, color: Colors.grey[700])),
-                    )
+                    ),
+                    SizedBox(height: 30),
+                    Container(
+                      margin: EdgeInsets.only(right: 0),
+                      // padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: HexColor("#1e96fc")),
+                      child: FlatButton(
+                        onPressed: () {
+                          getImageFromGallery();
+                        },
+                        child: Text(
+                          'Upload Bukti Transfer',
+                          style: session.kBodyText
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
+                      child: Center(
+                        child: _image == null
+                            ? Text('No File Selected.')
+                            : Text(basenamegallery.toString()),
+                      ),
+                    ),
+                    SizedBox(height: 50),
+                    Container(
+                      margin: EdgeInsets.only(right: 0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: HexColor("#168aad")),
+                      child: FlatButton(
+                        onPressed: () {
+                          if (_image == null) {
+                            Fluttertoast.showToast(
+                                msg: "Silahkan upload bukti transfer anda");
+                          } else {
+                            evtConfirm();
+                            Fluttertoast.showToast(
+                                msg:
+                                    "Saldo sementara di proses. Saldo akan masuk maksimal dalam waktu 30 menit",
+                                toastLength: Toast.LENGTH_LONG);
+                            Navigator.pushNamed(context, "/member");
+                          }
+                        },
+                        child: Text(
+                          'Submit',
+                          style: session.kBodyText
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               )

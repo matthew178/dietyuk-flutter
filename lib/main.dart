@@ -52,7 +52,6 @@ class MyApp extends StatelessWidget {
         '/editprofile': (context) => Editprofile(),
         '/saldo': (context) => Saldo(),
         '/topup': (context) => Topup(),
-        '/topup2': (context) => Topup2(),
         '/tambahproduk': (context) => TambahProduk(),
         '/halamancart': (context) => Checkout()
       },
