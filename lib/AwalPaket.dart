@@ -1,5 +1,6 @@
 import 'package:dietyuk/ClassPerkembangan.dart';
 import 'package:dietyuk/JadwalHarian.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'ClassAwalPaket.dart';
 import 'session.dart' as session;
@@ -79,11 +80,16 @@ class AwalPaketState extends State<AwalPaket> {
       data = returndata[0]['laporan'];
       for (int i = 0; i < data.length; i++) {
         week = ((int.parse(data[i]['harike'].toString()) - 1) ~/ 7).toInt() + 1;
-        databaru = ClassAwalPaket(data[i]['id'].toString(),
-            data[i]['harike'].toString(), "0", week.toString(), "laporan");
+        databaru = ClassAwalPaket(
+            data[i]['id'].toString(),
+            data[i]['harike'].toString(),
+            data[i]['tanggal'].toString(),
+            week.toString(),
+            "laporan");
         databaru.setberat(int.parse(data[i]['berat'].toString()));
         databaru.setidbeli(data[i]['idbeli'].toString());
         databaru.setketerangan(data[i]['status'].toString());
+        databaru.setidbeli(data[i]['idbeli'].toString());
         arrAwal.add(databaru);
       }
       arrAwal.sort((a, b) => int.parse(a.hari).compareTo(int.parse(b.hari)));
@@ -151,12 +157,15 @@ class AwalPaketState extends State<AwalPaket> {
     });
   }
 
-  Future<ClassPerkembangan> tambahPerkembangan(String id, brt, stts) async {
+  Future<ClassPerkembangan> tambahPerkembangan(
+      String id, brt, stts, idbeli, harike) async {
     Map paramData = {
       'id': id,
       'berat': brt,
       'status': stts,
-      'user': session.userlogin
+      'user': session.userlogin,
+      'idbeli': idbeli,
+      'harike': harike
     };
     var parameter = json.encode(paramData);
     http
@@ -169,7 +178,7 @@ class AwalPaketState extends State<AwalPaket> {
     });
   }
 
-  void cetakdialog(String idsaatini, statussaatini) {
+  void cetakdialog(String idsaatini, statussaatini, idbel, hrike) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -217,8 +226,8 @@ class AwalPaketState extends State<AwalPaket> {
                         padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
                         child: new RaisedButton(
                           onPressed: () {
-                            tambahPerkembangan(
-                                idsaatini, timbang.text, statussaatini);
+                            tambahPerkembangan(idsaatini, timbang.text,
+                                statussaatini, idbel, hrike);
                             print("idsaatini : " +
                                 idsaatini +
                                 " berat : " +
@@ -362,8 +371,11 @@ class AwalPaketState extends State<AwalPaket> {
                                             week: week,
                                             idbeli: id,
                                             hari: arrAwal[index].hari)))
-                                : cetakdialog(arrTemp[index].id,
-                                    arrTemp[index].keterangan);
+                                : cetakdialog(
+                                    arrTemp[index].id,
+                                    arrTemp[index].keterangan,
+                                    arrTemp[index].idbeli,
+                                    arrTemp[index].hari);
                           },
                           child: arrTemp[index].tipe == "hari"
                               ? Card(
@@ -411,6 +423,16 @@ class AwalPaketState extends State<AwalPaket> {
                                                       fontFamily: 'Biryani'),
                                                 )),
                                             Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  arrTemp[index].tanggal,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily: 'Biryani'),
+                                                )),
+                                            Expanded(
                                                 flex: 2,
                                                 child: Text(
                                                   arrTemp[index]
@@ -446,6 +468,17 @@ class AwalPaketState extends State<AwalPaket> {
                                                               'Biryani'),
                                                     )),
                                                 Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      arrTemp[index].tanggal,
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              'Biryani'),
+                                                    )),
+                                                Expanded(
                                                     flex: 2,
                                                     child: Text(
                                                       arrTemp[index]
@@ -458,7 +491,24 @@ class AwalPaketState extends State<AwalPaket> {
                                                           fontSize: 30,
                                                           fontFamily:
                                                               'Biryani'),
-                                                    ))
+                                                    )),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Row(
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: SizedBox(),
+                                                      ),
+                                                      Expanded(
+                                                          child: Icon(
+                                                        Icons.arrow_downward,
+                                                        color: Colors.white,
+                                                      ))
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(height: 10)
                                               ],
                                             ),
                                           ))
@@ -485,6 +535,20 @@ class AwalPaketState extends State<AwalPaket> {
                                                                   'Biryani'),
                                                         )),
                                                     Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          arrTemp[index]
+                                                              .tanggal,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  'Biryani'),
+                                                        )),
+                                                    Expanded(
                                                         flex: 2,
                                                         child: Text(
                                                           arrTemp[index]
@@ -499,7 +563,24 @@ class AwalPaketState extends State<AwalPaket> {
                                                               fontSize: 30,
                                                               fontFamily:
                                                                   'Biryani'),
-                                                        ))
+                                                        )),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: SizedBox(),
+                                                          ),
+                                                          Expanded(
+                                                              child: Icon(
+                                                            Icons.arrow_upward,
+                                                            color: Colors.white,
+                                                          ))
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10)
                                                   ],
                                                 ),
                                               ))
@@ -525,6 +606,20 @@ class AwalPaketState extends State<AwalPaket> {
                                                                   'Biryani'),
                                                         )),
                                                     Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          arrTemp[index]
+                                                              .tanggal,
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  'Biryani'),
+                                                        )),
+                                                    Expanded(
                                                         flex: 2,
                                                         child: Text(
                                                           arrTemp[index]
@@ -539,7 +634,26 @@ class AwalPaketState extends State<AwalPaket> {
                                                               fontSize: 30,
                                                               fontFamily:
                                                                   'Biryani'),
-                                                        ))
+                                                        )),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: SizedBox(),
+                                                          ),
+                                                          Expanded(
+                                                              child:
+                                                                  Image.asset(
+                                                            'assets/images/equals.png',
+                                                            height: 50,
+                                                            width: 50,
+                                                          ))
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10)
                                                   ],
                                                 ),
                                               )));

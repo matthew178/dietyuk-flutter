@@ -89,6 +89,7 @@ flutter:
     - assets/images/bni.jpg
     - assets/images/bca.png
     - assets/images/mandiri.png
+    - assets/images/equals.png
 
 
   # The following line ensures that the Material Icons font is
