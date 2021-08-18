@@ -79,7 +79,7 @@ class EditprofileState extends State<Editprofile> {
 
     if (_image != null) {
       base64Image = base64Encode(_image.readAsBytesSync()); //mimage
-      namaFile = _image.path.split("/").last; //mfile
+      namaFile = _image.path.split("/").last + ".png"; //mfile
       print("not null");
     } else {
       print("image is null");

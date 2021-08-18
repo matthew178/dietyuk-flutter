@@ -48,7 +48,7 @@ class Topup2State extends State<Topup2> {
     setState(() {
       _image = image;
       this.namaFile = image.path;
-      this.basenamegallery = basename(namaFile);
+      this.basenamegallery = basename(namaFile) + ".png";
     });
   }
 
@@ -58,7 +58,7 @@ class Topup2State extends State<Topup2> {
 
     if (_image != null) {
       base64Image = base64Encode(_image.readAsBytesSync()); //mimage
-      namaFile = _image.path.split("/").last; //mfile
+      namaFile = _image.path.split("/").last + ".png"; //mfile
       print("not null");
     } else {
       print("image is null");
