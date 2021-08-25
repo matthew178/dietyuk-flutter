@@ -172,6 +172,7 @@ class AwalPaketState extends State<AwalPaket> {
         .post(session.ipnumber + "/tambahPerkembangan",
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
+      print(res.body);
       getDetail();
     }).catchError((err) {
       print(err);
