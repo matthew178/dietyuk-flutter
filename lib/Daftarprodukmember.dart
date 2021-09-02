@@ -205,7 +205,7 @@ class DaftarprodukmemberState extends State<Daftarprodukmember> {
                               decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: NetworkImage(session.ipnumber +
-                                          "/gambar/" +
+                                          "/gambar/produk/" +
                                           arrProduk[index].foto),
                                       fit: BoxFit.cover)),
                             )),

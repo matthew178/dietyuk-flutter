@@ -16,6 +16,7 @@ class Daftarpaket extends StatefulWidget {
 class DaftarpaketState extends State<Daftarpaket> {
   List<ClassPaket> arrPaket = new List();
   NumberFormat frmt = new NumberFormat(',000');
+  String search = "";
   @override
   void initState() {
     super.initState();
@@ -41,10 +42,40 @@ class DaftarpaketState extends State<Daftarpaket> {
             data[i]['nama'].toString(),
             data[i]['nama_paket'].toString(),
             data[i]['deskripsi'].toString(),
-            data[i]['gambar'].toString());
+            data[i]['background'].toString());
         arrPaket.add(databaru);
       }
       setState(() => this.arrPaket = arrPaket);
+      print(arrPaket.length);
+      return arrPaket;
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+  Future<List<ClassPaket>> searchPaket(String cari) async {
+    List<ClassPaket> tempPaket = new List();
+    Map paramData = {"cari": cari};
+    var parameter = json.encode(paramData);
+    http.post(session.ipnumber + "/searchPaket",
+        headers: {"Content-Type": "application/json"}).then((res) {
+      var data = json.decode(res.body);
+      data = data[0]['paket'];
+      for (int i = 0; i < data.length; i++) {
+        ClassPaket databaru = ClassPaket(
+            data[i]['id_paket'].toString(),
+            data[i]['estimasiturun'].toString(),
+            data[i]['harga'].toString(),
+            data[i]['durasi'].toString(),
+            data[i]['status'].toString(),
+            data[i]['rating'].toString(),
+            data[i]['nama'].toString(),
+            data[i]['nama_paket'].toString(),
+            data[i]['deskripsi'].toString(),
+            data[i]['background'].toString());
+        tempPaket.add(databaru);
+      }
+      setState(() => this.arrPaket = tempPaket);
       print(arrPaket.length);
       return arrPaket;
     }).catchError((err) {
@@ -70,9 +101,9 @@ class DaftarpaketState extends State<Daftarpaket> {
                     child: TextField(
                       onSubmitted: (String str) {
                         setState(() {
-                          // search = str;
+                          search = str;
                         });
-                        // searchProduk(search);
+                        searchPaket(search);
                       },
                       decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
@@ -101,9 +132,93 @@ class DaftarpaketState extends State<Daftarpaket> {
           ),
           SizedBox(height: 15),
           Container(
-            child:
-                Wrap(children: List.generate(arrPaket.length, (index) => null)),
-          )
+              child: Wrap(
+                  children: List.generate(arrPaket.length, (index) {
+            return InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DetailPaket(
+                              id: arrPaket[index].id,
+                              konsultan: arrPaket[index].konsultan)));
+                },
+                child: Card(
+                    child: Column(
+                  children: [
+                    Stack(children: <Widget>[
+                      new Image.network(
+                          session.ipnumber + "/" + arrPaket[index].gambar),
+                      Positioned.fill(
+                          top: 35,
+                          right: 10,
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Text(
+                              arrPaket[index].nama,
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: "PoiretOne"),
+                            ),
+                          )),
+                      Positioned.fill(
+                          top: 65,
+                          right: 10,
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Text(
+                              "By : " + arrPaket[index].konsultan,
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                      Positioned.fill(
+                          top: 95,
+                          right: 10,
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Text(
+                              arrPaket[index].durasi + " hari",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                      Positioned.fill(
+                          top: 125,
+                          right: 10,
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Text(
+                              "Rp " +
+                                  frmt.format(int.parse(arrPaket[index].harga)),
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w300,
+                                  fontFamily: 'Biryani'),
+                            ),
+                          )),
+                    ]),
+                    // Container(
+                    //   child: Image.network(
+                    //       session.ipnumber + "/" + arrPaket[index].gambar),
+                    // ),
+                    // Container(
+                    //     padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
+                    //     child: Text(
+                    //       arrPaket[index].nama,
+                    //       style: TextStyle(
+                    //         fontSize: 20,
+                    //       ),
+                    //     )),
+                    // Container(
+                    //     padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    //     child: Text("By " + arrPaket[index].konsultan)),
+                    // Container(child: Text(arrPaket[index].durasi + " hari")),
+                    // Container(child: Text("Rp " + arrPaket[index].harga))
+                  ],
+                )));
+          })))
         ],
       ),
       // body: new ListView.builder(
@@ -197,13 +312,13 @@ class DaftarpaketState extends State<Daftarpaket> {
       //             )));
       //       }
       //     }),
-      //   floatingActionButton: FloatingActionButton(
-      //     onPressed: () {
-      //       Navigator.pushNamed(context, "/tambahpaket");
-      //     },
-      //     child: const Icon(Icons.add),
-      //     backgroundColor: Colors.blue.shade200,
-      //   ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.pushNamed(context, "/tambahpaket");
+      //   },
+      //   child: const Icon(Icons.add),
+      //   backgroundColor: Colors.blue.shade200,
+      // ),
     );
   }
 }

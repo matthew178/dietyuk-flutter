@@ -194,6 +194,18 @@ class LoginState extends State<Login> {
                       ),
                     )),
               ),
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/lupapassword'),
+                child: Container(
+                  child: Text(
+                    'Lupa Password ?',
+                    style: kecil,
+                  ),
+                  decoration: BoxDecoration(
+                      border:
+                          Border(bottom: BorderSide(width: 1, color: kWhite))),
+                ),
+              ),
               SizedBox(height: 25),
               Container(
                 height: size.height * 0.08,

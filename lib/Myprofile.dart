@@ -539,6 +539,38 @@ class MyprofileState extends State<Myprofile> {
                                   ],
                                 )),
                           ),
+                          session.role == "konsultan"
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: FlatButton(
+                                      padding: EdgeInsets.all(20),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      color: Colors.white,
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                            this.context, "/tambahlibur");
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            AntDesign.calendar,
+                                            size: 22,
+                                            color: Colors.yellow[900],
+                                          ),
+                                          SizedBox(width: 20),
+                                          Expanded(
+                                              child: Text("Tambah Libur",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText1)),
+                                          Icon(Icons.arrow_forward_ios)
+                                        ],
+                                      )),
+                                )
+                              : SizedBox(height: 0),
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),

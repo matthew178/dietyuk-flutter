@@ -11,6 +11,7 @@ int saldo = 0;
 List<shoppingcart> Cart = new List();
 
 const TextStyle kBodyText = TextStyle(fontSize: 18, color: Colors.white);
+const TextStyle kecil = TextStyle(fontSize: 15, color: Colors.white);
 const TextStyle kradioButton = TextStyle(fontSize: 20, color: Colors.white);
 const TextStyle cardStyle =
     TextStyle(fontSize: 14, fontWeight: FontWeight.bold);

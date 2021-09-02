@@ -10,21 +10,24 @@ class JadwalHarian extends StatefulWidget {
   final String week;
   final String idbeli;
   final String hari;
+  final int tipe;
 
   JadwalHarian(
       {Key key,
       @required this.week,
       @required this.idbeli,
-      @required this.hari})
+      @required this.hari,
+      @required this.tipe})
       : super(key: key);
 
   @override
   JadwalHarianState createState() =>
-      JadwalHarianState(this.week, this.idbeli, this.hari);
+      JadwalHarianState(this.week, this.idbeli, this.hari, this.tipe);
 }
 
 class JadwalHarianState extends State<JadwalHarian> {
   String week, idbeli, hari;
+  int tipe;
 
   List<ClassJadwalHarian> pagi = new List();
   List<ClassJadwalHarian> siang = new List();
@@ -32,11 +35,13 @@ class JadwalHarianState extends State<JadwalHarian> {
   List<ClassJadwalHarian> olahraga = new List();
   List<ClassJadwalHarian> jadwal = new List();
   bool centang = true;
+  JadwalHarianState(this.week, this.idbeli, this.hari, this.tipe);
 
   @override
   void initState() {
     super.initState();
     getJadwalHarian();
+    print(tipe.toString() + " tipe");
   }
 
   void ubahStatus(String id, String status) {
@@ -94,8 +99,6 @@ class JadwalHarianState extends State<JadwalHarian> {
       print(err);
     });
   }
-
-  JadwalHarianState(this.week, this.idbeli, this.hari);
 
   @override
   Widget build(BuildContext context) {
@@ -162,30 +165,48 @@ class JadwalHarianState extends State<JadwalHarian> {
                                           child: Text("Data empty"),
                                         );
                                       } else {
-                                        return new CheckboxListTile(
-                                            value: pagi[index].getStatus(),
-                                            activeColor: Colors.blue[600],
-                                            title: Text(
-                                              pagi[index].takaran +
-                                                  " " +
-                                                  pagi[index].keterangan,
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            onChanged: (bool value) {
-                                              if (pagi[index].status == "1") {
-                                                setState(() =>
-                                                    pagi[index].status = "0");
-                                                ubahStatus(
-                                                    pagi[index].id.toString(),
-                                                    "0");
-                                              } else {
-                                                setState(() =>
-                                                    pagi[index].status = "1");
-                                                ubahStatus(
-                                                    pagi[index].id.toString(),
-                                                    "1");
-                                              }
-                                            });
+                                        return tipe == 1
+                                            ? new CheckboxListTile(
+                                                value: pagi[index].getStatus(),
+                                                activeColor: Colors.blue[600],
+                                                title: Text(
+                                                  pagi[index].takaran +
+                                                      " " +
+                                                      pagi[index].keterangan,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                onChanged: (bool value) {
+                                                  if (pagi[index].status ==
+                                                      "1") {
+                                                    setState(() => pagi[index]
+                                                        .status = "0");
+                                                    ubahStatus(
+                                                        pagi[index]
+                                                            .id
+                                                            .toString(),
+                                                        "0");
+                                                  } else {
+                                                    setState(() => pagi[index]
+                                                        .status = "1");
+                                                    ubahStatus(
+                                                        pagi[index]
+                                                            .id
+                                                            .toString(),
+                                                        "1");
+                                                  }
+                                                })
+                                            : new CheckboxListTile(
+                                                value: pagi[index].getStatus(),
+                                                activeColor: Colors.blue[600],
+                                                title: Text(
+                                                  pagi[index].takaran +
+                                                      " " +
+                                                      pagi[index].keterangan,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                onChanged: (bool value) {});
                                       }
                                     }),
                               ),
@@ -254,30 +275,48 @@ class JadwalHarianState extends State<JadwalHarian> {
                                           child: Text("Data empty"),
                                         );
                                       } else {
-                                        return new CheckboxListTile(
-                                            value: siang[index].getStatus(),
-                                            activeColor: Colors.blue[600],
-                                            title: Text(
-                                              siang[index].takaran +
-                                                  " " +
-                                                  siang[index].keterangan,
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            onChanged: (bool value) {
-                                              if (siang[index].status == "1") {
-                                                setState(() =>
-                                                    siang[index].status = "0");
-                                                ubahStatus(
-                                                    siang[index].id.toString(),
-                                                    "0");
-                                              } else {
-                                                setState(() =>
-                                                    siang[index].status = "1");
-                                                ubahStatus(
-                                                    siang[index].id.toString(),
-                                                    "1");
-                                              }
-                                            });
+                                        return tipe == 1
+                                            ? new CheckboxListTile(
+                                                value: siang[index].getStatus(),
+                                                activeColor: Colors.blue[600],
+                                                title: Text(
+                                                  siang[index].takaran +
+                                                      " " +
+                                                      siang[index].keterangan,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                onChanged: (bool value) {
+                                                  if (siang[index].status ==
+                                                      "1") {
+                                                    setState(() => siang[index]
+                                                        .status = "0");
+                                                    ubahStatus(
+                                                        siang[index]
+                                                            .id
+                                                            .toString(),
+                                                        "0");
+                                                  } else {
+                                                    setState(() => siang[index]
+                                                        .status = "1");
+                                                    ubahStatus(
+                                                        siang[index]
+                                                            .id
+                                                            .toString(),
+                                                        "1");
+                                                  }
+                                                })
+                                            : new CheckboxListTile(
+                                                value: siang[index].getStatus(),
+                                                activeColor: Colors.blue[600],
+                                                title: Text(
+                                                  siang[index].takaran +
+                                                      " " +
+                                                      siang[index].keterangan,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                onChanged: (bool value) {});
                                       }
                                     }),
                               ),
@@ -346,30 +385,48 @@ class JadwalHarianState extends State<JadwalHarian> {
                                           child: Text("Data empty"),
                                         );
                                       } else {
-                                        return new CheckboxListTile(
-                                            value: malam[index].getStatus(),
-                                            activeColor: Colors.blue[600],
-                                            title: Text(
-                                              malam[index].takaran +
-                                                  " " +
-                                                  malam[index].keterangan,
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            onChanged: (bool value) {
-                                              if (malam[index].status == "1") {
-                                                setState(() =>
-                                                    malam[index].status = "0");
-                                                ubahStatus(
-                                                    malam[index].id.toString(),
-                                                    "0");
-                                              } else {
-                                                setState(() =>
-                                                    malam[index].status = "1");
-                                                ubahStatus(
-                                                    malam[index].id.toString(),
-                                                    "1");
-                                              }
-                                            });
+                                        return tipe == 1
+                                            ? new CheckboxListTile(
+                                                value: malam[index].getStatus(),
+                                                activeColor: Colors.blue[600],
+                                                title: Text(
+                                                  malam[index].takaran +
+                                                      " " +
+                                                      malam[index].keterangan,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                onChanged: (bool value) {
+                                                  if (malam[index].status ==
+                                                      "1") {
+                                                    setState(() => malam[index]
+                                                        .status = "0");
+                                                    ubahStatus(
+                                                        malam[index]
+                                                            .id
+                                                            .toString(),
+                                                        "0");
+                                                  } else {
+                                                    setState(() => malam[index]
+                                                        .status = "1");
+                                                    ubahStatus(
+                                                        malam[index]
+                                                            .id
+                                                            .toString(),
+                                                        "1");
+                                                  }
+                                                })
+                                            : new CheckboxListTile(
+                                                value: malam[index].getStatus(),
+                                                activeColor: Colors.blue[600],
+                                                title: Text(
+                                                  malam[index].takaran +
+                                                      " " +
+                                                      malam[index].keterangan,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                onChanged: (bool value) {});
                                       }
                                     }),
                               ),
@@ -439,35 +496,54 @@ class JadwalHarianState extends State<JadwalHarian> {
                                           child: Text("Data empty"),
                                         );
                                       } else {
-                                        return new CheckboxListTile(
-                                            value: olahraga[index].getStatus(),
-                                            activeColor: Colors.blue[600],
-                                            title: Text(
-                                              olahraga[index].takaran +
-                                                  " " +
-                                                  olahraga[index].keterangan,
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                            onChanged: (bool value) {
-                                              if (olahraga[index].status ==
-                                                  "1") {
-                                                setState(() => olahraga[index]
-                                                    .status = "0");
-                                                ubahStatus(
-                                                    olahraga[index]
-                                                        .id
-                                                        .toString(),
-                                                    "0");
-                                              } else {
-                                                setState(() => olahraga[index]
-                                                    .status = "1");
-                                                ubahStatus(
-                                                    olahraga[index]
-                                                        .id
-                                                        .toString(),
-                                                    "1");
-                                              }
-                                            });
+                                        return tipe == 1
+                                            ? new CheckboxListTile(
+                                                value:
+                                                    olahraga[index].getStatus(),
+                                                activeColor: Colors.blue[600],
+                                                title: Text(
+                                                  olahraga[index].takaran +
+                                                      " " +
+                                                      olahraga[index]
+                                                          .keterangan,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                onChanged: (bool value) {
+                                                  if (olahraga[index].status ==
+                                                      "1") {
+                                                    setState(() =>
+                                                        olahraga[index].status =
+                                                            "0");
+                                                    ubahStatus(
+                                                        olahraga[index]
+                                                            .id
+                                                            .toString(),
+                                                        "0");
+                                                  } else {
+                                                    setState(() =>
+                                                        olahraga[index].status =
+                                                            "1");
+                                                    ubahStatus(
+                                                        olahraga[index]
+                                                            .id
+                                                            .toString(),
+                                                        "1");
+                                                  }
+                                                })
+                                            : new CheckboxListTile(
+                                                value:
+                                                    olahraga[index].getStatus(),
+                                                activeColor: Colors.blue[600],
+                                                title: Text(
+                                                  olahraga[index].takaran +
+                                                      " " +
+                                                      olahraga[index]
+                                                          .keterangan,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                onChanged: (bool value) {});
                                       }
                                     }),
                               ),

@@ -64,6 +64,81 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     });
   }
 
+  void showAlert(String di, String packet) {
+    AlertDialog dialog = new AlertDialog(
+      content: new Container(
+        width: 260.0,
+        height: 230.0,
+        decoration: new BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: const Color(0xFFFFFF),
+          borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+        ),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            new Expanded(
+              child: new Container(
+                  child: new Text(
+                      "Program akan dimulai besok, aktivasi paket sekarang ?")),
+              flex: 2,
+            ),
+            new Expanded(
+              child: Row(
+                children: [
+                  SizedBox(width: 30),
+                  Container(
+                    child: new RaisedButton(
+                      onPressed: () {
+                        aktivasiPaket(di, packet);
+                        Navigator.of(context, rootNavigator: true).pop(true);
+                      },
+                      padding: new EdgeInsets.all(16.0),
+                      color: Colors.green,
+                      child: new Text(
+                        'Ya',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontFamily: 'helvetica_neue_light',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Container(
+                    child: new RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop(true);
+                      },
+                      padding: new EdgeInsets.all(16.0),
+                      color: Colors.red,
+                      child: new Text(
+                        'Tidak',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontFamily: 'helvetica_neue_light',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        });
+  }
+
   Future<List<Transaksibelipaket>> transaksiOnProses() async {
     List<Transaksibelipaket> arrTrans = new List();
     Map paramData = {'user': session.userlogin};
@@ -272,7 +347,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                                                 .circular(2),
                                                       ),
                                                       onPressed: () {
-                                                        aktivasiPaket(
+                                                        showAlert(
                                                             arrTransaksi[index]
                                                                 .id,
                                                             arrTransaksi[index]

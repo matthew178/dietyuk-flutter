@@ -216,7 +216,7 @@ class ProdukDetailState extends State<ProdukDetail> {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: NetworkImage(
-                          session.ipnumber + "/gambar/" + produk.foto),
+                          session.ipnumber + "/gambar/produk/" + produk.foto),
                       fit: BoxFit.cover)),
               child: Padding(
                 padding: EdgeInsets.only(left: 25, right: 25),

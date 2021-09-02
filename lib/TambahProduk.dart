@@ -19,6 +19,7 @@ class TambahProdukState extends State<TambahProduk> {
   TextEditingController kemasanProduk = new TextEditingController();
   TextEditingController deskripsiProduk = new TextEditingController();
   TextEditingController varianProduk = new TextEditingController();
+  TextEditingController beratProduk = new TextEditingController();
 
   ClassKategoriProduk kategori = null;
   List<ClassKategoriProduk> arrKategori = new List();
@@ -53,12 +54,14 @@ class TambahProdukState extends State<TambahProduk> {
       var data = json.decode(res.body);
       data = data[0]['kategori'];
       for (int i = 0; i < data.length; i++) {
-        databaru = ClassKategoriProduk(
-            data[i]['kodekategori'].toString(),
-            data[i]['namakategori'].toString(),
-            data[i]['gambar'].toString(),
-            data[i]['icon'].toString());
-        tempKategori.add(databaru);
+        if (i > 0) {
+          databaru = ClassKategoriProduk(
+              data[i]['kodekategori'].toString(),
+              data[i]['namakategori'].toString(),
+              data[i]['gambar'].toString(),
+              data[i]['icon'].toString());
+          tempKategori.add(databaru);
+        }
       }
       setState(() => this.arrKategori = tempKategori);
       return tempKategori;
@@ -68,21 +71,37 @@ class TambahProdukState extends State<TambahProduk> {
   }
 
   void addProduk() async {
+    String base64Image = "";
+    String namaFile = "";
+
+    if (_image != null) {
+      base64Image = base64Encode(_image.readAsBytesSync()); //mimage
+      namaFile = _image.path.split("/").last + ".png"; //mfile
+      print("not null");
+    } else {
+      // print("image is null");
+      namaFile = "default.png";
+    }
     Map paramData = {
       'konsultan': session.userlogin,
       'nama': namaProduk.text,
       'kategori': kategori.kodekategori,
       'kemasan': kemasanProduk.text,
+      'berat': beratProduk.text,
       'harga': hargaProduk.text,
       'deskripsi': deskripsiProduk.text,
-      'varian': varianProduk.text
+      'varian': varianProduk.text,
+      'm_filename': namaFile,
+      'm_image': base64Image
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getkategori",
+        .post(session.ipnumber + "/tambahproduk",
             headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {})
-        .catchError((err) {
+        .then((res) {
+      print(res.body);
+      Navigator.of(this.context, rootNavigator: true).pop(true);
+    }).catchError((err) {
       print(err);
     });
   }
@@ -145,10 +164,21 @@ class TambahProdukState extends State<TambahProduk> {
             Container(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: TextFormField(
+                controller: beratProduk,
+                keyboardType: TextInputType.number,
+                autofocus: true,
+                decoration: InputDecoration(labelText: "Berat (gram)"),
+                validator: (value) =>
+                    value.isEmpty ? "Detail Kemasan tidak boleh kosong" : null,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: TextFormField(
                 controller: hargaProduk,
                 keyboardType: TextInputType.number,
                 autofocus: true,
-                decoration: InputDecoration(labelText: "Harga"),
+                decoration: InputDecoration(labelText: "Harga (Rp)"),
                 validator: (value) =>
                     value.isEmpty ? "Detail Kemasan tidak boleh kosong" : null,
               ),
@@ -159,6 +189,7 @@ class TambahProdukState extends State<TambahProduk> {
                 controller: deskripsiProduk,
                 keyboardType: TextInputType.text,
                 autofocus: true,
+                maxLines: 5,
                 decoration: InputDecoration(labelText: "Deskripsi Produk"),
                 validator: (value) => value.isEmpty
                     ? "Deskripsi Produk tidak boleh kosong"

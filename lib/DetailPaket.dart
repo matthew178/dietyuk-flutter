@@ -60,31 +60,31 @@ class DetailPaketState extends State<DetailPaket> {
     getProfile();
   }
 
-  Future<void> evtSebelum() async {
-    if (hari <= 1) {
-      setState(() {
-        hari = int.parse(paketsekarang.durasi);
-      });
-    } else {
-      setState(() {
-        hari = hari - 1;
-      });
-    }
-    sesuaikanJadwal(hari);
-  }
+  // Future<void> evtSebelum() async {
+  //   if (hari <= 1) {
+  //     setState(() {
+  //       hari = int.parse(paketsekarang.durasi);
+  //     });
+  //   } else {
+  //     setState(() {
+  //       hari = hari - 1;
+  //     });
+  //   }
+  //   sesuaikanJadwal(hari);
+  // }
 
-  Future<void> evtSesudah() async {
-    if (hari >= int.parse(paketsekarang.durasi)) {
-      setState(() {
-        hari = 1;
-      });
-    } else {
-      setState(() {
-        hari = hari + 1;
-      });
-    }
-    sesuaikanJadwal(hari);
-  }
+  // Future<void> evtSesudah() async {
+  //   if (hari >= int.parse(paketsekarang.durasi)) {
+  //     setState(() {
+  //       hari = 1;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       hari = hari + 1;
+  //     });
+  //   }
+  //   sesuaikanJadwal(hari);
+  // }
 
   Future<ClassUser> getProfile() async {
     ClassUser userlog = new ClassUser(
@@ -146,26 +146,26 @@ class DetailPaketState extends State<DetailPaket> {
     });
   }
 
-  Future<List<ClassJadwal>> sesuaikanJadwal(int harike) async {
-    List<ClassJadwal> tempJadwal = new List();
-    ClassJadwal databaru =
-        new ClassJadwal("id", "id_paket", "hari", "waktu", "keterangan", "");
-    for (int i = 0; i < allJadwal.length; i++) {
-      if (allJadwal[i].hari == harike.toString()) {
-        databaru = ClassJadwal(
-            allJadwal[i].id,
-            allJadwal[i].id_paket,
-            allJadwal[i].hari,
-            allJadwal[i].waktu,
-            allJadwal[i].keterangan,
-            allJadwal[i].takaran);
-        tempJadwal.add(databaru);
-      }
-    }
-    setState(() => this.arrJadwal = tempJadwal);
-    print(arrJadwal.length.toString() + " data");
-    return tempJadwal;
-  }
+  // Future<List<ClassJadwal>> sesuaikanJadwal(int harike) async {
+  //   List<ClassJadwal> tempJadwal = new List();
+  //   ClassJadwal databaru =
+  //       new ClassJadwal("id", "id_paket", "hari", "waktu", "keterangan", "");
+  //   for (int i = 0; i < allJadwal.length; i++) {
+  //     if (allJadwal[i].hari == harike.toString()) {
+  //       databaru = ClassJadwal(
+  //           allJadwal[i].id,
+  //           allJadwal[i].id_paket,
+  //           allJadwal[i].hari,
+  //           allJadwal[i].waktu,
+  //           allJadwal[i].keterangan,
+  //           allJadwal[i].takaran);
+  //       tempJadwal.add(databaru);
+  //     }
+  //   }
+  //   setState(() => this.arrJadwal = tempJadwal);
+  //   print(arrJadwal.length.toString() + " data");
+  //   return tempJadwal;
+  // }
 
   Future<List<ClassJadwal>> getJadwal() async {
     List<ClassJadwal> tempJadwal = new List();
@@ -191,7 +191,7 @@ class DetailPaketState extends State<DetailPaket> {
       }
       setState(() => this.arrJadwal = tempJadwal);
       setState(() => this.allJadwal = tempJadwal);
-      sesuaikanJadwal(hari);
+      // sesuaikanJadwal(hari);
       return tempJadwal;
     }).catchError((err) {
       print(err);
@@ -228,7 +228,7 @@ class DetailPaketState extends State<DetailPaket> {
           data[0]['nama'].toString(),
           data[0]['nama_paket'].toString(),
           data[0]['deskripsi'].toString(),
-          data[0]['gambar'].toString());
+          data[0]['background'].toString());
       setState(() => this.paketsekarang = arrPaket);
       return arrPaket;
     }).catchError((err) {
@@ -359,62 +359,59 @@ class DetailPaketState extends State<DetailPaket> {
                     Container(
                       child: ListView(
                         children: [
-                          Container(
-                            padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                      flex: 2,
-                                      child: Text(
-                                        "Hari " + hari.toString(),
-                                        style: TextStyle(fontSize: 20),
-                                      )),
-                                  Expanded(
-                                    flex: 1,
-                                    child: RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(2),
-                                      ),
-                                      onPressed: () {
-                                        evtSebelum();
-                                      },
-                                      color: Colors.lightBlueAccent,
-                                      child: Text(
-                                        '<',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(2),
-                                      ),
-                                      onPressed: () {
-                                        evtSesudah();
-                                      },
-                                      color: Colors.lightBlueAccent,
-                                      child: Text(
-                                        '>',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                            child: Center(),
-                          ),
+                          // Container(
+                          //   padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
+                          //   child: Center(
+                          //     child: Row(
+                          //       mainAxisAlignment: MainAxisAlignment.center,
+                          //       children: [
+                          //         Expanded(
+                          //             flex: 2,
+                          //             child: Text(
+                          //               "Hari " + hari.toString(),
+                          //               style: TextStyle(fontSize: 20),
+                          //             )),
+                          //         Expanded(
+                          //           flex: 1,
+                          //           child: RaisedButton(
+                          //             shape: RoundedRectangleBorder(
+                          //               borderRadius: BorderRadius.circular(2),
+                          //             ),
+                          //             onPressed: () {
+                          //               evtSebelum();
+                          //             },
+                          //             color: Colors.lightBlueAccent,
+                          //             child: Text(
+                          //               '<',
+                          //               style: TextStyle(color: Colors.white),
+                          //             ),
+                          //           ),
+                          //         ),
+                          //         Expanded(
+                          //           flex: 1,
+                          //           child: RaisedButton(
+                          //             shape: RoundedRectangleBorder(
+                          //               borderRadius: BorderRadius.circular(2),
+                          //             ),
+                          //             onPressed: () {
+                          //               evtSesudah();
+                          //             },
+                          //             color: Colors.lightBlueAccent,
+                          //             child: Text(
+                          //               '>',
+                          //               style: TextStyle(color: Colors.white),
+                          //             ),
+                          //           ),
+                          //         )
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+                          SizedBox(height: 15),
                           Container(
                               padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                               child: SizedBox(
-                                height: 150,
+                                height: 190,
                                 child: new ListView.builder(
                                     itemCount: arrJadwal.length == 0
                                         ? 0
@@ -461,7 +458,8 @@ class DetailPaketState extends State<DetailPaket> {
                             padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                             child: Text(
                               // "Deskripsi : " + paketsekarang.deskripsi,
-                              paketsekarang.deskripsi,
+                              // paketsekarang.deskripsi,
+                              "ini harusnya ambil dari db review",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 17,

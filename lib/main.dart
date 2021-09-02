@@ -1,6 +1,8 @@
 import 'package:dietyuk/Dashkonsultan.dart';
 import 'package:dietyuk/Dashmember.dart';
+import 'package:dietyuk/ForgotPassword.dart';
 import 'package:dietyuk/Register.dart';
+import 'package:dietyuk/TambahLibur.dart';
 import 'package:dietyuk/checkout.dart';
 import 'package:dietyuk/perkembanganmember.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +56,9 @@ class MyApp extends StatelessWidget {
         '/saldo': (context) => Saldo(),
         '/topup': (context) => Topup(),
         '/tambahproduk': (context) => TambahProduk(),
-        '/halamancart': (context) => Checkout()
+        '/halamancart': (context) => Checkout(),
+        '/tambahlibur': (context) => TambahLibur(),
+        '/lupapassword': (context) => ForgotPassword()
       },
     );
   }

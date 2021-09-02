@@ -83,7 +83,7 @@ class DaftarProdukState extends State<DaftarProduk> {
                         flex: 3,
                         child: Image.network(
                             session.ipnumber +
-                                "/gambar/" +
+                                "/gambar/produk/" +
                                 arrProduk[index].foto,
                             fit: BoxFit.cover),
                       ),

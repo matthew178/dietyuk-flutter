@@ -371,7 +371,8 @@ class AwalPaketState extends State<AwalPaket> {
                                         builder: (context) => JadwalHarian(
                                             week: week,
                                             idbeli: id,
-                                            hari: arrAwal[index].hari)))
+                                            hari: arrAwal[index].hari,
+                                            tipe: 1)))
                                 : cetakdialog(
                                     arrTemp[index].id,
                                     arrTemp[index].keterangan,
