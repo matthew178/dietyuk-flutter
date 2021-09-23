@@ -183,7 +183,8 @@ class HomePageMemberState extends State<HomePageMember> {
                                         color: HexColor("#1e96fc")),
                                     child: FlatButton(
                                       onPressed: () {
-                                        Navigator.pushNamed(context, "/saldo");
+                                        Navigator.pushNamed(context, "/saldo")
+                                            .then((value) => getProfile());
                                       },
                                       child: Text(
                                         'Top Up',
@@ -209,9 +210,10 @@ class HomePageMemberState extends State<HomePageMember> {
                         GestureDetector(
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Daftarpaket()));
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Daftarpaket()))
+                                  .then((value) => getProfile());
                             },
                             child: Card(
                               elevation: 4,
@@ -235,9 +237,10 @@ class HomePageMemberState extends State<HomePageMember> {
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PilihProduk()));
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PilihProduk()))
+                                .then((value) => getProfile());
                           },
                           child: Card(
                             elevation: 4,
@@ -262,10 +265,11 @@ class HomePageMemberState extends State<HomePageMember> {
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        Daftartransaksimember()));
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            Daftartransaksimember()))
+                                .then((value) => getProfile());
                           },
                           child: Card(
                             elevation: 4,

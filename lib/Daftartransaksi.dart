@@ -46,7 +46,8 @@ class DaftartransaksiState extends State<Daftartransaksi> {
             data[i]['totalharga'].toString(),
             data[i]['status'].toString(),
             data[i]['nama_paket'].toString(),
-            data[i]['nama'].toString());
+            data[i]['nama'].toString(),
+            data[i]['statuskonsultan'].toString());
         arrTrans.add(databaru);
       }
       setState(() => this.onproses = arrTrans);
@@ -79,7 +80,8 @@ class DaftartransaksiState extends State<Daftartransaksi> {
             data[i]['totalharga'].toString(),
             data[i]['status'].toString(),
             data[i]['nama_paket'].toString(),
-            data[i]['nama'].toString());
+            data[i]['nama'].toString(),
+            data[i]['statuskonsultan'].toString());
         arrTrans.add(databaru);
       }
       setState(() => this.selesai = arrTrans);

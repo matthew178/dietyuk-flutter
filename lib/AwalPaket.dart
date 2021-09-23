@@ -415,25 +415,26 @@ class AwalPaketState extends State<AwalPaket> {
                                         child: Column(
                                           children: [
                                             Expanded(
-                                                flex: 1,
+                                                flex: 2,
                                                 child: Text(
-                                                  "Hari " + arrTemp[index].hari,
+                                                  "Laporan\nHari Ke-" +
+                                                      arrTemp[index].hari,
                                                   style: TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontFamily: 'Biryani'),
                                                 )),
-                                            Expanded(
-                                                flex: 1,
-                                                child: Text(
-                                                  arrTemp[index].tanggal,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily: 'Biryani'),
-                                                )),
+                                            // Expanded(
+                                            //     flex: 1,
+                                            //     child: Text(
+                                            //       arrTemp[index].tanggal,
+                                            //       style: TextStyle(
+                                            //           color: Colors.white,
+                                            //           fontWeight:
+                                            //               FontWeight.bold,
+                                            //           fontFamily: 'Biryani'),
+                                            //     )),
                                             Expanded(
                                                 flex: 2,
                                                 child: Text(
@@ -458,9 +459,9 @@ class AwalPaketState extends State<AwalPaket> {
                                             child: Column(
                                               children: [
                                                 Expanded(
-                                                    flex: 1,
+                                                    flex: 2,
                                                     child: Text(
-                                                      "Hari " +
+                                                      "Laporan\nHari Ke-" +
                                                           arrTemp[index].hari,
                                                       style: TextStyle(
                                                           color: Colors.white,
@@ -469,17 +470,17 @@ class AwalPaketState extends State<AwalPaket> {
                                                           fontFamily:
                                                               'Biryani'),
                                                     )),
-                                                Expanded(
-                                                    flex: 1,
-                                                    child: Text(
-                                                      arrTemp[index].tanggal,
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              'Biryani'),
-                                                    )),
+                                                // Expanded(
+                                                //     flex: 1,
+                                                //     child: Text(
+                                                //       arrTemp[index].tanggal,
+                                                //       style: TextStyle(
+                                                //           color: Colors.white,
+                                                //           fontWeight:
+                                                //               FontWeight.bold,
+                                                //           fontFamily:
+                                                //               'Biryani'),
+                                                //     )),
                                                 Expanded(
                                                     flex: 2,
                                                     child: Text(
@@ -522,9 +523,9 @@ class AwalPaketState extends State<AwalPaket> {
                                                 child: Column(
                                                   children: [
                                                     Expanded(
-                                                        flex: 1,
+                                                        flex: 2,
                                                         child: Text(
-                                                          "Hari " +
+                                                          "Laporan\nHari Ke-" +
                                                               arrTemp[index]
                                                                   .hari,
                                                           style: TextStyle(
@@ -536,20 +537,20 @@ class AwalPaketState extends State<AwalPaket> {
                                                               fontFamily:
                                                                   'Biryani'),
                                                         )),
-                                                    Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          arrTemp[index]
-                                                              .tanggal,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  'Biryani'),
-                                                        )),
+                                                    // Expanded(
+                                                    //     flex: 1,
+                                                    //     child: Text(
+                                                    //       arrTemp[index]
+                                                    //           .tanggal,
+                                                    //       style: TextStyle(
+                                                    //           color:
+                                                    //               Colors.white,
+                                                    //           fontWeight:
+                                                    //               FontWeight
+                                                    //                   .bold,
+                                                    //           fontFamily:
+                                                    //               'Biryani'),
+                                                    //     )),
                                                     Expanded(
                                                         flex: 2,
                                                         child: Text(
@@ -593,9 +594,9 @@ class AwalPaketState extends State<AwalPaket> {
                                                 child: Column(
                                                   children: [
                                                     Expanded(
-                                                        flex: 1,
+                                                        flex: 2,
                                                         child: Text(
-                                                          "Hari " +
+                                                          "Laporan\nHari Ke-" +
                                                               arrTemp[index]
                                                                   .hari,
                                                           style: TextStyle(
@@ -607,20 +608,20 @@ class AwalPaketState extends State<AwalPaket> {
                                                               fontFamily:
                                                                   'Biryani'),
                                                         )),
-                                                    Expanded(
-                                                        flex: 1,
-                                                        child: Text(
-                                                          arrTemp[index]
-                                                              .tanggal,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  'Biryani'),
-                                                        )),
+                                                    // Expanded(
+                                                    //     flex: 1,
+                                                    //     child: Text(
+                                                    //       arrTemp[index]
+                                                    //           .tanggal,
+                                                    //       style: TextStyle(
+                                                    //           color:
+                                                    //               Colors.white,
+                                                    //           fontWeight:
+                                                    //               FontWeight
+                                                    //                   .bold,
+                                                    //           fontFamily:
+                                                    //               'Biryani'),
+                                                    //     )),
                                                     Expanded(
                                                         flex: 2,
                                                         child: Text(

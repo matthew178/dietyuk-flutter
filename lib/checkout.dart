@@ -279,7 +279,7 @@ class CheckoutState extends State<Checkout> {
                                         ),
                                         child: Image(
                                           image: NetworkImage(session.ipnumber +
-                                              "/gambar/" +
+                                              "/gambar/produk/" +
                                               session
                                                   .Cart[index].produkini.foto),
                                         ),

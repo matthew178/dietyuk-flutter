@@ -1,4 +1,5 @@
 import 'package:dietyuk/AwalPaket.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -54,7 +55,8 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
             data[i]['totalharga'].toString(),
             data[i]['status'].toString(),
             data[i]['nama_paket'].toString(),
-            data[i]['nama'].toString());
+            data[i]['nama'].toString(),
+            data[i]['statuskonsultan'].toString());
         arrTrans.add(databaru);
       }
       setState(() => this.arrTransaksi = arrTrans);
@@ -64,7 +66,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     });
   }
 
-  void showAlert(String di, String packet) {
+  void showAlert(String di, String packet, String sttskonsultan) {
     AlertDialog dialog = new AlertDialog(
       content: new Container(
         width: 260.0,
@@ -90,7 +92,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                   Container(
                     child: new RaisedButton(
                       onPressed: () {
-                        aktivasiPaket(di, packet);
+                        aktivasiPaket(di, packet, sttskonsultan);
                         Navigator.of(context, rootNavigator: true).pop(true);
                       },
                       padding: new EdgeInsets.all(16.0),
@@ -162,7 +164,8 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
             data[i]['totalharga'].toString(),
             data[i]['status'].toString(),
             data[i]['nama_paket'].toString(),
-            data[i]['nama'].toString());
+            data[i]['nama'].toString(),
+            data[i]['statuskonsultan'].toString());
         arrTrans.add(databaru);
       }
       setState(() => this.onProses = arrTrans);
@@ -195,7 +198,8 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
             data[i]['totalharga'].toString(),
             data[i]['status'].toString(),
             data[i]['nama_paket'].toString(),
-            data[i]['nama'].toString());
+            data[i]['nama'].toString(),
+            data[i]['statuskonsultan'].toString());
         arrTrans.add(databaru);
       }
       setState(() => this.selesai = arrTrans);
@@ -228,7 +232,8 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
             data[i]['totalharga'].toString(),
             data[i]['status'].toString(),
             data[i]['nama_paket'].toString(),
-            data[i]['nama'].toString());
+            data[i]['nama'].toString(),
+            data[i]['statuskonsultan'].toString());
         arrTrans.add(databaru);
       }
       setState(() => this.batal = arrTrans);
@@ -238,28 +243,69 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     });
   }
 
-  Future<String> aktivasiPaket(String id, String paket) async {
+  Future<String> aktivasiPaket(
+      String id, String paket, String sttskonsultan) async {
     print("id = " + id + " paket = " + paket);
-    Map paramData = {
-      'id': id,
-      'paket': paket,
-      'username': session.userlogin,
-      'berat': session.berat
-    };
+    if (sttskonsultan == "Aktif") {
+      Map paramData = {
+        'id': id,
+        'paket': paket,
+        'username': session.userlogin,
+        'berat': session.berat
+      };
+      var parameter = json.encode(paramData);
+      http
+          .post(session.ipnumber + "/aktivasiPaket",
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        // print(res.body);
+        var data = json.decode(res.body);
+        data = data[0]['transaksi'];
+        print("transaksi = " + data.toString());
+        getTransaksiBelumSelesai();
+        transaksiOnProses();
+        getTransaksiSelesai();
+        getTransaksiBatal();
+        return "selesai";
+      }).catchError((err) {
+        print(err);
+      });
+    } else {
+      Fluttertoast.showToast(
+          msg:
+              "Konsultan diblokir, paket yang telah dibeli akan otomatis dibatalkan. Uang anda akan dikembalikan");
+      Map paramData = {'id': id, 'username': session.userlogin, 'mode': 1};
+      var parameter = json.encode(paramData);
+      http
+          .post(session.ipnumber + "/refundPaket",
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        // print(res.body);
+        var data = json.decode(res.body);
+        data = data[0]['transaksi'];
+        print("transaksi = " + data.toString());
+        getTransaksiBelumSelesai();
+        transaksiOnProses();
+        getTransaksiSelesai();
+        getTransaksiBatal();
+        return "selesai";
+      }).catchError((err) {
+        print(err);
+      });
+    }
+  }
+
+  void batalBeliPaket(String id) async {
+    Map paramData = {'id': id, 'username': session.userlogin, 'mode': 2};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/aktivasiPaket",
+        .post(session.ipnumber + "/refundPaket",
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
-      // print(res.body);
-      var data = json.decode(res.body);
-      data = data[0]['transaksi'];
-      print("transaksi = " + data.toString());
       getTransaksiBelumSelesai();
       transaksiOnProses();
       getTransaksiSelesai();
       getTransaksiBatal();
-      return "selesai";
     }).catchError((err) {
       print(err);
     });
@@ -319,8 +365,8 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                       child: Column(
                                     children: [
                                       Container(
-                                        child: Text("Paket " +
-                                            arrTransaksi[index].idpaket),
+                                        child:
+                                            Text(arrTransaksi[index].namapaket),
                                       ),
                                       DateTime.parse(arrTransaksi[index]
                                                       .tanggalbeli)
@@ -351,7 +397,9 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                                             arrTransaksi[index]
                                                                 .id,
                                                             arrTransaksi[index]
-                                                                .idpaket);
+                                                                .idpaket,
+                                                            arrTransaksi[index]
+                                                                .statuskonsultan);
                                                       },
                                                       color: Colors
                                                           .lightBlueAccent,
@@ -376,7 +424,9 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                                                 .circular(2),
                                                       ),
                                                       onPressed: () {
-                                                        print("batal");
+                                                        batalBeliPaket(
+                                                            arrTransaksi[index]
+                                                                .id);
                                                       },
                                                       color: Colors
                                                           .lightBlueAccent,
@@ -407,11 +457,13 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                                                 .circular(2),
                                                       ),
                                                       onPressed: () {
-                                                        aktivasiPaket(
+                                                        showAlert(
                                                             arrTransaksi[index]
                                                                 .id,
                                                             arrTransaksi[index]
-                                                                .idpaket);
+                                                                .idpaket,
+                                                            arrTransaksi[index]
+                                                                .statuskonsultan);
                                                       },
                                                       color: Colors
                                                           .lightBlueAccent,
@@ -567,7 +619,8 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                       SizedBox(
                                         width: 30,
                                       ),
-                                      Container(
+                                      Expanded(
+                                        flex: 2,
                                         child: Column(
                                           children: [
                                             Container(
@@ -583,6 +636,13 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                           ],
                                         ),
                                       ),
+                                      // Expanded(
+                                      //   child: SizedBox(),
+                                      // ),
+                                      Expanded(
+                                          child: batal[index].status == "3"
+                                              ? Text("Batal Beli Paket")
+                                              : Text("Konsultan Diblokir"))
                                     ],
                                   )));
                             }

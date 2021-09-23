@@ -80,7 +80,7 @@ class TambahProdukState extends State<TambahProduk> {
       print("not null");
     } else {
       // print("image is null");
-      namaFile = "default.png";
+      namaFile = "defaultproduct.png";
     }
     Map paramData = {
       'konsultan': session.userlogin,
@@ -100,7 +100,8 @@ class TambahProdukState extends State<TambahProduk> {
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
-      Navigator.of(this.context, rootNavigator: true).pop(true);
+      // Navigator.of(this.context, rootNavigator: true).pop(true);
+      Navigator.pushNamed(this.context, "/konsultan");
     }).catchError((err) {
       print(err);
     });

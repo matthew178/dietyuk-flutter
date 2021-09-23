@@ -72,27 +72,34 @@ class LoginState extends State<Login> {
         var data = json.decode(res.body);
         session.userlogin = data[0]['id'];
         session.role = data[0]['role'];
-        Fluttertoast.showToast(msg: "Berhasil Login");
         preference.setString("user", data[0]['id'].toString());
         preference.setString("role", data[0]['role']);
         preference.setString("berat", data[0]['berat']);
 
-        if (data[0]['role'] == "member") {
-          var temp = jsonDecode(
-              preference.getString('cart' + session.userlogin.toString()) ??
-                  "[]");
-          for (var i = 0; i < temp.length; i++) {
-            session.Cart.add(new shoppingcart(
-                temp[i]["kodeproduk"].toString(),
-                temp[i]["username"].toString(),
-                temp[i]["jumlah"].toString(),
-                temp[i]["konsultan"].toString(),
-                temp[i]["harga"].toString()));
+        if (data[0]['status'] == "Aktif") {
+          if (data[0]['role'] == "member") {
+            var temp = jsonDecode(
+                preference.getString('cart' + session.userlogin.toString()) ??
+                    "[]");
+            for (var i = 0; i < temp.length; i++) {
+              session.Cart.add(new shoppingcart(
+                  temp[i]["kodeproduk"].toString(),
+                  temp[i]["username"].toString(),
+                  temp[i]["jumlah"].toString(),
+                  temp[i]["konsultan"].toString(),
+                  temp[i]["harga"].toString()));
+            }
+            print("jumlah cart : " + session.Cart.length.toString());
+            Fluttertoast.showToast(msg: "Berhasil Login");
+            Navigator.pushNamed(this.context, "/member");
+          } else if (data[0]['role'] == "konsultan") {
+            Navigator.pushNamed(this.context, "/konsultan");
           }
-          print("jumlah cart : " + session.Cart.length.toString());
-          Navigator.pushNamed(this.context, "/member");
-        } else if (data[0]['role'] == "konsultan") {
-          Navigator.pushNamed(this.context, "/konsultan");
+        } else if (data[0]['status'] == "Tidak Aktif") {
+          Fluttertoast.showToast(
+              msg: "Akun anda di blok. Silahkan hubungi admin");
+        } else {
+          Fluttertoast.showToast(msg: "Akun anda belum aktif");
         }
       } else {
         Fluttertoast.showToast(msg: "Gagal Login");

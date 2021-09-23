@@ -1,3 +1,5 @@
+import 'package:fluttertoast/fluttertoast.dart';
+
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -42,6 +44,17 @@ class RegisterState extends State<Register> {
               headers: {"Content-Type": "application/json"}, body: parameter)
           .then((res) {
         print(res.body);
+        var data = json.decode(res.body);
+        data = data[0]['status'];
+        if (data.toString() == "sukses") {
+          Fluttertoast.showToast(
+              msg: "Berhasil daftar. Silahkan cek email anda");
+          Navigator.pushNamed(context, '/');
+        } else {
+          Fluttertoast.showToast(
+              msg:
+                  "Email sudah terdaftar. Silahkan masuk dengan email tersebut");
+        }
       }).catchError((err) {
         print(err);
       });
@@ -123,6 +136,7 @@ class RegisterState extends State<Register> {
           body: ListView(
             children: [
               // SizedBox(height: size.height * 0.1),
+              SizedBox(height: 20),
               Center(
                   child: Center(
                       child: Text(
@@ -132,12 +146,12 @@ class RegisterState extends State<Register> {
                     fontSize: 35,
                     fontWeight: FontWeight.bold),
               ))),
-              SizedBox(height: 5),
+              SizedBox(height: 25),
               Padding(
                 padding: EdgeInsets.fromLTRB(
                     size.width * 0.1, 0, size.width * 0.1, 0),
                 child: Container(
-                    height: size.height * 0.8,
+                    height: size.height * 0.7,
                     width: size.width * 0.8,
                     decoration: BoxDecoration(
                         color: Colors.grey[500].withOpacity(0.5),
@@ -145,32 +159,33 @@ class RegisterState extends State<Register> {
                     child: Center(
                         child: Column(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(
-                              size.width * 0.1, 20, size.width * 0.1, 10),
-                          child: Container(
-                              height: size.height * 0.08,
-                              width: size.width * 0.8,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[500].withOpacity(0.5),
-                                  borderRadius: BorderRadius.circular(16)),
-                              child: Center(
-                                child: TextField(
-                                  controller: myName,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      prefixIcon: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 20.0),
-                                      ),
-                                      hintText: "Nama",
-                                      hintStyle: session.kBodyText),
-                                  style: session.kBodyText,
-                                  keyboardType: TextInputType.text,
-                                  textInputAction: TextInputAction.done,
-                                ),
-                              )),
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.fromLTRB(
+                        //       size.width * 0.1, 20, size.width * 0.1, 10),
+                        //   child: Container(
+                        //       height: size.height * 0.08,
+                        //       width: size.width * 0.8,
+                        //       decoration: BoxDecoration(
+                        //           color: Colors.grey[500].withOpacity(0.5),
+                        //           borderRadius: BorderRadius.circular(16)),
+                        //       child: Center(
+                        //         child: TextField(
+                        //           controller: myName,
+                        //           decoration: InputDecoration(
+                        //               border: InputBorder.none,
+                        //               prefixIcon: Padding(
+                        //                 padding: EdgeInsets.symmetric(
+                        //                     horizontal: 20.0),
+                        //               ),
+                        //               hintText: "Nama",
+                        //               hintStyle: session.kBodyText),
+                        //           style: session.kBodyText,
+                        //           keyboardType: TextInputType.text,
+                        //           textInputAction: TextInputAction.done,
+                        //         ),
+                        //       )),
+                        // ),
+                        SizedBox(height: 20),
                         Padding(
                           padding: EdgeInsets.fromLTRB(
                               size.width * 0.1, 0, size.width * 0.1, 0),

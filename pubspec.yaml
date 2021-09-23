@@ -47,6 +47,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^1.2.3
   
 
 # For information on the generic Dart part of this file, see the
@@ -91,6 +92,7 @@ flutter:
     - assets/images/bca.png
     - assets/images/mandiri.png
     - assets/images/equals.png
+    - assets/images/forgotpassword.jpg
 
 
   # The following line ensures that the Material Icons font is
@@ -129,3 +131,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  

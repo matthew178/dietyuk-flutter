@@ -146,6 +146,179 @@ class DetailPaketState extends State<DetailPaket> {
     });
   }
 
+  void showAlert() {
+    AlertDialog dialog = new AlertDialog(
+      content: new Container(
+        width: 600.0,
+        height: 300.0,
+        decoration: new BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: const Color(0xFFFFFF),
+          borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+        ),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            new Expanded(
+              child: new Container(
+                  child: Text(
+                "Rincian Pembelian",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              )),
+            ),
+            new Expanded(
+              child: new Container(
+                  child: Column(
+                children: [
+                  int.parse(userprofile.saldo.toString()) > 1000
+                      ? Container(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text("Saldo : "),
+                                flex: 1,
+                              ),
+                              Expanded(
+                                child: Text("Rp. " +
+                                    frmt.format(int.parse(userprofile.saldo))),
+                                flex: 1,
+                              )
+                            ],
+                          ),
+                        )
+                      : Container(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text("Saldo : "),
+                                flex: 1,
+                              ),
+                              Expanded(
+                                child: Text("Rp. " + userprofile.saldo),
+                                flex: 1,
+                              )
+                            ],
+                          ),
+                        ),
+                  int.parse(paketsekarang.harga.toString()) > 1000
+                      ? Container(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text("Harga Paket : "),
+                                flex: 1,
+                              ),
+                              Expanded(
+                                child: Text("Rp. " +
+                                    frmt.format(
+                                        int.parse(paketsekarang.harga))),
+                                flex: 1,
+                              )
+                            ],
+                          ),
+                        )
+                      : Container(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text("Harga Paket : "),
+                                flex: 1,
+                              ),
+                              Expanded(
+                                child: Text("Rp. " + paketsekarang.harga),
+                                flex: 1,
+                              )
+                            ],
+                          ),
+                        ),
+                  Container(
+                    child: Text("-----------------------------"),
+                  )
+                ],
+              )),
+            ),
+            new Expanded(
+                child: Container(
+              child: Row(
+                children: [
+                  Expanded(child: Text("Saldo Akhir : ")),
+                  Expanded(
+                      child: int.parse(userprofile.saldo) -
+                                  int.parse(paketsekarang.harga) >=
+                              0
+                          ? Text("Rp. " +
+                              frmt.format(int.parse(userprofile.saldo) -
+                                  int.parse(paketsekarang.harga)))
+                          : Text(
+                              "Rp. " +
+                                  frmt.format(int.parse(userprofile.saldo) -
+                                      int.parse(paketsekarang.harga)),
+                              style: TextStyle(color: Colors.red),
+                            ))
+                ],
+              ),
+            )),
+            new Expanded(
+              child: Row(
+                children: [
+                  SizedBox(width: 30),
+                  Container(
+                    child: new RaisedButton(
+                      onPressed: () {
+                        int.parse(userprofile.saldo) >
+                                int.parse(paketsekarang.harga)
+                            ? beliPaket()
+                            : Fluttertoast.showToast(
+                                msg: "Saldo Anda Tidak Cukup");
+                        Navigator.of(context, rootNavigator: true).pop(true);
+                      },
+                      padding: new EdgeInsets.all(16.0),
+                      color: Colors.green,
+                      child: new Text(
+                        'Beli',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontFamily: 'helvetica_neue_light',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Container(
+                    child: new RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop(true);
+                      },
+                      padding: new EdgeInsets.all(16.0),
+                      color: Colors.red,
+                      child: new Text(
+                        'Batal',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontFamily: 'helvetica_neue_light',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        });
+  }
+
   // Future<List<ClassJadwal>> sesuaikanJadwal(int harike) async {
   //   List<ClassJadwal> tempJadwal = new List();
   //   ClassJadwal databaru =
@@ -478,10 +651,7 @@ class DetailPaketState extends State<DetailPaket> {
                     borderRadius: BorderRadius.circular(2),
                   ),
                   onPressed: () {
-                    int.parse(userprofile.saldo) <
-                            int.parse(paketsekarang.harga)
-                        ? Fluttertoast.showToast(msg: "Saldo tidak cukup!")
-                        : beliPaket();
+                    showAlert();
                   },
                   color: Colors.lightBlueAccent,
                   child: Text(

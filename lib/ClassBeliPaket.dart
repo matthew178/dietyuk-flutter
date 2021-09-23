@@ -12,7 +12,8 @@ class Transaksibelipaket {
       totalharga,
       status,
       namapaket,
-      namakonsultan;
+      namakonsultan,
+      statuskonsultan;
 
   Transaksibelipaket(
       this.id,
@@ -26,5 +27,6 @@ class Transaksibelipaket {
       this.totalharga,
       this.status,
       this.namapaket,
-      this.namakonsultan);
+      this.namakonsultan,
+      this.statuskonsultan);
 }

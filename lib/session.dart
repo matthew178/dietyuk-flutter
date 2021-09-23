@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dietyuk/shoppingcart.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:dietyuk/ClassPaket.dart';
 
 String ipnumber = "http://192.168.1.116/dietyuk/public";
 int userlogin = 0;
@@ -9,6 +10,7 @@ String role = "";
 int berat = 0;
 int saldo = 0;
 List<shoppingcart> Cart = new List();
+List<ClassPaket> paketSemua = new List();
 
 const TextStyle kBodyText = TextStyle(fontSize: 18, color: Colors.white);
 const TextStyle kecil = TextStyle(fontSize: 15, color: Colors.white);
