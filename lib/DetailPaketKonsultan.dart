@@ -98,7 +98,7 @@ class DetailPaketKonsultanState extends State<DetailPaketKonsultan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Detail Paket Konsultan Page  " + id),
+        title: Text("Edit Paket  " + id),
         backgroundColor: session.warna,
       ),
       body: Center(

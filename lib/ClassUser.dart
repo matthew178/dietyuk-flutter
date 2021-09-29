@@ -15,7 +15,9 @@ class ClassUser {
       saldo,
       rating,
       status,
-      foto;
+      foto,
+      kota,
+      provinsi;
 
   ClassUser(
       this.id,
@@ -32,5 +34,7 @@ class ClassUser {
       this.saldo,
       this.rating,
       this.status,
-      this.foto);
+      this.foto,
+      this.provinsi,
+      this.kota);
 }

@@ -23,7 +23,7 @@ class TopupState extends State<Topup> {
   TextEditingController nominaltopup = new TextEditingController();
 
   ClassUser userprofile = new ClassUser(
-      "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+      "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
 
   void initState() {
     super.initState();
@@ -58,7 +58,7 @@ class TopupState extends State<Topup> {
 
   Future<ClassUser> getProfile() async {
     ClassUser userlog = new ClassUser(
-        "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+        "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
@@ -83,7 +83,9 @@ class TopupState extends State<Topup> {
           data[0]["saldo"].toString(),
           data[0]["rating"].toString(),
           data[0]["status"].toString(),
-          data[0]["foto"].toString());
+          data[0]["foto"].toString(),
+          "",
+          "");
       setState(() => this.userprofile = userlog);
       return userlog;
     }).catchError((err) {

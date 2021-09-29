@@ -1,3 +1,5 @@
+import 'package:dietyuk/Kota.dart';
+
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -23,11 +25,14 @@ class EditprofileState extends State<Editprofile> {
   TextEditingController berat = new TextEditingController();
   TextEditingController tinggi = new TextEditingController();
   List<Provinsi> arrProvinsi = new List();
+  List<Kota> arrKota = new List();
+  Kota city = null;
+  Provinsi prov = null;
 
   File _image;
 
   ClassUser userprofile = new ClassUser(
-      "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+      "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
 
   void initState() {
     super.initState();
@@ -38,14 +43,12 @@ class EditprofileState extends State<Editprofile> {
   Future<List<Provinsi>> getProvinsi() async {
     List<Provinsi> tempProvinsi = new List();
     Provinsi prv = new Provinsi("1", "");
-    http.get("https://api.rajaongkir.com/starter/province", headers: {
-      "Content-Type": "application/json",
-      "key": "08989a3df11fde8300acd691159a2ebd"
-    }).then((res) {
+    http.get(session.ipnumber + "/getProvinsi", headers: {}).then((res) {
       var data = json.decode(res.body);
-      data = data['rajaongkir']['results'];
+      data = data[0]['provinsi'];
       for (int i = 0; i < data.length; i++) {
-        prv = new Provinsi(data[i]['province_id'], data[i]['province']);
+        prv = new Provinsi(data[i]['id_provinsi'].toString(),
+            data[i]['nama_provinsi'].toString());
         tempProvinsi.add(prv);
       }
       setState(() {
@@ -57,20 +60,56 @@ class EditprofileState extends State<Editprofile> {
     return tempProvinsi;
   }
 
-  Future<String> getKota(String provinsi) async {
-    // Map paramData = {'province': provinsi};
-    // var parameter = json.encode(paramData);
-    // if (myPassword.text == confirmPassword.text) {
-    //   http
-    //       .post(session.ipnumber + "/register",
-    //           headers: {"Content-Type": "application/json"}, body: parameter)
-    //       .then((res) {
-    //     print(res.body);
-    //   }).catchError((err) {
-    //     print(err);
-    //   });
-    // }
-    // return "";
+  // Future<List<Provinsi>> getProvinsi() async {
+  //   List<Provinsi> tempProvinsi = new List();
+  //   Provinsi prv = new Provinsi("1", "");
+  //   http.get("https://api.rajaongkir.com/starter/province", headers: {
+  //     "Content-Type": "application/json",
+  //     "key": "08989a3df11fde8300acd691159a2ebd"
+  //   }).then((res) {
+  //     var data = json.decode(res.body);
+  //     data = data['rajaongkir']['results'];
+  //     for (int i = 0; i < data.length; i++) {
+  //       prv = new Provinsi(data[i]['province_id'], data[i]['province']);
+  //       tempProvinsi.add(prv);
+  //     }
+  //     setState(() {
+  //       this.arrProvinsi = tempProvinsi;
+  //     });
+  //   }).catchError((err) {
+  //     print(err);
+  //   });
+  //   return tempProvinsi;
+  // }
+
+  Future<List<Kota>> getKota(int provinsi) async {
+    city = null;
+    List<Kota> tempKota = new List();
+    Kota kot = new Kota(
+        "id", "provinsi", "namaprovinsi", "tipe", "namakota", "kodepos");
+    Map paramData = {'prov': provinsi};
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/getKotaByProvinsi",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      var data = json.decode(res.body);
+      data = data[0]['kota'];
+      for (int i = 0; i < data.length; i++) {
+        kot = Kota(
+            data[i]['id_kota'].toString(),
+            data[i]['id_provinsi'].toString(),
+            data[i]['provinsi'].toString(),
+            data[i]['tipe'].toString(),
+            data[i]['nama_kota'].toString(),
+            data[i]['kodepos'].toString());
+        tempKota.add(kot);
+      }
+      setState(() => this.arrKota = tempKota);
+      return arrKota;
+    }).catchError((err) {
+      print(err);
+    });
   }
 
   Future<String> editProfile() async {
@@ -93,7 +132,9 @@ class EditprofileState extends State<Editprofile> {
       'tinggi': tinggi.text,
       'id': session.userlogin,
       'm_filename': namaFile,
-      'm_image': base64Image
+      'm_image': base64Image,
+      'prov': prov.id,
+      'city': city.id
     };
     var parameter = json.encode(paramData);
     http
@@ -122,9 +163,56 @@ class EditprofileState extends State<Editprofile> {
     String basenamegallery = basename(namaFile);
   }
 
+  Future<Kota> getKotaAwal(String idkota) async {
+    Kota kota = new Kota("", "", "", "", "", "");
+    Map paramData = {'idkota': idkota};
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/getKotaAwal",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      print(res.body);
+      var data = json.decode(res.body);
+      data = data[0]['kota'];
+      kota = Kota(
+          data["id_kota"].toString(),
+          data["id_provinsi"].toString(),
+          data["provinsi"].toString(),
+          data["tipe"].toString(),
+          data["nama_kota"].toString(),
+          data["kodepos"].toString());
+      setState(() => this.city = kota);
+      print("nama kota: " + this.city.namakota);
+      return kota;
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+  Future<Provinsi> getProvinsiAwal(String idprovinsi) async {
+    Provinsi provinsiawal = new Provinsi("", "");
+    Map paramData = {'idprovinsi': idprovinsi};
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/getProvinsiAwal",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      print(res.body);
+      var data = json.decode(res.body);
+      data = data[0]['provinsi'];
+      provinsiawal = Provinsi(
+          data["id_provinsi"].toString(), data["nama_provinsi"].toString());
+      print("luar if: " + provinsiawal.nama + " " + provinsiawal.id);
+      // setState(() => this.prov = provinsiawal);
+      return provinsiawal;
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
   Future<ClassUser> getProfile() async {
     ClassUser userlog = new ClassUser(
-        "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+        "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
@@ -149,7 +237,13 @@ class EditprofileState extends State<Editprofile> {
           data[0]["saldo"].toString(),
           data[0]["rating"].toString(),
           data[0]["status"].toString(),
-          data[0]["foto"].toString());
+          data[0]["foto"].toString(),
+          data[0]["provinsi"].toString(),
+          data[0]["kota"].toString());
+      if (userlog.kota != "0") {
+        getProvinsiAwal(userlog.provinsi);
+        getKotaAwal(userlog.kota);
+      }
       setState(() => this.userprofile = userlog);
       username.text = userprofile.username;
       email.text = userprofile.email;
@@ -172,14 +266,14 @@ class EditprofileState extends State<Editprofile> {
 
   @override
   Widget build(BuildContext context) {
-    String img = "";
-    if (userprofile.jeniskelamin == "pria" && userprofile.foto == "pria.png")
-      img = "assets/images/pria.jpg";
-    else if (userprofile.jeniskelamin == "wanita" &&
-        userprofile.foto == "wanita.png")
-      img = "assets/images/wanita.png";
-    else
-      img = session.ipnumber + "/gambar/" + userprofile.foto;
+    // String img = "";
+    // if (userprofile.jeniskelamin == "pria" && userprofile.foto == "pria.png")
+    //   img = "assets/images/pria.jpg";
+    // else if (userprofile.jeniskelamin == "wanita" &&
+    //     userprofile.foto == "wanita.png")
+    //   img = "assets/images/wanita.png";
+    // else
+    //   img = session.ipnumber + "/gambar/" + userprofile.foto;
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Profile"),
@@ -266,6 +360,78 @@ class EditprofileState extends State<Editprofile> {
               ),
             ),
           ),
+          userprofile.role == "konsultan"
+              ? Container(
+                  padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
+                  height: 100,
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: DropdownButton<Provinsi>(
+                        style: Theme.of(context).textTheme.title,
+                        hint: Text("Provinsi"),
+                        value: prov,
+                        onChanged: (Provinsi value) {
+                          setState(() => {
+                                this.prov = value,
+                                city = null,
+                                getKota(int.parse(value.id))
+                              });
+                        },
+                        items: arrProvinsi.map((Provinsi prov) {
+                          return DropdownMenuItem<Provinsi>(
+                            value: prov,
+                            child: Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  prov.nama,
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      )),
+                    ],
+                  ))
+              : SizedBox(),
+          userprofile.role == "konsultan"
+              ? Container(
+                  padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
+                  height: 100,
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: DropdownButton<Kota>(
+                        style: Theme.of(context).textTheme.title,
+                        hint: Text("Kota"),
+                        value: city,
+                        onChanged: (Kota value) {
+                          setState(() => {this.city = value});
+                        },
+                        items: arrKota.map((Kota tempKot) {
+                          return DropdownMenuItem<Kota>(
+                            value: tempKot,
+                            child: Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  tempKot.tipe + " " + tempKot.namakota,
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      )),
+                    ],
+                  ))
+              : SizedBox(),
           Container(
             padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
             width: MediaQuery.of(context).size.width,

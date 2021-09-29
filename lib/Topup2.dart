@@ -30,7 +30,7 @@ class Topup2State extends State<Topup2> {
   ClassBank bank;
   String nominal;
   ClassUser userprofile = new ClassUser(
-      "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+      "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
   File _image;
   String namaFile = "";
   String basenamegallery = "";
@@ -85,7 +85,7 @@ class Topup2State extends State<Topup2> {
 
   Future<ClassUser> getProfile() async {
     ClassUser userlog = new ClassUser(
-        "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+        "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
@@ -110,7 +110,9 @@ class Topup2State extends State<Topup2> {
           data[0]["saldo"].toString(),
           data[0]["rating"].toString(),
           data[0]["status"].toString(),
-          data[0]['foto'].toString());
+          data[0]['foto'].toString(),
+          "",
+          "");
       setState(() => this.userprofile = userlog);
       return userlog;
     }).catchError((err) {

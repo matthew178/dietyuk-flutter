@@ -1,4 +1,6 @@
+import 'package:dietyuk/ClassUser.dart';
 import 'package:dietyuk/DetailProdukKonsultan.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
@@ -14,10 +16,67 @@ class DaftarProduk extends StatefulWidget {
 
 class DaftarProdukState extends State<DaftarProduk> {
   List<ClassProduk> arrProduk = new List();
+  ClassUser userprofile = new ClassUser(
+      "id",
+      "username",
+      "email",
+      "password",
+      "nama",
+      "jeniskelamin",
+      "nomorhp",
+      "tanggallahir",
+      "berat",
+      "tinggi",
+      "role",
+      "saldo",
+      "rating",
+      "status",
+      "foto",
+      "provinsi",
+      "kota");
   @override
   void initState() {
     super.initState();
     getProduk();
+    getProfile();
+  }
+
+  Future<ClassUser> getProfile() async {
+    ClassUser userlog = new ClassUser(
+        "", "", "", "", "", "", "", "", "", "", "", "0", "0", "", "", "", "");
+    Map paramData = {'id': session.userlogin};
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/getprofile",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      print(res.body);
+      var data = json.decode(res.body);
+      data = data[0]['profile'];
+      userlog = ClassUser(
+          data[0]["id"].toString(),
+          data[0]["username"].toString(),
+          data[0]["email"].toString(),
+          data[0]["password"].toString(),
+          data[0]["nama"].toString(),
+          data[0]["jeniskelamin"].toString(),
+          data[0]["nomorhp"].toString(),
+          data[0]["tanggallahir"].toString(),
+          data[0]["berat"].toString(),
+          data[0]["tinggi"].toString(),
+          data[0]["role"].toString(),
+          data[0]["saldo"].toString(),
+          data[0]["rating"].toString(),
+          data[0]["status"].toString(),
+          data[0]["foto"].toString(),
+          data[0]["provinsi"].toString(),
+          data[0]["kota"].toString());
+      setState(() => this.userprofile = userlog);
+
+      return userlog;
+    }).catchError((err) {
+      print(err);
+    });
   }
 
   Future<List<ClassProduk>> getProduk() async {
@@ -138,7 +197,12 @@ class DaftarProdukState extends State<DaftarProduk> {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, "/tambahproduk");
+          if (userprofile.provinsi == "0" && userprofile.kota == "0") {
+            Fluttertoast.showToast(
+                msg: "Harap masukkan kota asal di halaman Profile");
+          } else {
+            Navigator.pushNamed(context, "/tambahproduk");
+          }
         },
         child: const Icon(Icons.add),
         backgroundColor: Colors.blue.shade200,

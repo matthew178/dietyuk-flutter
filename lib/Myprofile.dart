@@ -20,7 +20,7 @@ class Myprofile extends StatefulWidget {
 class MyprofileState extends State<Myprofile> {
   String foto = session.ipnumber + "/gambar/wanita.png";
   ClassUser userprofile = new ClassUser(
-      "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+      "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
 
   void initState() {
     super.initState();
@@ -29,7 +29,7 @@ class MyprofileState extends State<Myprofile> {
 
   Future<ClassUser> getProfile() async {
     ClassUser userlog = new ClassUser(
-        "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+        "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
@@ -54,7 +54,9 @@ class MyprofileState extends State<Myprofile> {
           data[0]["saldo"].toString(),
           data[0]["rating"].toString(),
           data[0]["status"].toString(),
-          data[0]["foto"].toString());
+          data[0]["foto"].toString(),
+          data[0]["provinsi"].toString(),
+          data[0]["kota"].toString());
       setState(() => this.userprofile = userlog);
       print("foto : " + userprofile.foto);
       if (userprofile.jeniskelamin == "pria" && userprofile.foto == "pria.png")

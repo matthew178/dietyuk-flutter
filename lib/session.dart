@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:dietyuk/shoppingcart.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:dietyuk/ClassPaket.dart';
+import 'ClassAlamat.dart';
+import 'Kota.dart';
+import 'Provinsi.dart';
 
 String ipnumber = "http://192.168.1.116/dietyuk/public";
 int userlogin = 0;
@@ -11,6 +14,9 @@ int berat = 0;
 int saldo = 0;
 List<shoppingcart> Cart = new List();
 List<ClassPaket> paketSemua = new List();
+ClassAlamat alamat = new ClassAlamat("", "", "", "", "");
+Kota kota = new Kota("", "", "", "", "", "");
+Provinsi prov = new Provinsi("", "");
 
 const TextStyle kBodyText = TextStyle(fontSize: 18, color: Colors.white);
 const TextStyle kecil = TextStyle(fontSize: 15, color: Colors.white);

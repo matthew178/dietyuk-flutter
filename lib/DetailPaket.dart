@@ -46,7 +46,9 @@ class DetailPaketState extends State<DetailPaket> {
       "0",
       "0",
       "status",
-      "foto");
+      "foto",
+      "",
+      "");
 
   List<ClassPaket> arrPaket = new List();
 
@@ -88,7 +90,7 @@ class DetailPaketState extends State<DetailPaket> {
 
   Future<ClassUser> getProfile() async {
     ClassUser userlog = new ClassUser(
-        "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "");
+        "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
@@ -113,7 +115,9 @@ class DetailPaketState extends State<DetailPaket> {
           data[0]["saldo"].toString(),
           data[0]["rating"].toString(),
           data[0]["status"].toString(),
-          data[0]["foto"].toString());
+          data[0]["foto"].toString(),
+          data[0]["provinsi"].toString(),
+          data[0]["kota"].toString());
       setState(() => this.userprofile = userlog);
       return userlog;
     }).catchError((err) {

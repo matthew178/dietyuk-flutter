@@ -422,6 +422,9 @@ class CheckoutState extends State<Checkout> {
                   }),
             ),
             SizedBox(height: 25),
+            // Row(
+            //   children: [Expanded(child: Text("Jasa Pengiriman"))],
+            // ),
             Row(
               children: [
                 SizedBox(width: 25),
