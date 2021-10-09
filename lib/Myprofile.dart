@@ -1,3 +1,4 @@
+import 'package:dietyuk/ClassAlamat.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,10 +22,232 @@ class MyprofileState extends State<Myprofile> {
   String foto = session.ipnumber + "/gambar/wanita.png";
   ClassUser userprofile = new ClassUser(
       "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
+  TextEditingController tanggalawal = new TextEditingController();
+  TextEditingController tanggalakhir = new TextEditingController();
+  DateTime tglawal = new DateTime.now();
+  DateTime tglakhir = new DateTime.now();
+  bool _like = false, like2 = false;
 
   void initState() {
     super.initState();
     getProfile();
+  }
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: tglawal,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2021, 12));
+    //lastDate: DateTime( .year, date.month - 1, date.day));
+    if (picked != null && picked != tglawal)
+      setState(() {
+        tglawal = picked;
+        tanggalawal.text = tglawal.toString().substring(0, 10);
+      });
+  }
+
+  Future<Null> pilihTanggalAkhir(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: tglakhir,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2021, 12));
+    //lastDate: DateTime( .year, date.month - 1, date.day));
+    if (picked != null && picked != tglakhir)
+      setState(() {
+        tglakhir = picked;
+        tanggalakhir.text = tglakhir.toString().substring(0, 10);
+      });
+  }
+
+  Future<String> tambahLibur() async {
+    Map paramData = {
+      'id': session.userlogin,
+      'awal': tanggalawal.text,
+      'akhir': tanggalakhir.text
+    };
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/tambahLibur",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      print(res.body);
+      var data = json.decode(res.body);
+      data = data[0]['status'];
+      Fluttertoast.showToast(msg: data);
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+  void showAlert() {
+    AlertDialog dialog = new AlertDialog(
+      content: new Container(
+        width: 260.0,
+        height: 250,
+        decoration: new BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: const Color(0xFFFFFF),
+          borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+        ),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            // new Expanded(child: new Center(child: new Text("Tambah Libur"))),
+            new Expanded(
+              child: Column(
+                children: [
+                  SizedBox(width: 30),
+                  Padding(
+                    padding: EdgeInsets.only(left: 0, right: 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 6,
+                          child: Center(
+                            child: TextFormField(
+                              controller: tanggalawal,
+                              decoration:
+                                  InputDecoration(labelText: 'Tanggal Awal'),
+                              style: TextStyle(
+                                letterSpacing: 1.0,
+                              ),
+                              enabled: false,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10.0),
+                        Expanded(
+                          flex: 1,
+                          child: Center(
+                            child: Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  _selectDate(context);
+                                },
+                                child: Container(
+                                  margin:
+                                      EdgeInsets.fromLTRB(0.0, 20.0, 0.0, .0),
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                            blurRadius: 5,
+                                            spreadRadius: 1)
+                                      ]),
+                                  child: Icon(
+                                    Icons.date_range,
+                                    size: 28,
+                                    color:
+                                        (_like) ? Colors.red : Colors.grey[600],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Padding(
+                    padding: EdgeInsets.only(left: 0, right: 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 6,
+                          child: Center(
+                            child: TextFormField(
+                              controller: tanggalakhir,
+                              decoration:
+                                  InputDecoration(labelText: 'Tanggal Akhir'),
+                              style: TextStyle(
+                                letterSpacing: 1.0,
+                              ),
+                              enabled: false,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10.0),
+                        Expanded(
+                          flex: 1,
+                          child: Center(
+                            child: Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  pilihTanggalAkhir(context);
+                                },
+                                child: Container(
+                                  margin:
+                                      EdgeInsets.fromLTRB(0.0, 20.0, 0.0, .0),
+                                  height: 30,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                            blurRadius: 5,
+                                            spreadRadius: 1)
+                                      ]),
+                                  child: Icon(
+                                    Icons.date_range,
+                                    size: 28,
+                                    color:
+                                        (like2) ? Colors.red : Colors.grey[600],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                  Container(
+                    child: new RaisedButton(
+                      onPressed: () {
+                        tambahLibur();
+                        Navigator.of(context, rootNavigator: true).pop(true);
+                      },
+                      padding: new EdgeInsets.all(16.0),
+                      color: Colors.blue,
+                      child: new Text(
+                        'Tambah Libur',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontFamily: 'helvetica_neue_light',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        });
   }
 
   Future<ClassUser> getProfile() async {
@@ -90,10 +313,9 @@ class MyprofileState extends State<Myprofile> {
     pref.remove("user");
     pref.remove("role");
     String data = jsonEncode(session.Cart);
-    print("jumlah cart sebelum clear: " + session.Cart.length.toString());
     pref.setString(("cart" + session.userlogin.toString()), data);
     session.Cart.clear();
-    print("jumlah cart : " + session.Cart.length.toString());
+    session.alamat = new ClassAlamat("0", "", "", "", "", "", "", "", "");
     Navigator.of(context)
         .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
   }
@@ -552,8 +774,9 @@ class MyprofileState extends State<Myprofile> {
                                               BorderRadius.circular(15)),
                                       color: Colors.white,
                                       onPressed: () {
-                                        Navigator.pushNamed(
-                                            this.context, "/tambahlibur");
+                                        // Navigator.pushNamed(
+                                        //     this.context, "/tambahlibur");
+                                        showAlert();
                                       },
                                       child: Row(
                                         children: [

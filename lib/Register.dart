@@ -24,6 +24,8 @@ class RegisterState extends State<Register> {
   List<Provinsi> arrProvinsi = new List();
   List<Kota> arrKota = new List();
   bool status = false;
+  Provinsi prov = null;
+  Kota city = null;
   String jk = "pria";
 
   Future<String> evtRegister() async {
@@ -67,45 +69,57 @@ class RegisterState extends State<Register> {
     setState(() {
       this.jk = "pria";
     });
-    // getProvinsi();
+    getProvinsi();
   }
 
   Future<List<Provinsi>> getProvinsi() async {
     List<Provinsi> tempProvinsi = new List();
     Provinsi prv = new Provinsi("1", "");
-    http.get("https://api.rajaongkir.com/starter/province", headers: {
-      "Content-Type": "application/json",
-      "key": "08989a3df11fde8300acd691159a2ebd"
-    }).then((res) {
+    http.get(session.ipnumber + "/getProvinsi", headers: {}).then((res) {
       var data = json.decode(res.body);
-      data = data['rajaongkir']['results'];
+      data = data[0]['provinsi'];
       for (int i = 0; i < data.length; i++) {
-        prv = new Provinsi(data[i]['province_id'], data[i]['province']);
+        prv = new Provinsi(data[i]['id_provinsi'].toString(),
+            data[i]['nama_provinsi'].toString());
         tempProvinsi.add(prv);
       }
       setState(() {
         this.arrProvinsi = tempProvinsi;
       });
+      return tempProvinsi;
     }).catchError((err) {
       print(err);
     });
-    return tempProvinsi;
   }
 
-  Future<String> getKota(String provinsi) async {
-    Map paramData = {'province': provinsi};
+  Future<List<Kota>> getKota(int provinsi) async {
+    city = null;
+    List<Kota> tempKota = new List();
+    Kota kot = new Kota(
+        "id", "provinsi", "namaprovinsi", "tipe", "namakota", "kodepos");
+    Map paramData = {'prov': provinsi};
     var parameter = json.encode(paramData);
-    if (myPassword.text == confirmPassword.text) {
-      http
-          .post(session.ipnumber + "/register",
-              headers: {"Content-Type": "application/json"}, body: parameter)
-          .then((res) {
-        print(res.body);
-      }).catchError((err) {
-        print(err);
-      });
-    }
-    return "";
+    http
+        .post(session.ipnumber + "/getKotaByProvinsi",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      var data = json.decode(res.body);
+      data = data[0]['kota'];
+      for (int i = 0; i < data.length; i++) {
+        kot = Kota(
+            data[i]['id_kota'].toString(),
+            data[i]['id_provinsi'].toString(),
+            data[i]['provinsi'].toString(),
+            data[i]['tipe'].toString(),
+            data[i]['nama_kota'].toString(),
+            data[i]['kodepos'].toString());
+        tempKota.add(kot);
+      }
+      setState(() => this.arrKota = tempKota);
+      return arrKota;
+    }).catchError((err) {
+      print(err);
+    });
   }
 
   void handleradiogroup(String value) {

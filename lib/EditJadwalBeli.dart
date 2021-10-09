@@ -10,11 +10,13 @@ import 'ClassProduk.dart';
 
 class EditJadwalBeli extends StatefulWidget {
   final String id;
+  final String paket;
 
-  EditJadwalBeli({Key key, @required this.id}) : super(key: key);
+  EditJadwalBeli({Key key, @required this.id, @required this.paket})
+      : super(key: key);
 
   @override
-  EditJadwalBeliState createState() => EditJadwalBeliState(this.id);
+  EditJadwalBeliState createState() => EditJadwalBeliState(this.id, this.paket);
 }
 
 class EditJadwalBeliState extends State<EditJadwalBeli> {
@@ -35,10 +37,10 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
   ClassPaket paketsaatini =
       new ClassPaket("", "", "", "", "", "", "", "", "", "");
 
-  String id, tanggal;
+  String id, tanggal, paket;
   List<ClassPaket> arrPaket = new List();
 
-  EditJadwalBeliState(this.id);
+  EditJadwalBeliState(this.id, this.paket);
 
   void initState() {
     super.initState();
@@ -65,11 +67,11 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
     sesuaikanJadwal(waktu, hari);
   }
 
-  void hapusJadwal(String idpaket) async {
-    Map paramData = {'id': idpaket};
+  void hapusJadwal(String idjadwal) async {
+    Map paramData = {'id': idjadwal};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/hapusjadwal",
+        .post(session.ipnumber + "/kurangSpek",
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       if (res.body.contains("sukses")) {
@@ -98,7 +100,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
   Future<List<ClassProduk>> getProduk() async {
     List<ClassProduk> allproduk = new List();
     ClassProduk produk =
-        new ClassProduk("", "", "", "", "", "", "", "", "", "", "", "");
+        new ClassProduk("", "", "", "", "", "", "", "", "", "", "", "", "");
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
@@ -120,7 +122,8 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
             data[i]['status'].toString(),
             data[i]['varian'].toString(),
             data[i]['fotokonsultan'].toString(),
-            data[i]['konsultan'].toString());
+            data[i]['konsultan'].toString(),
+            data[i]['berat'].toString());
         allproduk.add(produk);
       }
       setState(() => this.arrProduk = allproduk);
@@ -131,8 +134,9 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
   }
 
   Future<List<ClassPaket>> getPaket() async {
-    ClassPaket paket = new ClassPaket("", "", "", "", "", "", "", "", "", "");
-    Map paramData = {'id': id};
+    ClassPaket tempPaket =
+        new ClassPaket("", "", "", "", "", "", "", "", "", "");
+    Map paramData = {'id': paket};
     var parameter = json.encode(paramData);
     http
         .post(session.ipnumber + "/getpaketbyid",
@@ -141,7 +145,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
       var data = json.decode(res.body);
       data = data[0]['paket'];
       for (int i = 0; i < data.length; i++) {
-        paket = ClassPaket(
+        tempPaket = ClassPaket(
             data[i]['id_paket'].toString(),
             data[i]['estimasiturun'].toString(),
             data[i]['harga'].toString(),
@@ -153,7 +157,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
             data[i]['deskripsi'].toString(),
             data[i]['gambar'].toString());
       }
-      setState(() => this.paketsaatini = paket);
+      setState(() => this.paketsaatini = tempPaket);
       //   nama.text = paket.nama;
       //   deskripsi.text = paket.deskripsi;
       //   estimasi.text = paket.estimasi;
@@ -223,7 +227,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
 
   Future<List<ClassJadwal>> evtTambahJadwal() async {
     Map paramData = {
-      'id': id,
+      'idbeli': this.id,
       'hari': hari,
       'waktu': waktu,
       'ket': deskripsi.text,
@@ -231,7 +235,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/tambahjadwal",
+        .post(session.ipnumber + "/tambahSpek",
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

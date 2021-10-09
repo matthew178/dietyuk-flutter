@@ -281,7 +281,7 @@ class AwalPaketKonsultanState extends State<AwalPaketKonsultan> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      EditJadwalBeli(id: id)));
+                                      EditJadwalBeli(id: id, paket: paket)));
                         },
                         color: Colors.lightBlueAccent,
                         child: Text(
@@ -322,8 +322,12 @@ class AwalPaketKonsultanState extends State<AwalPaketKonsultan> {
                                     : arrTemp[index].keterangan == "2"
                                         ? Fluttertoast.showToast(
                                             msg: "Berat badan naik")
-                                        : Fluttertoast.showToast(
-                                            msg: "Turun berat badan");
+                                        : arrTemp[index].keterangan == "1"
+                                            ? Fluttertoast.showToast(
+                                                msg: "Turun berat badan")
+                                            : Fluttertoast.showToast(
+                                                msg:
+                                                    "Belum ada laporan perkembangan");
                           },
                           child: arrTemp[index].tipe == "hari"
                               ? Card(

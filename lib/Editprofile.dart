@@ -32,15 +32,16 @@ class EditprofileState extends State<Editprofile> {
   File _image;
 
   ClassUser userprofile = new ClassUser(
-      "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
+      "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "1", "1");
 
   void initState() {
     super.initState();
-    getProfile();
+    // getProfile();
     getProvinsi();
   }
 
   Future<List<Provinsi>> getProvinsi() async {
+    getProfile();
     List<Provinsi> tempProvinsi = new List();
     Provinsi prv = new Provinsi("1", "");
     http.get(session.ipnumber + "/getProvinsi", headers: {}).then((res) {
@@ -49,6 +50,10 @@ class EditprofileState extends State<Editprofile> {
       for (int i = 0; i < data.length; i++) {
         prv = new Provinsi(data[i]['id_provinsi'].toString(),
             data[i]['nama_provinsi'].toString());
+        if (data[i]['id_provinsi'].toString() ==
+            userprofile.provinsi.toString()) {
+          setState(() => prov = prv);
+        }
         tempProvinsi.add(prv);
       }
       setState(() {
@@ -163,53 +168,6 @@ class EditprofileState extends State<Editprofile> {
     String basenamegallery = basename(namaFile);
   }
 
-  Future<Kota> getKotaAwal(String idkota) async {
-    Kota kota = new Kota("", "", "", "", "", "");
-    Map paramData = {'idkota': idkota};
-    var parameter = json.encode(paramData);
-    http
-        .post(session.ipnumber + "/getKotaAwal",
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-      var data = json.decode(res.body);
-      data = data[0]['kota'];
-      kota = Kota(
-          data["id_kota"].toString(),
-          data["id_provinsi"].toString(),
-          data["provinsi"].toString(),
-          data["tipe"].toString(),
-          data["nama_kota"].toString(),
-          data["kodepos"].toString());
-      setState(() => this.city = kota);
-      print("nama kota: " + this.city.namakota);
-      return kota;
-    }).catchError((err) {
-      print(err);
-    });
-  }
-
-  Future<Provinsi> getProvinsiAwal(String idprovinsi) async {
-    Provinsi provinsiawal = new Provinsi("", "");
-    Map paramData = {'idprovinsi': idprovinsi};
-    var parameter = json.encode(paramData);
-    http
-        .post(session.ipnumber + "/getProvinsiAwal",
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-      var data = json.decode(res.body);
-      data = data[0]['provinsi'];
-      provinsiawal = Provinsi(
-          data["id_provinsi"].toString(), data["nama_provinsi"].toString());
-      print("luar if: " + provinsiawal.nama + " " + provinsiawal.id);
-      // setState(() => this.prov = provinsiawal);
-      return provinsiawal;
-    }).catchError((err) {
-      print(err);
-    });
-  }
-
   Future<ClassUser> getProfile() async {
     ClassUser userlog = new ClassUser(
         "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
@@ -240,10 +198,6 @@ class EditprofileState extends State<Editprofile> {
           data[0]["foto"].toString(),
           data[0]["provinsi"].toString(),
           data[0]["kota"].toString());
-      if (userlog.kota != "0") {
-        getProvinsiAwal(userlog.provinsi);
-        getKotaAwal(userlog.kota);
-      }
       setState(() => this.userprofile = userlog);
       username.text = userprofile.username;
       email.text = userprofile.email;
@@ -266,14 +220,6 @@ class EditprofileState extends State<Editprofile> {
 
   @override
   Widget build(BuildContext context) {
-    // String img = "";
-    // if (userprofile.jeniskelamin == "pria" && userprofile.foto == "pria.png")
-    //   img = "assets/images/pria.jpg";
-    // else if (userprofile.jeniskelamin == "wanita" &&
-    //     userprofile.foto == "wanita.png")
-    //   img = "assets/images/wanita.png";
-    // else
-    //   img = session.ipnumber + "/gambar/" + userprofile.foto;
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Profile"),
@@ -282,14 +228,14 @@ class EditprofileState extends State<Editprofile> {
       body: Center(
         child: ListView(children: <Widget>[
           SizedBox(height: 15),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100.0),
-            child: Image.network(
-              this.foto,
-              width: 150,
-              height: 150,
-            ),
-          ),
+          // ClipRRect(
+          //   borderRadius: BorderRadius.circular(100.0),
+          //   child: Image.network(
+          //     this.foto,
+          //     width: 150,
+          //     height: 150,
+          //   ),
+          // ),
           Container(
             padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
             child: Center(

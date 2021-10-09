@@ -62,7 +62,8 @@ class DaftarprodukmemberState extends State<Daftarprodukmember> {
             data[i]['status'].toString(),
             data[i]['varian'].toString(),
             data[i]['fotokonsultan'].toString(),
-            data[i]['konsultan'].toString());
+            data[i]['konsultan'].toString(),
+            data[i]['berat'].toString());
         tempProduk.add(databaru);
       }
       setState(() => this.arrProduk = tempProduk);
@@ -96,10 +97,12 @@ class DaftarprodukmemberState extends State<Daftarprodukmember> {
             data[i]['status'].toString(),
             data[i]['varian'].toString(),
             data[i]['fotokonsultan'].toString(),
-            data[i]['konsultan'].toString());
+            data[i]['konsultan'].toString(),
+            data[i]['berat'].toString());
         tempProduk.add(databaru);
       }
       setState(() => this.arrProduk = tempProduk);
+      print("sinisitu");
       return tempProduk;
     }).catchError((err) {
       print(err);

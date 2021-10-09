@@ -25,9 +25,6 @@ class DaftarpaketState extends State<Daftarpaket> {
   }
 
   Future<List<ClassPaket>> getPaket() async {
-    // await Future.delayed(
-    //   Duration(seconds: 2),
-    // );
     List<ClassPaket> arrPaket = new List();
     Map paramData = {};
     var parameter = json.encode(paramData);
@@ -62,8 +59,10 @@ class DaftarpaketState extends State<Daftarpaket> {
     List<ClassPaket> tempPaket = new List();
     Map paramData = {"cari": cari};
     var parameter = json.encode(paramData);
-    http.post(session.ipnumber + "/searchPaket",
-        headers: {"Content-Type": "application/json"}).then((res) {
+    http
+        .post(session.ipnumber + "/searchPaketMember",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
       var data = json.decode(res.body);
       data = data[0]['paket'];
       for (int i = 0; i < data.length; i++) {
@@ -81,23 +80,11 @@ class DaftarpaketState extends State<Daftarpaket> {
         tempPaket.add(databaru);
       }
       setState(() => this.arrPaket = tempPaket);
-      print(arrPaket.length);
+      setState(() => session.paketSemua = this.arrPaket);
       return arrPaket;
     }).catchError((err) {
       print(err);
     });
-  }
-
-  Future<List<String>> getData() async {
-    await Future.delayed(Duration(seconds: 2));
-    return [
-      "New Value1",
-      "New Value2",
-      "New Value3",
-      "New Value4",
-      "New Value5",
-      "New Value6"
-    ];
   }
 
   @override
@@ -124,8 +111,8 @@ class DaftarpaketState extends State<Daftarpaket> {
                               onSubmitted: (String str) {
                                 setState(() {
                                   search = str;
+                                  searchPaket(search);
                                 });
-                                searchPaket(search);
                               },
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(

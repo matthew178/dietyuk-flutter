@@ -99,7 +99,7 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
   Future<List<ClassProduk>> getProduk() async {
     List<ClassProduk> allproduk = new List();
     ClassProduk produk =
-        new ClassProduk("", "", "", "", "", "", "", "", "", "", "", "");
+        new ClassProduk("", "", "", "", "", "", "", "", "", "", "", "", "");
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
@@ -121,7 +121,8 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
             data[i]['status'].toString(),
             data[i]['varian'].toString(),
             data[i]['fotokonsultan'].toString(),
-            data[i]['konsultan'].toString());
+            data[i]['konsultan'].toString(),
+            data[i]['berat'].toString());
         allproduk.add(produk);
       }
       setState(() => this.arrProduk = allproduk);

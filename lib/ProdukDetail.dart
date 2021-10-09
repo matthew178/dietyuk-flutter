@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:dietyuk/ClassProduk.dart';
+import 'package:dietyuk/WallKonsultan.dart';
 import 'package:dietyuk/shoppingcart.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'session.dart' as session;
@@ -36,7 +37,8 @@ class ProdukDetailState extends State<ProdukDetail> {
       "status",
       "varian",
       "pria.jpg",
-      "0");
+      "0",
+      "");
 
   ProdukDetailState(this.id);
 
@@ -63,7 +65,8 @@ class ProdukDetailState extends State<ProdukDetail> {
         "status",
         "varian",
         "pria.jpg",
-        "0");
+        "0",
+        "");
     Map paramData = {'kodeproduk': this.id};
     var parameter = json.encode(paramData);
     http
@@ -74,18 +77,19 @@ class ProdukDetailState extends State<ProdukDetail> {
       var data = json.decode(res.body);
       data = data[0]['produk'];
       produkskrg = new ClassProduk(
-          data[0]['kodeproduk'].toString(),
-          data[0]['namakonsultan'].toString(),
-          data[0]['namaproduk'].toString(),
-          data[0]['kodekategori'].toString(),
-          data[0]['kemasan'].toString(),
-          data[0]['harga'].toString(),
-          data[0]['foto'].toString(),
-          data[0]['deskripsi'].toString(),
-          data[0]['status'].toString(),
-          data[0]['varian'].toString(),
-          data[0]['fotokonsultan'].toString(),
-          data[0]['konsultan'].toString());
+          data['kodeproduk'].toString(),
+          data['namakonsultan'].toString(),
+          data['namaproduk'].toString(),
+          data['kodekategori'].toString(),
+          data['kemasan'].toString(),
+          data['harga'].toString(),
+          data['foto'].toString(),
+          data['deskripsi'].toString(),
+          data['status'].toString(),
+          data['varian'].toString(),
+          data['fotokonsultan'].toString(),
+          data['konsultan'].toString(),
+          data['berat'].toString());
       setState(() => this.produk = produkskrg);
       return produkskrg;
     }).catchError((err) {
@@ -204,7 +208,7 @@ class ProdukDetailState extends State<ProdukDetail> {
                 ))),
         backgroundColor: session.kBlue,
       ),
-      body: ListView(
+      body: Column(
         children: [
           Hero(
             tag: produk.foto,
@@ -365,6 +369,11 @@ class ProdukDetailState extends State<ProdukDetail> {
                   SizedBox(height: 15),
                   GestureDetector(
                     onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  WallKonsultan(id: produk.idkonsultan)));
                       print(produk.konsultan + " " + produk.idkonsultan);
                     },
                     child: Row(

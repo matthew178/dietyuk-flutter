@@ -93,6 +93,17 @@ flutter:
     - assets/images/mandiri.png
     - assets/images/equals.png
     - assets/images/forgotpassword.jpg
+    - assets/images/nodata.png
+    - assets/images/datanotfound.png
+    - assets/images/nocomment.png
+    - assets/images/nocollection.png
+    - assets/images/nonetwork.png
+    - assets/images/noresult.png
+    - assets/images/jne.png
+    - assets/images/pos.png
+    - assets/images/tiki.png
+
+
 
 
   # The following line ensures that the Material Icons font is

@@ -351,7 +351,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                     Container(
                       child: new ListView.builder(
                           itemCount: arrTransaksi.length == 0
-                              ? 0
+                              ? 1
                               : arrTransaksi.length,
                           itemBuilder: (context, index) {
                             if (arrTransaksi.length == 0) {
@@ -488,7 +488,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                     ),
                     Container(
                       child: new ListView.builder(
-                          itemCount: onProses.length == 0 ? 0 : onProses.length,
+                          itemCount: onProses.length == 0 ? 1 : onProses.length,
                           itemBuilder: (context, index) {
                             if (onProses.length == 0) {
                               return Card(
@@ -556,12 +556,10 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                     ),
                     Container(
                       child: new ListView.builder(
-                          itemCount: selesai.length == 0 ? 0 : selesai.length,
+                          itemCount: selesai.length == 0 ? 1 : selesai.length,
                           itemBuilder: (context, index) {
                             if (selesai.length == 0) {
-                              return Card(
-                                child: Text("Data empty"),
-                              );
+                              return Image.asset("assets/images/nodata.png");
                             } else {
                               return GestureDetector(
                                   onTap: () {},
@@ -599,7 +597,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                     ),
                     Container(
                       child: new ListView.builder(
-                          itemCount: batal.length == 0 ? 0 : batal.length,
+                          itemCount: batal.length == 0 ? 1 : batal.length,
                           itemBuilder: (context, index) {
                             if (batal.length == 0) {
                               return Card(

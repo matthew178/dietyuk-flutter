@@ -1,3 +1,4 @@
+import 'package:dietyuk/ClassProduk.dart';
 import 'package:dietyuk/session.dart';
 import 'package:dietyuk/shoppingcart.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,6 +28,7 @@ class LoginState extends State<Login> {
   }
 
   void loadUser() async {
+    selesaikanTransaksi();
     preference = await SharedPreferences.getInstance();
     user = preference.getString("user") ?? "0";
     role = preference.getString("role") ?? "";
@@ -48,6 +50,7 @@ class LoginState extends State<Login> {
               temp[i]["harga"].toString()));
         }
         print("jumlah cart : " + session.Cart.length.toString());
+        getProdukCart();
         Navigator.of(this.context).pushNamedAndRemoveUntil(
             '/member', (Route<dynamic> route) => false);
       } else if (role == "konsultan") {
@@ -57,7 +60,54 @@ class LoginState extends State<Login> {
     }
   }
 
+  void selesaikanTransaksi() async {
+    Map paramData = {};
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/selesaikanTransaksi",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {})
+        .catchError((err) {
+      print(err);
+    });
+  }
+
+  Future<List<ClassProduk>> getProdukCart() async {
+    String data = jsonEncode(session.Cart);
+    List<ClassProduk> arrTemp = new List();
+    Map paramData = {'data': data};
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/getProdukCart",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      var hsl = json.decode(res.body);
+      hsl = hsl[0]['produk'];
+      for (int i = 0; i < hsl.length; i++) {
+        ClassProduk databaru = new ClassProduk(
+            hsl[i]['kodeproduk'].toString(),
+            hsl[i]['konsultan'].toString(),
+            hsl[i]['namaproduk'].toString(),
+            hsl[i]['kodekategori'].toString(),
+            hsl[i]['kemasan'].toString(),
+            hsl[i]['harga'].toString(),
+            hsl[i]['foto'].toString(),
+            hsl[i]['deskripsi'].toString(),
+            hsl[i]['status'].toString(),
+            hsl[i]['varian'].toString(),
+            hsl[i]['fotokonsultan'].toString(),
+            hsl[i]['konsultan'].toString(),
+            hsl[i]['berat'].toString());
+        session.Cart[i].produkini = databaru;
+      }
+    }).catchError((err) {
+      print(err);
+    });
+    return arrTemp;
+  }
+
   Future<String> evtLogin() async {
+    selesaikanTransaksi();
     preference = await SharedPreferences.getInstance();
     Map paramData = {
       'username': myUsername.text,

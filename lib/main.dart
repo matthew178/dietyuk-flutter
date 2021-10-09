@@ -1,10 +1,9 @@
 import 'package:dietyuk/Dashkonsultan.dart';
 import 'package:dietyuk/Dashmember.dart';
 import 'package:dietyuk/ForgotPassword.dart';
+import 'package:dietyuk/PilihAlamat.dart';
 import 'package:dietyuk/Register.dart';
-import 'package:dietyuk/TambahLibur.dart';
 import 'package:dietyuk/checkout.dart';
-import 'package:dietyuk/perkembanganmember.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
@@ -15,10 +14,8 @@ import 'Tambahpaket.dart';
 import 'Editprofile.dart';
 import 'Saldo.dart';
 import 'Topup.dart';
-import 'Topup2.dart';
+import 'TambahAlamat.dart';
 import 'TambahProduk.dart';
-import 'Coba.dart';
-import 'Daftarpaket.dart';
 
 void main() {
   runZoned(() {
@@ -57,8 +54,9 @@ class MyApp extends StatelessWidget {
         '/topup': (context) => Topup(),
         '/tambahproduk': (context) => TambahProduk(),
         '/halamancart': (context) => Checkout(),
-        '/tambahlibur': (context) => TambahLibur(),
-        '/lupapassword': (context) => ForgotPassword()
+        '/lupapassword': (context) => ForgotPassword(),
+        '/pilihAlamat': (context) => PilihAlamat(),
+        '/tambahAlamat': (context) => TambahAlamat()
       },
     );
   }

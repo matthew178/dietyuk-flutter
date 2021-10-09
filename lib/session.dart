@@ -14,7 +14,7 @@ int berat = 0;
 int saldo = 0;
 List<shoppingcart> Cart = new List();
 List<ClassPaket> paketSemua = new List();
-ClassAlamat alamat = new ClassAlamat("", "", "", "", "");
+ClassAlamat alamat = new ClassAlamat("0", "", "", "", "", "", "", "", "");
 Kota kota = new Kota("", "", "", "", "", "");
 Provinsi prov = new Provinsi("", "");
 

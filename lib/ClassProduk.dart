@@ -1,12 +1,10 @@
-// import 'package:intl/intl.dart';
-
 class ClassProduk {
-//   int id, estimasi, harga, durasi, status, rating, konsultan;
   String kodeproduk,
       konsultan,
       namaproduk,
       kodekategori,
       kemasan,
+      berat,
       harga,
       foto,
       deskripsi,
@@ -27,7 +25,8 @@ class ClassProduk {
       this.status,
       this.varian,
       this.fotokonsultan,
-      this.idkonsultan);
+      this.idkonsultan,
+      this.berat);
 
   Map toJson() => {
         'kodeproduk': kodeproduk,

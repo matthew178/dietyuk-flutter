@@ -102,7 +102,8 @@ class DaftarProdukState extends State<DaftarProduk> {
             data[i]['status'].toString(),
             data[i]['varian'].toString(),
             data[i]['fotokonsultan'].toString(),
-            data[i]['konsultan'].toString());
+            data[i]['konsultan'].toString(),
+            data[i]['berat'].toString());
         tempProduk.add(databaru);
       }
       setState(() => this.arrProduk = tempProduk);
@@ -120,12 +121,10 @@ class DaftarProdukState extends State<DaftarProduk> {
         backgroundColor: session.warna,
       ),
       body: new ListView.builder(
-          itemCount: arrProduk.length == 0 ? 0 : arrProduk.length,
+          itemCount: arrProduk.length == 0 ? 1 : arrProduk.length,
           itemBuilder: (context, index) {
             if (arrProduk.length == 0) {
-              return Card(
-                child: Text("Data empty"),
-              );
+              return Image.asset("assets/images/noresult.png");
             } else {
               return GestureDetector(
                   onTap: () {
