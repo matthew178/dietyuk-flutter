@@ -1,3 +1,4 @@
+import 'package:dietyuk/PilihOrder.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -21,7 +22,7 @@ class DashkonsultanState extends State<Dashkonsultan> {
   final bottomBar = [
     Daftarpaketkonsultan(),
     DaftarProduk(),
-    Daftartransaksi(),
+    PilihOrder(),
     Myprofile()
   ];
 
@@ -37,13 +38,11 @@ class DashkonsultanState extends State<Dashkonsultan> {
       body: bottomBar.elementAt(index),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.list), title: Text("Paket")),
+          BottomNavigationBarItem(icon: Icon(Icons.list), title: Text("Paket")),
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_bag), title: Text("Produk")),
           BottomNavigationBarItem(
-              icon: Icon(Icons.local_grocery_store),
-              title: Text("Order")),
+              icon: Icon(Icons.local_grocery_store), title: Text("Order")),
           BottomNavigationBarItem(
               icon: Icon(Icons.person_pin_outlined), title: Text("Profile"))
         ],

@@ -140,6 +140,7 @@ class LoginState extends State<Login> {
                   temp[i]["harga"].toString()));
             }
             print("jumlah cart : " + session.Cart.length.toString());
+            getProdukCart();
             Fluttertoast.showToast(msg: "Berhasil Login");
             Navigator.pushNamed(this.context, "/member");
           } else if (data[0]['role'] == "konsultan") {
@@ -202,6 +203,7 @@ class LoginState extends State<Login> {
                         borderRadius: BorderRadius.circular(16)),
                     child: Center(
                       child: TextField(
+                        autofocus: false,
                         controller: myUsername,
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -233,6 +235,7 @@ class LoginState extends State<Login> {
                       child: TextField(
                         controller: myPassword,
                         obscureText: true,
+                        autofocus: false,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             prefixIcon: Padding(

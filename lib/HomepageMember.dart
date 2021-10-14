@@ -175,13 +175,12 @@ class HomePageMemberState extends State<HomePageMember> {
                                                 " Rp. " + userprofile.saldo,
                                                 style: TextStyle(
                                                     fontSize: 20,
-                                                    color: Colors.grey),
+                                                    color: Colors.white),
                                               ),
                                             )),
-                                  SizedBox(width: 120),
+                                  SizedBox(width: 100),
                                   Container(
                                     margin: EdgeInsets.only(right: 0),
-                                    // padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(16),
                                         color: HexColor("#1e96fc")),
@@ -222,7 +221,7 @@ class HomePageMemberState extends State<HomePageMember> {
                             child: Card(
                               elevation: 4,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
+                                  borderRadius: BorderRadius.circular(50)),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -249,7 +248,7 @@ class HomePageMemberState extends State<HomePageMember> {
                           child: Card(
                             elevation: 4,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                                borderRadius: BorderRadius.circular(50)),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -278,7 +277,7 @@ class HomePageMemberState extends State<HomePageMember> {
                           child: Card(
                             elevation: 4,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                                borderRadius: BorderRadius.circular(50)),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -298,7 +297,7 @@ class HomePageMemberState extends State<HomePageMember> {
                         Card(
                           elevation: 4,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
+                              borderRadius: BorderRadius.circular(50)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[

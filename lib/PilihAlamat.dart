@@ -73,14 +73,12 @@ class PilihAlamatState extends State<PilihAlamat> {
                   padding: EdgeInsets.fromLTRB(100, 10, 100, 10),
                   margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
                   decoration: BoxDecoration(
-                      // color: session.kBlue,
                       border: Border.all(color: Colors.black),
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   child: FlatButton(
                       onPressed: () {
                         Navigator.pushNamed(context, "/tambahAlamat")
                             .then((value) => getAlamatUser());
-                        // Fluttertoast.showToast(msg: "SINI");
                       },
                       child: Text(
                         "(+) Tambah Alamat",

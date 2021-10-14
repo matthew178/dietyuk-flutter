@@ -355,9 +355,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                               : arrTransaksi.length,
                           itemBuilder: (context, index) {
                             if (arrTransaksi.length == 0) {
-                              return Card(
-                                child: Text("Data empty"),
-                              );
+                              return Image.asset("assets/images/nodata.png");
                             } else {
                               return GestureDetector(
                                   onTap: () {},
@@ -491,9 +489,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                           itemCount: onProses.length == 0 ? 1 : onProses.length,
                           itemBuilder: (context, index) {
                             if (onProses.length == 0) {
-                              return Card(
-                                child: Text("Data empty"),
-                              );
+                              return Image.asset("assets/images/nodata.png");
                             } else {
                               return GestureDetector(
                                   onTap: () {
@@ -559,7 +555,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                           itemCount: selesai.length == 0 ? 1 : selesai.length,
                           itemBuilder: (context, index) {
                             if (selesai.length == 0) {
-                              return Image.asset("assets/images/nodata.png");
+                              return Image.asset("assets/images/noresult.png");
                             } else {
                               return GestureDetector(
                                   onTap: () {},
@@ -600,9 +596,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                           itemCount: batal.length == 0 ? 1 : batal.length,
                           itemBuilder: (context, index) {
                             if (batal.length == 0) {
-                              return Card(
-                                child: Text("Data empty"),
-                              );
+                              return Image.asset("assets/images/nodata.png");
                             } else {
                               return GestureDetector(
                                   onTap: () {},

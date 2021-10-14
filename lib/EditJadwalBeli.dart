@@ -459,7 +459,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
                         ? TextFormField(
                             controller: deskripsi,
                             keyboardType: TextInputType.text,
-                            autofocus: true,
+                            autofocus: false,
                             decoration:
                                 InputDecoration(labelText: "Deskripsi Jadwal"),
                             validator: (value) => value.isEmpty
@@ -547,7 +547,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
             child: TextFormField(
               controller: takaran,
               keyboardType: TextInputType.text,
-              autofocus: true,
+              autofocus: false,
               decoration: InputDecoration(labelText: "Takaran"),
               validator: (value) =>
                   value.isEmpty ? "Takaran tidak boleh kosong" : null,

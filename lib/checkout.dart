@@ -165,6 +165,9 @@ class CheckoutState extends State<Checkout> {
           cartshop.add(session.Cart[i]);
         }
       }
+      // if (session.alamat.id != "0" && session.Cart.length > 0) {
+      //   getOngkir();
+      // }
     }
   }
 
@@ -339,7 +342,9 @@ class CheckoutState extends State<Checkout> {
       'alamat': session.alamat.id,
       'total': grandtotal,
       'kurir': kurir.kurir,
-      'service': kurir.service
+      'service': kurir.service,
+      'totalharga': total.toString(),
+      'ongkir': kurir.ongkir.toString()
     };
     var parameter = json.encode(paramData);
     http
@@ -433,7 +438,7 @@ class CheckoutState extends State<Checkout> {
                     borderRadius: BorderRadius.all(Radius.circular(20))),
                 child: FlatButton(
                     onPressed: () {
-                      if (session.Cart.length > 0) {
+                      if (session.Cart.length > 0 && session.alamat.id != "0") {
                         Navigator.pushNamed(context, "/pilihAlamat")
                             .then((value) => getOngkir());
                       } else {
@@ -593,7 +598,8 @@ class CheckoutState extends State<Checkout> {
                                                           .berat));
                                                 }
                                                 hitungTotal();
-                                                if (session.alamat.id != "0") {
+                                                if (session.alamat.id != "0" &&
+                                                    session.Cart.length > 0) {
                                                   getOngkir();
                                                 }
                                               });
@@ -639,7 +645,8 @@ class CheckoutState extends State<Checkout> {
                                                         .produkini
                                                         .berat);
                                                 hitungTotal();
-                                                if (session.alamat.id != "0") {
+                                                if (session.alamat.id != "0" &&
+                                                    session.Cart.length > 0) {
                                                   getOngkir();
                                                 }
                                               });

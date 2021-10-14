@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -16,6 +18,13 @@ class DetailProdukKonsultan extends StatefulWidget {
 
 class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
   String id;
+  File _image;
+  TextEditingController kemasan = new TextEditingController();
+  TextEditingController berat = new TextEditingController();
+  TextEditingController harga = new TextEditingController();
+  TextEditingController nama = new TextEditingController();
+  TextEditingController deskripsi = new TextEditingController();
+  TextEditingController varian = new TextEditingController();
 
   DetailProdukKonsultanState(this.id);
 

@@ -52,6 +52,40 @@ class ProdukDetailState extends State<ProdukDetail> {
     }
   }
 
+  Future<List<ClassProduk>> getProdukCart() async {
+    String data = jsonEncode(session.Cart);
+    List<ClassProduk> arrTemp = new List();
+    Map paramData = {'data': data};
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/getProdukCart",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      var hsl = json.decode(res.body);
+      hsl = hsl[0]['produk'];
+      for (int i = 0; i < hsl.length; i++) {
+        ClassProduk databaru = new ClassProduk(
+            hsl[i]['kodeproduk'].toString(),
+            hsl[i]['konsultan'].toString(),
+            hsl[i]['namaproduk'].toString(),
+            hsl[i]['kodekategori'].toString(),
+            hsl[i]['kemasan'].toString(),
+            hsl[i]['harga'].toString(),
+            hsl[i]['foto'].toString(),
+            hsl[i]['deskripsi'].toString(),
+            hsl[i]['status'].toString(),
+            hsl[i]['varian'].toString(),
+            hsl[i]['fotokonsultan'].toString(),
+            hsl[i]['konsultan'].toString(),
+            hsl[i]['berat'].toString());
+        session.Cart[i].produkini = databaru;
+      }
+    }).catchError((err) {
+      print(err);
+    });
+    return arrTemp;
+  }
+
   Future<ClassProduk> getProdukDetail() async {
     ClassProduk produkskrg = new ClassProduk(
         "kodeproduk",
@@ -208,7 +242,7 @@ class ProdukDetailState extends State<ProdukDetail> {
                 ))),
         backgroundColor: session.kBlue,
       ),
-      body: Column(
+      body: ListView(
         children: [
           Hero(
             tag: produk.foto,
@@ -251,7 +285,7 @@ class ProdukDetailState extends State<ProdukDetail> {
               ),
             ),
           ),
-          Expanded(
+          Container(
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 25.0),
               transform: Matrix4.translationValues(0, -30, 0),
@@ -501,7 +535,9 @@ class ProdukDetailState extends State<ProdukDetail> {
                                         produk.harga.toString());
                                     jumlahCart++;
                                     session.Cart.add(cart);
+                                    getProdukCart();
                                   });
+
                                   Fluttertoast.showToast(
                                       msg: "Berhasil tambah ke Keranjang!");
                                 } else if (flag == 2) {
@@ -510,13 +546,14 @@ class ProdukDetailState extends State<ProdukDetail> {
                                         (int.parse(session.Cart[index].jumlah) +
                                                 jumlah)
                                             .toString();
+                                    getProdukCart();
                                   });
                                   Fluttertoast.showToast(
                                       msg: "Berhasil tambah ke Keranjang!");
                                 }
                               },
                               child: Text(
-                                'Add To Cart',
+                                'Tambahkan Ke Keranjang',
                                 style: session.kBodyText
                                     .copyWith(fontWeight: FontWeight.bold),
                               ),

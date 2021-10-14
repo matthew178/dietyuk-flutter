@@ -22,6 +22,7 @@ class TambahpaketState extends State<Tambahpaket> {
   Future<String> tambahPaket() async {
     Map paramData = {
       'nama': namaPaket.text,
+      'jenis': jp.id,
       'desc': descPaket.text,
       'estimasi': estimasi.text,
       'harga': harga.text,
@@ -57,7 +58,6 @@ class TambahpaketState extends State<Tambahpaket> {
         headers: {"Content-Type": "application/json"}).then((res) {
       var data = json.decode(res.body);
       data = data[0]['jenis'];
-      print(res.body);
       for (int i = 0; i < data.length; i++) {
         databaru = ClassJenisPaket(
             data[i]['idjenispaket'].toString(),
@@ -94,6 +94,30 @@ class TambahpaketState extends State<Tambahpaket> {
                     value.isEmpty ? "Nama Paket tidak boleh kosong" : null,
               ),
             ),
+          ),
+          DropdownButton<ClassJenisPaket>(
+            style: Theme.of(context).textTheme.title,
+            hint: Text("Jenis Paket"),
+            value: jp,
+            onChanged: (ClassJenisPaket value) {
+              setState(() => {this.jp = value});
+            },
+            items: jenispaket.map((ClassJenisPaket jenis) {
+              return DropdownMenuItem<ClassJenisPaket>(
+                value: jenis,
+                child: Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      jenis.nama,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
           ),
           Container(
             padding: EdgeInsets.fromLTRB(20, 10, 10, 0),

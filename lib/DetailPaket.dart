@@ -143,7 +143,6 @@ class DetailPaketState extends State<DetailPaket> {
         Fluttertoast.showToast(msg: "Berhasil Beli Paket");
         Navigator.pushNamed(this.context, "/member");
       }
-      print(res.body.substring(200));
       return data;
     }).catchError((err) {
       print(err);

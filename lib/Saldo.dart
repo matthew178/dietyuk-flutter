@@ -1,5 +1,4 @@
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'ClassUser.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'ClassHistoryTransaksi.dart';
 
 class Saldo extends StatefulWidget {
   @override
@@ -18,10 +18,58 @@ class SaldoState extends State<Saldo> {
   ClassUser userprofile = new ClassUser(
       "", "", "", "", "", "", "", "", "", "", "", "0", "0", "", "", "", "");
   NumberFormat frmt = new NumberFormat(",000");
+  List<ClassHistoryTransaksi> arrHistory = new List();
 
   void initState() {
     super.initState();
+    print("userlogin" + session.userlogin.toString());
     getProfile();
+    getHistory();
+  }
+
+  Future<List<ClassHistoryTransaksi>> getHistory() async {
+    List<ClassHistoryTransaksi> arrTemp = new List();
+    Map paramData = {'iduser': session.userlogin};
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/getHistoryTopup",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      print(res.body);
+      var data = json.decode(res.body);
+      var withdraw = data[0]['withdraw'];
+      data = data[0]['topup'];
+      String keterangan = "";
+      for (var i = 0; i < withdraw.length; i++) {
+        if (withdraw[i]['status'].toString() == "0")
+          keterangan = "Proses Verifikasi";
+        else
+          keterangan = "Berhasil";
+        ClassHistoryTransaksi databaru = new ClassHistoryTransaksi(
+            withdraw[i]['saldo'].toString(),
+            keterangan,
+            withdraw[i]['waktu'].toString(),
+            "Penarikan Saldo");
+        arrTemp.add(databaru);
+      }
+      for (var i = 0; i < data.length; i++) {
+        if (data[i]['status'].toString() == "0")
+          keterangan = "Proses Verifikasi";
+        else
+          keterangan = "Berhasil";
+        ClassHistoryTransaksi databaru = new ClassHistoryTransaksi(
+            data[i]['saldo'].toString(),
+            keterangan,
+            data[i]['waktu'].toString(),
+            "Penambahan Saldo");
+        arrTemp.add(databaru);
+      }
+      setState(() => this.arrHistory = arrTemp);
+      print(arrHistory.length.toString() + " data");
+      return arrTemp;
+    }).catchError((err) {
+      print(err);
+    });
   }
 
   Future<ClassUser> getProfile() async {
@@ -218,21 +266,207 @@ class SaldoState extends State<Saldo> {
                                   fontSize: 24,
                                   color: Colors.black),
                             ),
-                            Text(
-                              "Lihat Semua",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                  color: Colors.grey[800]),
-                            )
+                            // Text(
+                            //   "Lihat Semua",
+                            //   style: TextStyle(
+                            //       fontWeight: FontWeight.w700,
+                            //       fontSize: 15,
+                            //       color: Colors.grey[800]),
+                            // )
                           ],
                         ),
                         padding: EdgeInsets.symmetric(horizontal: 32),
                       ),
                       SizedBox(height: 24),
-                      // Container(
-                      //   child: Text("Semua"),
-                      // )
+                      Container(
+                          height: 250,
+                          child: ListView.builder(
+                              itemCount: arrHistory.length == 0
+                                  ? 1
+                                  : arrHistory.length,
+                              itemBuilder: (context, index) {
+                                if (arrHistory.length == 0) {
+                                  return Card(
+                                      child: Text("Tidak Ada Transaksi Saldo"));
+                                } else {
+                                  return SizedBox(
+                                      height: 75,
+                                      child: Card(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                arrHistory[index].ket ==
+                                                        "Penarikan Saldo"
+                                                    ? Container(
+                                                        width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2 -
+                                                            10,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                10, 0, 10, 0),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                                arrHistory[
+                                                                        index]
+                                                                    .ket,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        17,
+                                                                    color: Colors
+                                                                        .red))
+                                                          ],
+                                                        ))
+                                                    : Container(
+                                                        width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2 -
+                                                            10,
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                10, 0, 10, 0),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                                arrHistory[
+                                                                        index]
+                                                                    .ket,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        17,
+                                                                    color: Colors
+                                                                        .green))
+                                                          ],
+                                                        )),
+                                                Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                    .size
+                                                                    .width /
+                                                                2 -
+                                                            10,
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            0, 0, 0, 0),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        Text(
+                                                            arrHistory[index]
+                                                                .waktu
+                                                                .substring(
+                                                                    0, 10),
+                                                            style: TextStyle(
+                                                                fontSize: 17))
+                                                      ],
+                                                    )),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Container(
+                                                    margin: EdgeInsets.fromLTRB(
+                                                        10, 10, 10, 0),
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                    .size
+                                                                    .width /
+                                                                2 -
+                                                            20,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          arrHistory[index]
+                                                              .status,
+                                                          style: TextStyle(
+                                                              fontSize: 17),
+                                                        )
+                                                      ],
+                                                    )),
+                                                arrHistory[index].ket ==
+                                                        "Penarikan Saldo"
+                                                    ? Container(
+                                                        margin:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2 -
+                                                            15,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Text(
+                                                                "- Rp. " +
+                                                                    frmt.format(int.parse(arrHistory[
+                                                                            index]
+                                                                        .saldo
+                                                                        .toString())),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        17,
+                                                                    color: Colors
+                                                                        .red))
+                                                          ],
+                                                        ))
+                                                    : Container(
+                                                        margin:
+                                                            EdgeInsets.fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                2 -
+                                                            15,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Text(
+                                                                "+ Rp. " +
+                                                                    frmt.format(int.parse(arrHistory[
+                                                                            index]
+                                                                        .saldo
+                                                                        .toString())),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        17,
+                                                                    color: Colors
+                                                                        .green))
+                                                          ],
+                                                        )),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ));
+                                }
+                              }))
                     ],
                   ),
                 ),
