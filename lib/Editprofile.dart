@@ -1,5 +1,4 @@
-import 'package:dietyuk/Kota.dart';
-
+import 'Kota.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

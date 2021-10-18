@@ -1,6 +1,9 @@
-import 'package:dietyuk/Daftartransaksimember.dart';
-import 'package:dietyuk/HomepageMember.dart';
+import 'package:dietyukapp/Chat.dart';
+import 'package:dietyukapp/ListChat.dart';
+import 'Daftartransaksimember.dart';
+import 'HomepageMember.dart';
 import 'package:flutter/material.dart';
+import 'session.dart' as session;
 import 'Myprofile.dart';
 
 class Dashmember extends StatefulWidget {
@@ -13,7 +16,7 @@ class DashmemberState extends State<Dashmember> {
 
   final bottomBar = [
     HomePageMember(),
-    Daftartransaksimember(),
+    ListChat(id: session.userlogin.toString()),
     Myprofile()
   ]; //harusnya homepage, chat, profile
 

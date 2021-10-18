@@ -1,4 +1,4 @@
-import 'package:dietyuk/AwalPaket.dart';
+import 'AwalPaket.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';

@@ -1,5 +1,5 @@
-import 'package:dietyuk/ClassTransaksiProdukJoin.dart';
-import 'package:dietyuk/DetailBeliProduk.dart';
+import 'ClassTransaksiProdukJoin.dart';
+import 'DetailBeliProduk.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'session.dart' as session;

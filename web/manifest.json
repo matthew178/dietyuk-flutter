@@ -1,6 +1,6 @@
 {
-    "name": "dietyuk",
-    "short_name": "dietyuk",
+    "name": "dietyukapp",
+    "short_name": "dietyukapp",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

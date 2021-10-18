@@ -1,7 +1,7 @@
-import 'package:dietyuk/Daftarpaket.dart';
-import 'package:dietyuk/Daftarprodukmember.dart';
-import 'package:dietyuk/Daftartransaksimember.dart';
-import 'package:dietyuk/PilihProduk.dart';
+import 'Daftarpaket.dart';
+import 'Daftarprodukmember.dart';
+import 'Daftartransaksimember.dart';
+import 'PilihProduk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';

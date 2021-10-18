@@ -1,5 +1,5 @@
-import 'package:dietyuk/ClassDetailBeliProduk.dart';
-import 'package:dietyuk/ClassTransaksiProdukJoin.dart';
+import 'ClassDetailBeliProduk.dart';
+import 'ClassTransaksiProdukJoin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';

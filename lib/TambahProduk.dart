@@ -1,5 +1,5 @@
 import 'package:image_picker/image_picker.dart';
-import 'package:dietyuk/ClassKategoriProduk.dart';
+import 'ClassKategoriProduk.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

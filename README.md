@@ -1,4 +1,4 @@
-# dietyuk
+# dietyukapp
 
 A new Flutter project.
 

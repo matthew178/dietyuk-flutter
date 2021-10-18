@@ -1,4 +1,4 @@
-import 'package:dietyuk/ClassKategoriProduk.dart';
+import 'ClassKategoriProduk.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'session.dart' as session;

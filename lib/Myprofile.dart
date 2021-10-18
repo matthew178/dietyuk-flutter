@@ -1,4 +1,4 @@
-import 'package:dietyuk/ClassAlamat.dart';
+import 'ClassAlamat.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';

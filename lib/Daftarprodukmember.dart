@@ -1,4 +1,4 @@
-import 'package:dietyuk/ProdukDetail.dart';
+import 'ProdukDetail.dart';
 import 'package:badges/badges.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';

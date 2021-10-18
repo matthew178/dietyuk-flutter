@@ -1,9 +1,9 @@
-import 'package:dietyuk/Dashkonsultan.dart';
-import 'package:dietyuk/Dashmember.dart';
-import 'package:dietyuk/ForgotPassword.dart';
-import 'package:dietyuk/PilihAlamat.dart';
-import 'package:dietyuk/Register.dart';
-import 'package:dietyuk/checkout.dart';
+import 'Dashkonsultan.dart';
+import 'Dashmember.dart';
+import 'ForgotPassword.dart';
+import 'PilihAlamat.dart';
+import 'Register.dart';
+import 'checkout.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
@@ -20,7 +20,7 @@ import 'TambahProduk.dart';
 void main() {
   runZoned(() {
     runApp(MaterialApp(
-      title: 'dietyuk',
+      title: 'dietYuk App',
       home: MyApp(),
     ));
   }, onError: (dynamic error, dynamic stack) {
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'dietyuk',
+      title: 'dietYuk App',
       theme: ThemeData(
           textTheme:
               // GoogleFonts.josefinSansTextTheme(Theme.of(context).textTheme),

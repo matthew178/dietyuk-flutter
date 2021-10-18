@@ -1,4 +1,4 @@
-package com.example.dietyuk
+package com.healthyapp.dietyukapp
 
 import io.flutter.embedding.android.FlutterActivity
 

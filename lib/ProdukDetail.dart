@@ -1,7 +1,7 @@
 import 'package:badges/badges.dart';
-import 'package:dietyuk/ClassProduk.dart';
-import 'package:dietyuk/WallKonsultan.dart';
-import 'package:dietyuk/shoppingcart.dart';
+import 'ClassProduk.dart';
+import 'WallKonsultan.dart';
+import 'shoppingcart.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
@@ -45,11 +45,11 @@ class ProdukDetailState extends State<ProdukDetail> {
   void initState() {
     super.initState();
     getProdukDetail();
-    for (int i = 0; i < session.Cart.length; i++) {
-      if (int.parse(session.Cart[i].username) == session.userlogin) {
-        jumlahCart++;
-      }
-    }
+    // for (int i = 0; i < session.Cart.length; i++) {
+    //   if (int.parse(session.Cart[i].username) == session.userlogin) {
+    //     jumlahCart++;
+    //   }
+    // }
   }
 
   Future<List<ClassProduk>> getProdukCart() async {

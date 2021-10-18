@@ -1,9 +1,9 @@
-import 'package:dietyuk/ClassAlamat.dart';
-import 'package:dietyuk/ClassKurir.dart';
-import 'package:dietyuk/ClassUser.dart';
+import 'ClassAlamat.dart';
+import 'ClassKurir.dart';
+import 'ClassUser.dart';
 import 'package:flutter/material.dart';
-import 'package:dietyuk/ClassProduk.dart';
-import 'package:dietyuk/shoppingcart.dart';
+import 'ClassProduk.dart';
+import 'shoppingcart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';

@@ -1,7 +1,6 @@
-import 'package:dietyuk/ClassUser.dart';
-import 'package:dietyuk/DetailProdukKonsultan.dart';
+import 'ClassUser.dart';
+import 'DetailProdukKonsultan.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

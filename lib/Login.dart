@@ -1,6 +1,6 @@
-import 'package:dietyuk/ClassProduk.dart';
-import 'package:dietyuk/session.dart';
-import 'package:dietyuk/shoppingcart.dart';
+import 'ClassProduk.dart';
+import 'session.dart';
+import 'shoppingcart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +10,9 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'Chat.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -17,6 +20,10 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
+  Firestore _firestore = Firestore.instance;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  String tokenKu;
+
   TextEditingController myUsername = new TextEditingController();
   TextEditingController myPassword = new TextEditingController();
   SharedPreferences preference;
@@ -25,6 +32,32 @@ class LoginState extends State<Login> {
   void initState() {
     super.initState();
     loadUser();
+    firebaseCloudMessaging_Listeners();
+  }
+
+  void firebaseCloudMessaging_Listeners() {
+    _firebaseMessaging.getToken().then((token) {
+      print("token di home dart = " + token);
+      tokenKu = token;
+      Firestore.instance
+          .collection("chatting")
+          .getDocuments()
+          .then((QuerySnapshot snapshot) {
+        snapshot.documents.forEach((f) {});
+      });
+    });
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('on message $message');
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('on resume $message');
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('on launch $message');
+      },
+    );
   }
 
   void loadUser() async {
@@ -112,6 +145,7 @@ class LoginState extends State<Login> {
     Map paramData = {
       'username': myUsername.text,
       'password': myPassword.text,
+      'token': tokenKu
     };
     var parameter = json.encode(paramData);
     http
@@ -127,6 +161,8 @@ class LoginState extends State<Login> {
         preference.setString("berat", data[0]['berat']);
 
         if (data[0]['status'] == "Aktif") {
+          // kalau berhasil login maka updateTokenFirebase ke mysql
+
           if (data[0]['role'] == "member") {
             var temp = jsonDecode(
                 preference.getString('cart' + session.userlogin.toString()) ??

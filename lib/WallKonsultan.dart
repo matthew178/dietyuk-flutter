@@ -1,8 +1,8 @@
-import 'package:dietyuk/ClassKategoriProduk.dart';
-import 'package:dietyuk/ClassPaket.dart';
-import 'package:dietyuk/ClassProduk.dart';
-import 'package:dietyuk/ClassUser.dart';
-import 'package:dietyuk/Daftarprodukmember.dart';
+import 'ClassKategoriProduk.dart';
+import 'ClassPaket.dart';
+import 'ClassProduk.dart';
+import 'ClassUser.dart';
+import 'Daftarprodukmember.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

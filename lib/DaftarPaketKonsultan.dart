@@ -1,5 +1,5 @@
-import 'package:dietyuk/ClassPaket.dart';
-import 'package:dietyuk/DetailPaket.dart';
+import 'ClassPaket.dart';
+import 'DetailPaket.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

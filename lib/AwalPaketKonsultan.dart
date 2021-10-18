@@ -1,6 +1,6 @@
-import 'package:dietyuk/ClassPerkembangan.dart';
-import 'package:dietyuk/EditJadwalBeli.dart';
-import 'package:dietyuk/JadwalHarian.dart';
+import 'ClassPerkembangan.dart';
+import 'EditJadwalBeli.dart';
+import 'JadwalHarian.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'ClassAwalPaket.dart';
