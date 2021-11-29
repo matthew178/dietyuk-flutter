@@ -60,6 +60,8 @@ class DetailBeliProdukState extends State<DetailBeliProduk> {
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print("selesai");
+      Navigator.pop(context);
+      Fluttertoast.showToast(msg: "Berhasil tolak pesanan");
     }).catchError((err) {
       print(err);
     });
@@ -469,7 +471,9 @@ class DetailBeliProdukState extends State<DetailBeliProduk> {
                       borderRadius: BorderRadius.circular(16),
                       color: Colors.green),
                   child: FlatButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // terimaPesanan();
+                    },
                     child: Text(
                       'Terima',
                       style: session.kBodyText

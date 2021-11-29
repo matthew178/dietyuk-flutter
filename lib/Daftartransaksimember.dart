@@ -2,7 +2,7 @@ import 'AwalPaket.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
+import 'rating.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -20,8 +20,12 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
   List<Transaksibelipaket> onProses = new List();
   List<Transaksibelipaket> selesai = new List();
   List<Transaksibelipaket> batal = new List();
+  TextEditingController reviewkonsultan = new TextEditingController();
+  TextEditingController reviewpaket = new TextEditingController();
+  TextEditingController keteranganlaporan = new TextEditingController();
   DateTime tglnow = new DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  int ratingpaket, ratingkonsultan;
 
   @override
   void initState() {
@@ -64,6 +68,404 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     }).catchError((err) {
       print(err);
     });
+  }
+
+  void kirimRating(String paket) async {
+    Map paramData = {
+      'user': session.userlogin,
+      'paket': paket,
+      'ratingkonsultan': ratingkonsultan,
+      'ratingpaket': ratingpaket,
+      'reviewpaket': reviewpaket.text,
+      'reviewkonsultan': reviewkonsultan.text
+    };
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/kirimRating",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      var data = json.decode(res.body);
+      data = data[0]['transaksi'];
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+  // void ratingReview(String paket) {
+  //   AlertDialog dialog = new AlertDialog(
+  //     content: new Container(
+  //       width: MediaQuery.of(context).size.width,
+  //       height: 475.0,
+  //       decoration: new BoxDecoration(
+  //         shape: BoxShape.rectangle,
+  //         color: const Color(0xFFFFFF),
+  //         borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+  //       ),
+  //       child: new ListView(
+  //         // crossAxisAlignment: CrossAxisAlignment.stretch,
+  //         children: <Widget>[
+  //           Container(
+  //             decoration: BoxDecoration(
+  //                 color: Colors.blue[100],
+  //                 border: Border.all(color: Colors.black),
+  //                 borderRadius: BorderRadius.all(Radius.circular(20))),
+  //             child: Column(
+  //               children: [
+  //                 SizedBox(height: 10),
+  //                 Container(
+  //                     child: Center(child: Text("Rating untuk Konsultan"))),
+  //                 SizedBox(height: 5),
+  //                 Container(
+  //                   child: Column(
+  //                     mainAxisAlignment: MainAxisAlignment.center,
+  //                     children: [
+  //                       Rating((rating) {
+  //                         setState(() {
+  //                           ratingkonsultan = rating;
+  //                         });
+  //                       }, 5),
+  //                     ],
+  //                   ),
+  //                 ),
+  //                 SizedBox(height: 15),
+  //                 Container(
+  //                     child: Center(child: Text("Review untuk Konsultan"))),
+  //                 Container(
+  //                   width: 250,
+  //                   child: TextField(
+  //                     controller: reviewkonsultan,
+  //                     autofocus: false,
+  //                     keyboardType: TextInputType.multiline,
+  //                     maxLines: null,
+  //                   ),
+  //                 ),
+  //                 SizedBox(height: 10)
+  //               ],
+  //             ),
+  //           ),
+  //           SizedBox(height: 25),
+  //           Container(
+  //             decoration: BoxDecoration(
+  //                 color: Colors.yellow[100],
+  //                 border: Border.all(color: Colors.black),
+  //                 borderRadius: BorderRadius.all(Radius.circular(20))),
+  //             child: Column(
+  //               children: [
+  //                 SizedBox(height: 10),
+  //                 Container(
+  //                     child: Center(child: Text("Rating untuk Paket Diet"))),
+  //                 SizedBox(height: 5),
+  //                 Container(
+  //                   child: Column(
+  //                     mainAxisAlignment: MainAxisAlignment.center,
+  //                     children: [
+  //                       Rating((rating) {
+  //                         setState(() {
+  //                           ratingpaket = rating;
+  //                         });
+  //                       }, 5),
+  //                     ],
+  //                   ),
+  //                 ),
+  //                 SizedBox(height: 15),
+  //                 Container(
+  //                     child: Center(child: Text("Review untuk Konsultan"))),
+  //                 Container(
+  //                   width: 250,
+  //                   child: TextField(
+  //                     controller: reviewpaket,
+  //                     autofocus: false,
+  //                     keyboardType: TextInputType.multiline,
+  //                     maxLines: null,
+  //                   ),
+  //                 ),
+  //                 SizedBox(height: 10)
+  //               ],
+  //             ),
+  //           ),
+  //           SizedBox(height: 20),
+  //           Container(
+  //             child: new RaisedButton(
+  //               onPressed: () {
+  //                 Navigator.of(context, rootNavigator: true).pop(true);
+  //               },
+  //               padding: new EdgeInsets.all(16.0),
+  //               color: Colors.green,
+  //               child: new Text(
+  //                 'Submit Rating & Review',
+  //                 style: TextStyle(
+  //                   color: Colors.white,
+  //                   fontSize: 18.0,
+  //                   fontFamily: 'helvetica_neue_light',
+  //                 ),
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(height: 5),
+  //           Container(
+  //             child: new RaisedButton(
+  //               onPressed: () {
+  //                 Navigator.of(context, rootNavigator: true).pop(true);
+  //               },
+  //               padding: new EdgeInsets.all(16.0),
+  //               color: Colors.red,
+  //               child: new Text(
+  //                 'Lapor Konsultan',
+  //                 style: TextStyle(
+  //                   color: Colors.white,
+  //                   fontSize: 18.0,
+  //                   fontFamily: 'helvetica_neue_light',
+  //                 ),
+  //                 textAlign: TextAlign.center,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return dialog;
+  //       });
+  // }
+
+  void ratingReview(String paket) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+              backgroundColor: Colors.transparent,
+              insetPadding: EdgeInsets.all(10),
+              child: Stack(
+                overflow: Overflow.visible,
+                alignment: Alignment.center,
+                children: <Widget>[
+                  ListView(
+                    children: <Widget>[
+                      SizedBox(height: MediaQuery.of(context).size.height / 8),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.blue[100],
+                            border: Border.all(color: Colors.black),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Container(
+                                child: Center(
+                                    child: Text(
+                              "Rating untuk Konsultan",
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold),
+                            ))),
+                            SizedBox(height: 5),
+                            Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Rating((rating) {
+                                    setState(() {
+                                      ratingkonsultan = rating;
+                                    });
+                                  }, 5),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Container(
+                                child: Center(
+                                    child: Text("Review untuk Konsultan",
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold)))),
+                            Container(
+                              width: 250,
+                              child: TextField(
+                                controller: reviewkonsultan,
+                                autofocus: false,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                              ),
+                            ),
+                            SizedBox(height: 10)
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 25),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.yellow[100],
+                            border: Border.all(color: Colors.black),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Container(
+                                child: Center(
+                                    child: Text("Rating untuk Paket Diet",
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold)))),
+                            SizedBox(height: 5),
+                            Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Rating((rating) {
+                                    setState(() {
+                                      ratingpaket = rating;
+                                    });
+                                  }, 5),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Container(
+                                child: Center(
+                                    child: Text("Review untuk Konsultan",
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold)))),
+                            Container(
+                              width: 250,
+                              child: TextField(
+                                controller: reviewpaket,
+                                autofocus: false,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                              ),
+                            ),
+                            SizedBox(height: 10)
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        child: new RaisedButton(
+                          onPressed: () {
+                            kirimRating(paket);
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(true);
+                            setState(() {
+                              ratingpaket = 0;
+                              ratingkonsultan = 0;
+                              reviewpaket.text = "";
+                              reviewkonsultan.text = "";
+                            });
+                          },
+                          padding: new EdgeInsets.all(16.0),
+                          color: Colors.green,
+                          child: new Text(
+                            'Submit Rating & Review',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontFamily: 'helvetica_neue_light',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Container(
+                        child: new RaisedButton(
+                          onPressed: () {
+                            laporKonsultan();
+                          },
+                          padding: new EdgeInsets.all(16.0),
+                          color: Colors.red,
+                          child: new Text(
+                            'Lapor Konsultan',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontFamily: 'helvetica_neue_light',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ));
+        });
+  }
+
+  void laporKonsultan() {
+    AlertDialog dialog = new AlertDialog(
+      content: new Container(
+        width: 260.0,
+        height: 230.0,
+        decoration: new BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: const Color(0xFFFFFF),
+          borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+        ),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  Container(
+                      child: Center(
+                          child: Text("Alasan Pelaporan",
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold)))),
+                  Container(
+                    width: 250,
+                    child: TextField(
+                      controller: keteranganlaporan,
+                      autofocus: false,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                    ),
+                  ),
+                  SizedBox(height: 10)
+                ],
+              ),
+            ),
+            new Expanded(
+              child: Row(
+                children: [
+                  SizedBox(width: 50),
+                  Container(
+                    child: new RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop(true);
+                      },
+                      padding: new EdgeInsets.all(16.0),
+                      color: Colors.blue,
+                      child: new Text(
+                        'Kirim Laporan',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontFamily: 'helvetica_neue_light',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        });
   }
 
   void showAlert(String di, String packet, String sttskonsultan) {
@@ -558,36 +960,127 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                               return Image.asset("assets/images/noresult.png");
                             } else {
                               return GestureDetector(
-                                  onTap: () {},
-                                  child: Card(
-                                      child: Row(
-                                    children: [
-                                      Container(
-                                          padding: EdgeInsets.fromLTRB(
-                                              10, 10, 0, 10),
-                                          child: Image.asset(
-                                              'assets/images/done.png')),
-                                      SizedBox(
-                                        width: 30,
-                                      ),
-                                      Container(
-                                        child: Column(
+                                  onTap: () {
+                                    selesai[index].status == "2"
+                                        ? Fluttertoast.showToast(
+                                            msg: selesai[index]
+                                                .status
+                                                .toString())
+                                        : ratingReview(selesai[index].idpaket);
+                                  },
+                                  child: selesai[index].status == "2"
+                                      // ? Card(
+                                      //     child: Row(
+                                      //     children: [
+                                      //       Container(
+                                      //           padding: EdgeInsets.fromLTRB(
+                                      //               10, 10, 0, 10),
+                                      //           child: Image.asset(
+                                      //               'assets/images/done.png')),
+                                      //       SizedBox(
+                                      //         width: 30,
+                                      //       ),
+                                      //       Container(
+                                      //         child: Column(
+                                      //           children: [
+                                      //             Container(
+                                      //                 child: Text(
+                                      //               selesai[index].namapaket,
+                                      //               style: TextStyle(
+                                      //                 fontSize: 20,
+                                      //               ),
+                                      //             )),
+                                      //             Container(
+                                      //                 child: Text(selesai[index]
+                                      //                     .namakonsultan))
+                                      //           ],
+                                      //         ),
+                                      //       ),
+                                      //     ],
+                                      //   ))
+                                      ? Card(
+                                          child: Row(
                                           children: [
+                                            Column(
+                                              children: [
+                                                Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 10, 0, 10),
+                                                    child: Image.asset(
+                                                        'assets/images/done.png')),
+                                                Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 10, 0, 10),
+                                                    child: Text(
+                                                      "      Selesai     ",
+                                                    )),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              width: 30,
+                                            ),
                                             Container(
-                                                child: Text(
-                                              selesai[index].namapaket,
-                                              style: TextStyle(
-                                                fontSize: 20,
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                      child: Text(
+                                                    selesai[index].namapaket,
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                    ),
+                                                  )),
+                                                  Container(
+                                                      child: Text(selesai[index]
+                                                          .namakonsultan))
+                                                ],
                                               ),
-                                            )),
-                                            Container(
-                                                child: Text(selesai[index]
-                                                    .namakonsultan))
+                                            ),
                                           ],
-                                        ),
-                                      ),
-                                    ],
-                                  )));
+                                        ))
+                                      : Card(
+                                          child: Row(
+                                          children: [
+                                            Column(
+                                              children: [
+                                                Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 10, 0, 10),
+                                                    child: Icon(Icons.help,
+                                                        size: 50,
+                                                        color: Colors
+                                                            .yellow[700])),
+                                                Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 10, 0, 10),
+                                                    child:
+                                                        Text("Berikan Ulasan")),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              width: 30,
+                                            ),
+                                            Container(
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                      child: Text(
+                                                    selesai[index].namapaket,
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                    ),
+                                                  )),
+                                                  Container(
+                                                      child: Text(selesai[index]
+                                                          .namakonsultan))
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        )));
                             }
                           }),
                     ),

@@ -63,7 +63,8 @@ class _ChatState extends State<Chat> {
       'user1': username1,
       'user2': username2,
       'teks': teks,
-      'tanggal': DateTime.now().toString()
+      'tanggal': DateTime.now().toString(),
+      'foto': ""
     });
   }
 
@@ -85,21 +86,22 @@ class _ChatState extends State<Chat> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: <Widget>[
+                        Expanded(flex: 1, child: SizedBox()),
                         Expanded(
                           flex: 7,
                           child: TextFormField(
-                            controller: teksChat,
-                            keyboardType: TextInputType.text,
-                            style: TextStyle(color: Colors.blue),
-                            decoration: InputDecoration(
+                              controller: teksChat,
+                              keyboardType: TextInputType.text,
+                              style: TextStyle(color: Colors.blue),
+                              decoration: InputDecoration(
                                 hintText: "Chat",
                                 hintStyle: TextStyle(color: Colors.grey),
                                 border: InputBorder.none,
-                                icon: Icon(
-                                  Icons.email,
-                                  color: Colors.grey,
-                                )),
-                          ),
+                                // icon: Icon(
+                                //   Icons.email,
+                                //   color: Colors.grey,
+                                // )),
+                              )),
                         ),
                         Expanded(
                           flex: 1,
@@ -197,7 +199,7 @@ class _ChatState extends State<Chat> {
                 horizontal: 16.0,
               ),
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.blue[100],
                   borderRadius: BorderRadius.circular(10.0)),
               child: Text(record.teks,
                   style: TextStyle(
@@ -221,20 +223,23 @@ class Record {
   final String teks;
   final String tanggal;
   final DocumentReference reference;
+  final String foto;
 
   Record.fromMap(Map<String, dynamic> map, {this.reference})
       : assert(map['user1'] != null),
         assert(map['user2'] != null),
         assert(map['teks'] != null),
         assert(map['tanggal'] != null),
+        assert(map['foto'] != null),
         user1 = map['user1'],
         user2 = map['user2'],
         teks = map['teks'],
-        tanggal = map['tanggal'];
+        tanggal = map['tanggal'],
+        foto = map['foto'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
   @override
-  String toString() => "Record<$user1:$user2:$teks:$tanggal>";
+  String toString() => "Record<$user1:$user2:$teks:$tanggal:$foto>";
 }

@@ -1,3 +1,4 @@
+import 'package:dietyukapp/ClassMakanan.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'session.dart' as session;
@@ -19,17 +20,16 @@ class EditJadwalPaket extends StatefulWidget {
 }
 
 class EditJadwalPaketState extends State<EditJadwalPaket> {
-  TextEditingController nama = new TextEditingController();
   TextEditingController deskripsi = new TextEditingController();
-  TextEditingController estimasi = new TextEditingController();
-  TextEditingController harga = new TextEditingController();
-  TextEditingController durasi = new TextEditingController();
+  TextEditingController cari = new TextEditingController();
   TextEditingController takaran = new TextEditingController();
 
   String waktu = "pagi";
   List<ClassJadwal> arrJadwal = new List();
   List<ClassJadwal> allJadwal = new List();
   List<ClassProduk> arrProduk = new List();
+  List<ClassMakanan> arrMakanan = new List();
+  ClassMakanan makanan = null;
   ClassProduk produkyangdipilih = null;
   int hari = 1;
   int mode = 0;
@@ -132,6 +132,46 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
     });
   }
 
+  Future<List<ClassProduk>> getInfoMakanan() async {
+    List<ClassMakanan> arrTemp = new List();
+    ClassMakanan tempMakanan =
+        new ClassMakanan("brand", "nama", "deskripsi", "url", "kalori");
+    Map paramData = {'search': cari.text};
+    var parameter = json.encode(paramData);
+    http
+        .post(session.ipnumber + "/cariInformasi",
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      var data = json.decode(res.body);
+      print(data);
+      data = json.decode(data);
+      data = data['foods']['food'];
+      var kalori = "";
+      var arrtemp = [];
+      var node = [];
+      var node1 = [];
+      var node2 = [];
+      for (int i = 0; i < data.length; i++) {
+        arrtemp = data[i]['food_description'].toString().split(" | ");
+        node = arrtemp[0].toString().split("-");
+        node1 = node[1].toString().split(":");
+        node2 = node1[1].toString().split(" ");
+        tempMakanan = ClassMakanan(
+            data[i]['brand_name'].toString(),
+            data[i]['food_name'].toString(),
+            data[i]['food_description'].toString(),
+            data[i]['food_url'].toString(),
+            node2[1].toString());
+        arrTemp.add(tempMakanan);
+      }
+      setState(() => this.arrMakanan = arrTemp);
+      print(arrMakanan.length.toString() + " makanan");
+      return arrTemp;
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
   Future<List<ClassPaket>> getPaket() async {
     ClassPaket paket = new ClassPaket("", "", "", "", "", "", "", "", "", "");
     Map paramData = {'id': id};
@@ -156,11 +196,6 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
             data[i]['gambar'].toString());
       }
       setState(() => this.paketsaatini = paket);
-      //   nama.text = paket.nama;
-      //   deskripsi.text = paket.deskripsi;
-      //   estimasi.text = paket.estimasi;
-      //   harga.text = paket.harga;
-      //   durasi.text = paket.durasi;
       getJadwal();
       return paket;
     }).catchError((err) {
@@ -450,55 +485,64 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
-                    flex: 4,
-                    child: mode == 0
-                        ? TextFormField(
-                            controller: deskripsi,
-                            keyboardType: TextInputType.text,
-                            autofocus: true,
-                            decoration:
-                                InputDecoration(labelText: "Deskripsi Jadwal"),
-                            validator: (value) => value.isEmpty
-                                ? "Deskripsi Jadwal tidak boleh kosong"
-                                : null,
-                          )
-                        : DropdownButton<ClassProduk>(
-                            style: Theme.of(context).textTheme.title,
-                            hint: Text("Daftar Produk"),
-                            value: produkyangdipilih,
-                            onChanged: (ClassProduk Value) {
-                              setState(() {
-                                produkyangdipilih = Value;
-                                deskripsi.text = Value.namaproduk;
-                              });
-                            },
-                            items: arrProduk.map((ClassProduk produk) {
-                              return DropdownMenuItem<ClassProduk>(
-                                value: produk,
-                                child: Row(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    produk.varian != "-"
-                                        ? Text(
-                                            produk.namaproduk +
-                                                " " +
-                                                produk.varian,
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          )
-                                        : Text(
-                                            produk.namaproduk,
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          )
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                  ),
+                      flex: 4,
+                      child: mode == 0
+                          ? TextFormField(
+                              controller: deskripsi,
+                              keyboardType: TextInputType.text,
+                              autofocus: true,
+                              decoration: InputDecoration(
+                                  labelText: "Deskripsi Jadwal"),
+                              validator: (value) => value.isEmpty
+                                  ? "Deskripsi Jadwal tidak boleh kosong"
+                                  : null,
+                            )
+                          : TextField(
+                              onSubmitted: (String str) {
+                                getInfoMakanan();
+                              },
+                              controller: cari,
+                              keyboardType: TextInputType.text,
+                              autofocus: true,
+                              decoration:
+                                  InputDecoration(labelText: "Cari Makanan"))
+                      // : DropdownButton<ClassProduk>(
+                      //     style: Theme.of(context).textTheme.title,
+                      //     hint: Text("Daftar Produk"),
+                      //     value: produkyangdipilih,
+                      //     onChanged: (ClassProduk Value) {
+                      //       setState(() {
+                      //         produkyangdipilih = Value;
+                      //         deskripsi.text = Value.namaproduk;
+                      //       });
+                      //     },
+                      //     items: arrProduk.map((ClassProduk produk) {
+                      //       return DropdownMenuItem<ClassProduk>(
+                      //         value: produk,
+                      //         child: Row(
+                      //           children: <Widget>[
+                      //             SizedBox(
+                      //               width: 10,
+                      //             ),
+                      //             produk.varian != "-"
+                      //                 ? Text(
+                      //                     produk.namaproduk +
+                      //                         " " +
+                      //                         produk.varian,
+                      //                     style:
+                      //                         TextStyle(color: Colors.black),
+                      //                   )
+                      //                 : Text(
+                      //                     produk.namaproduk,
+                      //                     style:
+                      //                         TextStyle(color: Colors.black),
+                      //                   )
+                      //           ],
+                      //         ),
+                      //       );
+                      //     }).toList(),
+                      //   ),
+                      ),
                   Expanded(
                     flex: 1,
                     child: RaisedButton(

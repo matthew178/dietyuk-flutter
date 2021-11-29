@@ -80,19 +80,24 @@ class ListChatState extends State<ListChat> {
                         child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: Image.network(
-                                  session.ipnumber +
-                                      "/gambar/" +
-                                      arrListChat[index].foto,
-                                  fit: BoxFit.cover),
-                            )),
                         Container(
-                          padding: EdgeInsets.fromLTRB(25, 30, 0, 0),
+                          // color: Colors.red,
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          child: SizedBox(
+                              height: 100,
+                              width: 100,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Image.network(
+                                    session.ipnumber +
+                                        "/gambar/" +
+                                        arrListChat[index].foto,
+                                    fit: BoxFit.cover),
+                              )),
+                        ),
+                        Container(
+                          // color: Colors.green,
+                          padding: EdgeInsets.fromLTRB(15, 50, 0, 0),
                           child: Text(
                             arrListChat[index].namalawan,
                             style: TextStyle(fontSize: 17),

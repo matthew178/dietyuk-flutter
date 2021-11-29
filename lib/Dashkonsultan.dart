@@ -1,3 +1,5 @@
+import 'package:dietyukapp/ListChat.dart';
+
 import 'PilihOrder.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ class DashkonsultanState extends State<Dashkonsultan> {
     Daftarpaketkonsultan(),
     DaftarProduk(),
     PilihOrder(),
+    ListChat(id: session.userlogin.toString()),
     Myprofile()
   ];
 
@@ -43,6 +46,7 @@ class DashkonsultanState extends State<Dashkonsultan> {
               icon: Icon(Icons.shopping_bag), title: Text("Produk")),
           BottomNavigationBarItem(
               icon: Icon(Icons.local_grocery_store), title: Text("Order")),
+          BottomNavigationBarItem(icon: Icon(Icons.email), title: Text("Chat")),
           BottomNavigationBarItem(
               icon: Icon(Icons.person_pin_outlined), title: Text("Profile"))
         ],

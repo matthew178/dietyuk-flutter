@@ -10,6 +10,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProdukDetail extends StatefulWidget {
   final String id;
@@ -25,6 +26,8 @@ class ProdukDetailState extends State<ProdukDetail> {
   int jumlahCart = 0;
   int flag = 0, index = -1;
   SharedPreferences preferences;
+  Firestore _firestore = Firestore.instance;
+  String channel;
   ClassProduk produk = new ClassProduk(
       "kodeproduk",
       "konsultan",
@@ -86,6 +89,19 @@ class ProdukDetailState extends State<ProdukDetail> {
     return arrTemp;
   }
 
+  void sendmessage() async {
+    // var teks = teksChat.text;
+    // teksChat.text = "";
+
+    DocumentReference ref = await _firestore.collection(channel).add({
+      'user1': session.userlogin,
+      'user2': produk.idkonsultan,
+      'teks': "",
+      'tanggal': DateTime.now().toString(),
+      'foto': produk.foto
+    });
+  }
+
   Future<ClassProduk> getProdukDetail() async {
     ClassProduk produkskrg = new ClassProduk(
         "kodeproduk",
@@ -125,6 +141,11 @@ class ProdukDetailState extends State<ProdukDetail> {
           data['konsultan'].toString(),
           data['berat'].toString());
       setState(() => this.produk = produkskrg);
+      if (session.userlogin.toString().compareTo(produk.idkonsultan) < 0) {
+        channel = session.userlogin.toString() + "_" + produk.idkonsultan;
+      } else {
+        channel = produk.idkonsultan + "_" + session.userlogin.toString();
+      }
       return produkskrg;
     }).catchError((err) {
       print(err);
@@ -475,6 +496,7 @@ class ProdukDetailState extends State<ProdukDetail> {
                             child: IconButton(
                                 onPressed: () {
                                   Fluttertoast.showToast(msg: "masuk chat");
+                                  sendmessage();
                                 },
                                 icon: Icon(Icons.chat)))),
                     SizedBox(width: 5),
