@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'Chat.dart';
 import 'ClassProduk.dart';
 import 'WallKonsultan.dart';
 import 'shoppingcart.dart';
@@ -94,7 +95,7 @@ class ProdukDetailState extends State<ProdukDetail> {
     // teksChat.text = "";
 
     DocumentReference ref = await _firestore.collection(channel).add({
-      'user1': session.userlogin,
+      'user1': session.userlogin.toString(),
       'user2': produk.idkonsultan,
       'teks': "",
       'tanggal': DateTime.now().toString(),
@@ -495,7 +496,14 @@ class ProdukDetailState extends State<ProdukDetail> {
                             // color: Colors.blue,
                             child: IconButton(
                                 onPressed: () {
-                                  Fluttertoast.showToast(msg: "masuk chat");
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Chat(
+                                              username1:
+                                                  session.userlogin.toString(),
+                                              username2: produk.idkonsultan,
+                                              namalawan: produk.konsultan)));
                                   sendmessage();
                                 },
                                 icon: Icon(Icons.chat)))),

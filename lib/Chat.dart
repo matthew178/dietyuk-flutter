@@ -165,19 +165,34 @@ class _ChatState extends State<Chat> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8.0,
-                horizontal: 16.0,
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0)),
-              child: Text(record.teks,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                  )),
-            ),
+            record.foto == ""
+                ? Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 16.0,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Text(record.teks,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                        )),
+                  )
+                : Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 16.0,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Image.network(
+                      session.ipnumber + "/gambar/produk/" + record.foto,
+                      height: 150,
+                      width: 150,
+                    ),
+                  ),
             Padding(padding: const EdgeInsets.only(top: 5.0)),
             Text(record.tanggal.substring(0, 16) + "",
                 style: TextStyle(fontSize: 10.0, color: Colors.black)),
@@ -193,19 +208,34 @@ class _ChatState extends State<Chat> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8.0,
-                horizontal: 16.0,
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.blue[100],
-                  borderRadius: BorderRadius.circular(10.0)),
-              child: Text(record.teks,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                  )),
-            ),
+            record.foto == ""
+                ? Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 16.0,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Colors.blue[100],
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Text(record.teks,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                        )),
+                  )
+                : Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 16.0,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Image.network(
+                      session.ipnumber + "/gambar/produk/" + record.foto,
+                      height: 150,
+                      width: 150,
+                    ),
+                  ),
             Padding(padding: const EdgeInsets.only(top: 5.0)),
             Text(record.tanggal.substring(0, 16) + "",
                 style: TextStyle(fontSize: 10.0, color: Colors.black)),

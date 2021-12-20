@@ -32,7 +32,7 @@ class LoginState extends State<Login> {
   void initState() {
     super.initState();
     loadUser();
-    // firebaseCloudMessaging_Listeners();
+    firebaseCloudMessaging_Listeners();
   }
 
   void firebaseCloudMessaging_Listeners() {
