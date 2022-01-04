@@ -27,8 +27,9 @@ class EditprofileState extends State<Editprofile> {
   List<Kota> arrKota = new List();
   Kota city = null;
   Provinsi prov = null;
+  final ImagePicker _picker = ImagePicker();
 
-  File _image;
+  XFile _image;
 
   ClassUser userprofile = new ClassUser(
       "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "1", "1");
@@ -122,7 +123,8 @@ class EditprofileState extends State<Editprofile> {
     String namaFile = "";
 
     if (_image != null) {
-      base64Image = base64Encode(_image.readAsBytesSync()); //mimage
+      base64Image = base64Encode(File(_image.path).readAsBytesSync()); //mimage
+      // base64Image = base64Encode(_image.readAsBytesSync()); //mimage
       namaFile = _image.path.split("/").last + ".png"; //mfile
       print("not null");
     } else {
@@ -159,14 +161,23 @@ class EditprofileState extends State<Editprofile> {
   }
 
   Future getImageFromGallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _image = image;
     });
-
     String namaFile = image.path;
     String basenamegallery = basename(namaFile);
   }
+
+  // Future getImageFromGallery() async {
+  //   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     _image = image;
+  //   });
+
+  //   String namaFile = image.path;
+  //   String basenamegallery = basename(namaFile);
+  // }
 
   Future<ClassUser> getProfile() async {
     ClassUser userlog = new ClassUser(
