@@ -24,7 +24,7 @@ class PilihAlamatState extends State<PilihAlamat> {
     Map paramData = {'userlogin': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getDaftarAlamat",
+        .post(Uri.parse(session.ipnumber + "/getDaftarAlamat"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

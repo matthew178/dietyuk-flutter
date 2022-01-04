@@ -77,7 +77,7 @@ class CheckoutState extends State<Checkout> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/hitungOngkir",
+        .post(Uri.parse(session.ipnumber + "/hitungOngkir"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -257,7 +257,7 @@ class CheckoutState extends State<Checkout> {
     Map paramData = {'id': 'all'};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getProdukKategori",
+        .post(Uri.parse(session.ipnumber + "/getProdukKategori"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       // print(res.body);
@@ -304,7 +304,7 @@ class CheckoutState extends State<Checkout> {
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getprofile",
+        .post(Uri.parse(session.ipnumber + "/getprofile"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -348,7 +348,7 @@ class CheckoutState extends State<Checkout> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/checkout",
+        .post(Uri.parse(session.ipnumber + "/checkout"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -685,7 +685,7 @@ class CheckoutState extends State<Checkout> {
                     height: 50,
                     width: 200,
                     child: DropdownButton<ClassKurir>(
-                      style: Theme.of(context).textTheme.title,
+                      // style: Theme.of(context).textTheme.title,
                       hint: Text("Pilih Kurir"),
                       value: kurir,
                       onChanged: (ClassKurir Value) {

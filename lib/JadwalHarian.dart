@@ -47,7 +47,7 @@ class JadwalHarianState extends State<JadwalHarian> {
     Map paramData = {'id': id, 'status': status};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/ubahStatusJadwal",
+        .post(Uri.parse(session.ipnumber + "/ubahStatusJadwal"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print("sini status = " + status + " id = " + id);
@@ -65,7 +65,7 @@ class JadwalHarianState extends State<JadwalHarian> {
     var parameter = json.encode(paramData);
     int week = 0;
     http
-        .post(session.ipnumber + "/getJadwalHarian",
+        .post(Uri.parse(session.ipnumber + "/getJadwalHarian"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);

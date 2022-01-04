@@ -54,7 +54,7 @@ class WallKonsultanState extends State<WallKonsultan> {
     Map paramData = {'id': idkonsultan};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getprofile",
+        .post(Uri.parse(session.ipnumber + "/getprofile"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -96,7 +96,7 @@ class WallKonsultanState extends State<WallKonsultan> {
     Map paramData = {'id': idkonsultan};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getprodukbykonsultan",
+        .post(Uri.parse(session.ipnumber + "/getprodukbykonsultan"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -130,7 +130,7 @@ class WallKonsultanState extends State<WallKonsultan> {
     Map paramData = {'id': idkonsultan};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getpaketkonsultan",
+        .post(Uri.parse(session.ipnumber + "/getpaketkonsultan"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);

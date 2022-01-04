@@ -28,7 +28,7 @@ class DaftarpaketState extends State<Daftarpaket> {
     List<ClassPaket> arrPaket = new List();
     Map paramData = {};
     var parameter = json.encode(paramData);
-    http.post(session.ipnumber + "/getpaket",
+    http.post(Uri.parse(session.ipnumber + "/getpaket"),
         headers: {"Content-Type": "application/json"}).then((res) {
       var data = json.decode(res.body);
       data = data[0]['paket'];
@@ -60,7 +60,7 @@ class DaftarpaketState extends State<Daftarpaket> {
     Map paramData = {"cari": cari};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/searchPaketMember",
+        .post(Uri.parse(session.ipnumber + "/searchPaketMember"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);

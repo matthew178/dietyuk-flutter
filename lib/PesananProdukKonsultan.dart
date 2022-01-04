@@ -68,7 +68,7 @@ class PesananProdukKonsultanState extends State<PesananProdukKonsultan> {
         "varian",
         "foto");
     http
-        .post(session.ipnumber + "/getTransaksiPacking",
+        .post(Uri.parse(session.ipnumber + "/getTransaksiPacking"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -160,7 +160,7 @@ class PesananProdukKonsultanState extends State<PesananProdukKonsultan> {
         "varian",
         "foto");
     http
-        .post(session.ipnumber + "/getTransaksiProdukKirim",
+        .post(Uri.parse(session.ipnumber + "/getTransaksiProdukKirim"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -252,7 +252,7 @@ class PesananProdukKonsultanState extends State<PesananProdukKonsultan> {
         "varian",
         "foto");
     http
-        .post(session.ipnumber + "/getTransaksiProdukSelesai",
+        .post(Uri.parse(session.ipnumber + "/getTransaksiProdukSelesai"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

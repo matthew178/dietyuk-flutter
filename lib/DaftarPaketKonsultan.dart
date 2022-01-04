@@ -27,7 +27,7 @@ class DaftarpaketkonsultanState extends State<Daftarpaketkonsultan> {
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getpaketkonsultan",
+        .post(Uri.parse(session.ipnumber + "/getpaketkonsultan"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);

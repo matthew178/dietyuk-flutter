@@ -43,7 +43,7 @@ class PilihOrderState extends State<PilihOrder> {
         "0",
         "0");
     http
-        .post(session.ipnumber + "/getTransaksiProdukKonsultan",
+        .post(Uri.parse(session.ipnumber + "/getTransaksiProdukKonsultan"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -93,7 +93,7 @@ class PilihOrderState extends State<PilihOrder> {
         "namakonsultan",
         "statuskonsultan");
     http
-        .post(session.ipnumber + "/getTransaksiPaketKonsultan",
+        .post(Uri.parse(session.ipnumber + "/getTransaksiPaketKonsultan"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

@@ -73,7 +73,7 @@ class Topup2State extends State<Topup2> {
     var parameter = json.encode(paramData);
 
     http
-        .post(session.ipnumber + "/topup",
+        .post(Uri.parse(session.ipnumber + "/topup"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -89,7 +89,7 @@ class Topup2State extends State<Topup2> {
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getprofile",
+        .post(Uri.parse(session.ipnumber + "/getprofile"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

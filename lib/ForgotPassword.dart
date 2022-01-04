@@ -23,7 +23,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
     Map paramData = {'email': email.text};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/kirim-email-verifikasi",
+        .post(Uri.parse(session.ipnumber + "/kirim-email-verifikasi"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -44,7 +44,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
     var parameter = json.encode(paramData);
     if (pass.text == konfir.text) {
       http
-          .post(session.ipnumber + '/resetPassword',
+          .post(Uri.parse(session.ipnumber + '/resetPassword'),
               headers: {'Content-Type': "application/json"}, body: parameter)
           .then((res) {
         var data = json.decode(res.body);

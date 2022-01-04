@@ -48,7 +48,7 @@ class TambahProdukState extends State<TambahProduk> {
     ClassKategoriProduk databaru =
         new ClassKategoriProduk("id", "id_paket", "gambar", "icon");
     http
-        .post(session.ipnumber + "/getkategori",
+        .post(Uri.parse(session.ipnumber + "/getkategori"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -96,7 +96,7 @@ class TambahProdukState extends State<TambahProduk> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/tambahproduk",
+        .post(Uri.parse(session.ipnumber + "/tambahproduk"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -128,7 +128,7 @@ class TambahProdukState extends State<TambahProduk> {
               ),
             ),
             DropdownButton<ClassKategoriProduk>(
-              style: Theme.of(context).textTheme.title,
+              // style: Theme.of(context).textTheme.title,
               hint: Text("Kategori Produk"),
               value: kategori,
               onChanged: (ClassKategoriProduk value) {

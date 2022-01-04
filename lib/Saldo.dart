@@ -32,7 +32,7 @@ class SaldoState extends State<Saldo> {
     Map paramData = {'iduser': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getHistoryTopup",
+        .post(Uri.parse(session.ipnumber + "/getHistoryTopup"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -78,7 +78,7 @@ class SaldoState extends State<Saldo> {
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getprofile",
+        .post(Uri.parse(session.ipnumber + "/getprofile"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

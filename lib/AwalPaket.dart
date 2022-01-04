@@ -66,7 +66,7 @@ class AwalPaketState extends State<AwalPaket> {
         new ClassAwalPaket("id", "hari", "tanggal", "week", "status");
     int week = 0;
     http
-        .post(session.ipnumber + "/getdetailbeli",
+        .post(Uri.parse(session.ipnumber + "/getdetailbeli"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var returndata = json.decode(res.body);
@@ -129,7 +129,7 @@ class AwalPaketState extends State<AwalPaket> {
     Map paramData = {'id': paket};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getpaketbyid",
+        .post(Uri.parse(session.ipnumber + "/getpaketbyid"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -169,7 +169,7 @@ class AwalPaketState extends State<AwalPaket> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/tambahPerkembangan",
+        .post(Uri.parse(session.ipnumber + "/tambahPerkembangan"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

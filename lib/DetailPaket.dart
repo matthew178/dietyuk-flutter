@@ -94,7 +94,7 @@ class DetailPaketState extends State<DetailPaket> {
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getprofile",
+        .post(Uri.parse(session.ipnumber + "/getprofile"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -134,7 +134,7 @@ class DetailPaketState extends State<DetailPaket> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/belipaket",
+        .post(Uri.parse(session.ipnumber + "/belipaket"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -350,7 +350,7 @@ class DetailPaketState extends State<DetailPaket> {
     ClassJadwal databaru =
         new ClassJadwal("id", "id_paket", "hari", "waktu", "keterangan", "");
     http
-        .post(session.ipnumber + "/getjadwalbyid",
+        .post(Uri.parse(session.ipnumber + "/getjadwalbyid"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -389,7 +389,7 @@ class DetailPaketState extends State<DetailPaket> {
     Map paramData = {'id': id};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getpaketbyid",
+        .post(Uri.parse(session.ipnumber + "/getpaketbyid"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);

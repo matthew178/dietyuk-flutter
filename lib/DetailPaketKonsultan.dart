@@ -40,7 +40,7 @@ class DetailPaketKonsultanState extends State<DetailPaketKonsultan> {
     Map paramData = {'id': id};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getpaketbyid",
+        .post(Uri.parse(session.ipnumber + "/getpaketbyid"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -81,7 +81,7 @@ class DetailPaketKonsultanState extends State<DetailPaketKonsultan> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/updatepaket",
+        .post(Uri.parse(session.ipnumber + "/updatepaket"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

@@ -70,7 +70,7 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
     Map paramData = {'id': idpaket};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/hapusjadwal",
+        .post(Uri.parse(session.ipnumber + "/hapusjadwal"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       if (res.body.contains("sukses")) {
@@ -103,7 +103,7 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getprodukbykonsultan",
+        .post(Uri.parse(session.ipnumber + "/getprodukbykonsultan"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -139,7 +139,7 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
     Map paramData = {'search': cari.text};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/cariInformasi",
+        .post(Uri.parse(session.ipnumber + "/cariInformasi"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -177,7 +177,7 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
     Map paramData = {'id': id};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getpaketbyid",
+        .post(Uri.parse(session.ipnumber + "/getpaketbyid"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -232,7 +232,7 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
     ClassJadwal databaru =
         new ClassJadwal("id", "id_paket", "hari", "waktu", "keterangan", "");
     http
-        .post(session.ipnumber + "/getjadwalbyid",
+        .post(Uri.parse(session.ipnumber + "/getjadwalbyid"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -266,7 +266,7 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/tambahjadwal",
+        .post(Uri.parse(session.ipnumber + "/tambahjadwal"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

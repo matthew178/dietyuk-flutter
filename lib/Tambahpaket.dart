@@ -31,7 +31,7 @@ class TambahpaketState extends State<Tambahpaket> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/tambahpaket",
+        .post(Uri.parse(session.ipnumber + "/tambahpaket"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -54,7 +54,7 @@ class TambahpaketState extends State<Tambahpaket> {
     var parameter = json.encode(paramData);
     ClassJenisPaket databaru =
         new ClassJenisPaket("id", "id_paket", "gambar", "icon");
-    http.get(session.ipnumber + "/getjenispaketmember",
+    http.get(Uri.parse(session.ipnumber + "/getjenispaketmember"),
         headers: {"Content-Type": "application/json"}).then((res) {
       var data = json.decode(res.body);
       data = data[0]['jenis'];
@@ -96,7 +96,7 @@ class TambahpaketState extends State<Tambahpaket> {
             ),
           ),
           DropdownButton<ClassJenisPaket>(
-            style: Theme.of(context).textTheme.title,
+            // style: Theme.of(context).textTheme.title,
             hint: Text("Jenis Paket"),
             value: jp,
             onChanged: (ClassJenisPaket value) {

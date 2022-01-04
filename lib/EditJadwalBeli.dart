@@ -71,7 +71,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
     Map paramData = {'id': idjadwal};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/kurangSpek",
+        .post(Uri.parse(session.ipnumber + "/kurangSpek"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       if (res.body.contains("sukses")) {
@@ -104,7 +104,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getprodukbykonsultan",
+        .post(Uri.parse(session.ipnumber + "/getprodukbykonsultan"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -139,7 +139,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
     Map paramData = {'id': paket};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getpaketbyid",
+        .post(Uri.parse(session.ipnumber + "/getpaketbyid"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -200,7 +200,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
     ClassJadwal databaru =
         new ClassJadwal("id", "id_paket", "hari", "waktu", "keterangan", "");
     http
-        .post(session.ipnumber + "/getdetailbyid",
+        .post(Uri.parse(session.ipnumber + "/getdetailbyid"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -235,7 +235,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/tambahSpek",
+        .post(Uri.parse(session.ipnumber + "/tambahSpek"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -467,7 +467,7 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
                                 : null,
                           )
                         : DropdownButton<ClassProduk>(
-                            style: Theme.of(context).textTheme.title,
+                            // style: Theme.of(context).textTheme.title,
                             hint: Text("Daftar Produk"),
                             value: produkyangdipilih,
                             onChanged: (ClassProduk Value) {

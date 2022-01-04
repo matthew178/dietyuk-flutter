@@ -97,7 +97,7 @@ class LoginState extends State<Login> {
     Map paramData = {};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/selesaikanTransaksi",
+        .post(Uri.parse(session.ipnumber + "/selesaikanTransaksi"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {})
         .catchError((err) {
@@ -111,7 +111,7 @@ class LoginState extends State<Login> {
     Map paramData = {'data': data};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getProdukCart",
+        .post(Uri.parse(session.ipnumber + "/getProdukCart"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var hsl = json.decode(res.body);
@@ -149,7 +149,7 @@ class LoginState extends State<Login> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/login",
+        .post(Uri.parse(session.ipnumber + "/login"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       if (res.body.contains("sukses")) {

@@ -209,7 +209,7 @@ class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
               ),
             ),
             DropdownButton<ClassKategoriProduk>(
-              style: Theme.of(context).textTheme.title,
+              // style: Theme.of(context).textTheme.title,
               hint: Text("Kategori Produk"),
               value: kategori,
               onChanged: (ClassKategoriProduk value) {

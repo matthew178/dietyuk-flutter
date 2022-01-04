@@ -69,7 +69,7 @@ class MyprofileState extends State<Myprofile> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/tambahLibur",
+        .post(Uri.parse(session.ipnumber + "/tambahLibur"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -256,7 +256,7 @@ class MyprofileState extends State<Myprofile> {
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getprofile",
+        .post(Uri.parse(session.ipnumber + "/getprofile"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

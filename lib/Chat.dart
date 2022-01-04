@@ -46,7 +46,7 @@ class _ChatState extends State<Chat> {
     Map paramData = {'username1': username1, 'username2': username2};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/cekPesan",
+        .post(Uri.parse(session.ipnumber + "/cekPesan"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

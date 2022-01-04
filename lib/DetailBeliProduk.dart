@@ -56,7 +56,7 @@ class DetailBeliProdukState extends State<DetailBeliProduk> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/tolakTransaksiProduk",
+        .post(Uri.parse(session.ipnumber + "/tolakTransaksiProduk"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print("selesai");
@@ -152,7 +152,7 @@ class DetailBeliProdukState extends State<DetailBeliProduk> {
         "varian",
         "foto");
     http
-        .post(session.ipnumber + "/getDetailTransProduk",
+        .post(Uri.parse(session.ipnumber + "/getDetailTransProduk"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);

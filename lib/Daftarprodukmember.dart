@@ -43,7 +43,7 @@ class DaftarprodukmemberState extends State<Daftarprodukmember> {
     Map paramData = {'id': kategori};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getProdukKategori",
+        .post(Uri.parse(session.ipnumber + "/getProdukKategori"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -78,7 +78,7 @@ class DaftarprodukmemberState extends State<Daftarprodukmember> {
     Map paramData = {'cari': cari, 'id': kategori};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/searchProduk",
+        .post(Uri.parse(session.ipnumber + "/searchProduk"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

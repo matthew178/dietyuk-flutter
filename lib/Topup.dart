@@ -46,7 +46,7 @@ class TopupState extends State<Topup> {
     var parameter = json.encode(paramData);
 
     http
-        .post(session.ipnumber + "/topup",
+        .post(Uri.parse(session.ipnumber + "/topup"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -62,7 +62,7 @@ class TopupState extends State<Topup> {
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getprofile",
+        .post(Uri.parse(session.ipnumber + "/getprofile"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -142,7 +142,7 @@ class TopupState extends State<Topup> {
                   height: 50,
                   width: 200,
                   child: DropdownButton<ClassBank>(
-                    style: Theme.of(context).textTheme.title,
+                    // style: Theme.of(context).textTheme.title,
                     hint: Text("Pilih Bank"),
                     value: bankyangdipilih,
                     onChanged: (ClassBank Value) {

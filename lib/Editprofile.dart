@@ -43,7 +43,8 @@ class EditprofileState extends State<Editprofile> {
     getProfile();
     List<Provinsi> tempProvinsi = new List();
     Provinsi prv = new Provinsi("1", "");
-    http.get(session.ipnumber + "/getProvinsi", headers: {}).then((res) {
+    http.get(Uri.parse(session.ipnumber + "/getProvinsi"), headers: {}).then(
+        (res) {
       var data = json.decode(res.body);
       data = data[0]['provinsi'];
       for (int i = 0; i < data.length; i++) {
@@ -94,7 +95,7 @@ class EditprofileState extends State<Editprofile> {
     Map paramData = {'prov': provinsi};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getKotaByProvinsi",
+        .post(Uri.parse(session.ipnumber + "/getKotaByProvinsi"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -142,7 +143,7 @@ class EditprofileState extends State<Editprofile> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/editprofile",
+        .post(Uri.parse(session.ipnumber + "/editprofile"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -173,7 +174,7 @@ class EditprofileState extends State<Editprofile> {
     Map paramData = {'id': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getprofile",
+        .post(Uri.parse(session.ipnumber + "/getprofile"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -313,7 +314,7 @@ class EditprofileState extends State<Editprofile> {
                     children: [
                       Expanded(
                           child: DropdownButton<Provinsi>(
-                        style: Theme.of(context).textTheme.title,
+                        // style: Theme.of(context).textTheme.title,
                         hint: Text("Provinsi"),
                         value: prov,
                         onChanged: (Provinsi value) {
@@ -351,7 +352,7 @@ class EditprofileState extends State<Editprofile> {
                     children: [
                       Expanded(
                           child: DropdownButton<Kota>(
-                        style: Theme.of(context).textTheme.title,
+                        // style: Theme.of(context).textTheme.title,
                         hint: Text("Kota"),
                         value: city,
                         onChanged: (Kota value) {

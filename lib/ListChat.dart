@@ -32,7 +32,7 @@ class ListChatState extends State<ListChat> {
     Map paramData = {'username': this.id};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getListChat",
+        .post(Uri.parse(session.ipnumber + "/getListChat"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

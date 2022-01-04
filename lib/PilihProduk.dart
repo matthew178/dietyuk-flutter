@@ -27,7 +27,7 @@ class PilihProdukState extends State<PilihProduk> {
     ClassKategoriProduk databaru =
         new ClassKategoriProduk("id", "id_paket", "gambar", "icon");
     http
-        .post(session.ipnumber + "/getkategori",
+        .post(Uri.parse(session.ipnumber + "/getkategori"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);

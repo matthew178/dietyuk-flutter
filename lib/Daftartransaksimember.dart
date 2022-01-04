@@ -41,7 +41,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     Map paramData = {'user': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getPaketBelumSelesai",
+        .post(Uri.parse(session.ipnumber + "/getPaketBelumSelesai"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -81,7 +81,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/kirimRating",
+        .post(Uri.parse(session.ipnumber + "/kirimRating"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -548,7 +548,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     Map paramData = {'user': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/paketOnProses",
+        .post(Uri.parse(session.ipnumber + "/paketOnProses"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -582,7 +582,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     Map paramData = {'user': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getTransaksiSelesai",
+        .post(Uri.parse(session.ipnumber + "/getTransaksiSelesai"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -616,7 +616,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     Map paramData = {'user': session.userlogin};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getTransaksiBatal",
+        .post(Uri.parse(session.ipnumber + "/getTransaksiBatal"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -657,7 +657,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
       };
       var parameter = json.encode(paramData);
       http
-          .post(session.ipnumber + "/aktivasiPaket",
+          .post(Uri.parse(session.ipnumber + "/aktivasiPaket"),
               headers: {"Content-Type": "application/json"}, body: parameter)
           .then((res) {
         // print(res.body);
@@ -679,7 +679,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
       Map paramData = {'id': id, 'username': session.userlogin, 'mode': 1};
       var parameter = json.encode(paramData);
       http
-          .post(session.ipnumber + "/refundPaket",
+          .post(Uri.parse(session.ipnumber + "/refundPaket"),
               headers: {"Content-Type": "application/json"}, body: parameter)
           .then((res) {
         // print(res.body);
@@ -701,7 +701,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     Map paramData = {'id': id, 'username': session.userlogin, 'mode': 2};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/refundPaket",
+        .post(Uri.parse(session.ipnumber + "/refundPaket"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       getTransaksiBelumSelesai();
