@@ -27,7 +27,7 @@ class ProdukDetailState extends State<ProdukDetail> {
   int jumlahCart = 0;
   int flag = 0, index = -1;
   SharedPreferences preferences;
-  Firestore _firestore = Firestore.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String channel;
   ClassProduk produk = new ClassProduk(
       "kodeproduk",

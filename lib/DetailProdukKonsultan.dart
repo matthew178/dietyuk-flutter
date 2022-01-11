@@ -24,7 +24,7 @@ class DetailProdukKonsultan extends StatefulWidget {
 
 class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
   String id;
-  File _image;
+  XFile _image;
   TextEditingController kemasan = new TextEditingController();
   TextEditingController berat = new TextEditingController();
   TextEditingController harga = new TextEditingController();
@@ -47,7 +47,7 @@ class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
       "fotokonsultan",
       "idkonsultan",
       "berat");
-
+  final ImagePicker _picker = ImagePicker();
   DetailProdukKonsultanState(this.id);
 
   @override
@@ -56,12 +56,21 @@ class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
     getProduk();
   }
 
+  // Future getImageFromGallery() async {
+  //   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     _image = image;
+  //   });
+
+  //   String namaFile = image.path;
+  //   String basenamegallery = basename(namaFile);
+  // }
+
   Future getImageFromGallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _image = image;
     });
-
     String namaFile = image.path;
     String basenamegallery = basename(namaFile);
   }
@@ -71,7 +80,8 @@ class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
     String namaFile = "";
 
     if (_image != null) {
-      base64Image = base64Encode(_image.readAsBytesSync()); //mimage
+      base64Image = base64Encode(File(_image.path).readAsBytesSync());
+      // base64Image = base64Encode(_image.readAsBytesSync()); //mimage
       namaFile = _image.path.split("/").last + ".png"; //mfile
       print("not null");
     } else {
@@ -91,7 +101,7 @@ class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
     };
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/editProduk",
+        .post(Uri.parse(session.ipnumber + "/editProduk"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       Fluttertoast.showToast(msg: "Berhasil edit produk");
@@ -110,7 +120,7 @@ class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
     ClassKategoriProduk databaru =
         new ClassKategoriProduk("id", "id_paket", "gambar", "icon");
     http
-        .post(session.ipnumber + "/getkategori",
+        .post(Uri.parse(session.ipnumber + "/getkategori"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
@@ -154,7 +164,7 @@ class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
     Map paramData = {'kodeproduk': this.id};
     var parameter = json.encode(paramData);
     http
-        .post(session.ipnumber + "/getProdukDetail",
+        .post(Uri.parse(session.ipnumber + "/getProdukDetail"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       print(res.body);
@@ -318,7 +328,7 @@ class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
               child: Center(
                 child: _image == null
                     ? Text('No Image Selected.')
-                    : Image.file(_image),
+                    : Image.file(File(_image.path)),
               ),
             ),
             Container(

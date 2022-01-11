@@ -1,3 +1,4 @@
+import 'package:dietyukapp/Withdrawsaldo.dart';
 import 'package:dietyukapp/perkembanganmember.dart';
 
 import 'Dashkonsultan.dart';
@@ -7,7 +8,7 @@ import 'PilihAlamat.dart';
 import 'Register.dart';
 import 'checkout.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'Login.dart';
 import 'Dashkonsultan.dart';
@@ -38,12 +39,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'dietYuk App',
-      theme: ThemeData(
-          textTheme:
-              // GoogleFonts.josefinSansTextTheme(Theme.of(context).textTheme),
-              GoogleFonts.aBeeZeeTextTheme(Theme.of(context).textTheme),
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity),
+      // theme: ThemeData(
+      //     textTheme:
+      //         // GoogleFonts.josefinSansTextTheme(Theme.of(context).textTheme),
+      //         GoogleFonts.aBeeZeeTextTheme(Theme.of(context).textTheme),
+      //     primarySwatch: Colors.blue,
+      //     visualDensity: VisualDensity.adaptivePlatformDensity),
       initialRoute: '/',
       routes: {
         '/': (context) => Login(),
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         '/editprofile': (context) => Editprofile(),
         '/saldo': (context) => Saldo(),
         '/topup': (context) => Topup(),
+        '/withdraw': (context) => Withdrawsaldo(),
         '/tambahproduk': (context) => TambahProduk(),
         '/halamancart': (context) => Checkout(),
         '/lupapassword': (context) => ForgotPassword(),

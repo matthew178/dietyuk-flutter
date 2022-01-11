@@ -12,6 +12,7 @@ import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'Chat.dart';
 
 class Login extends StatefulWidget {
@@ -20,44 +21,44 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  Firestore _firestore = Firestore.instance;
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  FirebaseFirestore _firestore;
+  FirebaseMessaging _firebaseMessaging;
   String tokenKu;
 
   TextEditingController myUsername = new TextEditingController();
   TextEditingController myPassword = new TextEditingController();
   SharedPreferences preference;
   String user = "0", role = "", berat = "0";
+
+  takeFirebase() async {
+    await Firebase.initializeApp();
+    _firestore = FirebaseFirestore.instance;
+    _firebaseMessaging = FirebaseMessaging.instance;
+    firebaseCloudMessaging_Listeners();
+    loadUser();
+  }
+
   @override
   void initState() {
     super.initState();
-    loadUser();
-    firebaseCloudMessaging_Listeners();
+    takeFirebase();
   }
 
   void firebaseCloudMessaging_Listeners() {
     _firebaseMessaging.getToken().then((token) {
       print("token di home dart = " + token);
       tokenKu = token;
-      Firestore.instance
+      FirebaseFirestore.instance
           .collection("chatting")
-          .getDocuments()
+          .get()
           .then((QuerySnapshot snapshot) {
-        snapshot.documents.forEach((f) {});
+        snapshot.docs.forEach((f) {});
       });
     });
 
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('on message $message');
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-      },
-    );
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('on message $message');
+    });
   }
 
   void loadUser() async {

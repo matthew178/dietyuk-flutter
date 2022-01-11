@@ -396,7 +396,7 @@ class EditprofileState extends State<Editprofile> {
             child: Center(
               child: _image == null
                   ? Text('No Image Selected.')
-                  : Image.file(_image),
+                  : Image.file(File(_image.path)),
             ),
           ),
           Container(

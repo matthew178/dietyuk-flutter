@@ -1,6 +1,6 @@
 import 'AwalPaket.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'rating.dart';
 import 'session.dart' as session;

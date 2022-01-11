@@ -1,3 +1,6 @@
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+
 import 'ClassPaket.dart';
 import 'DetailPaket.dart';
 import 'session.dart' as session;
@@ -15,6 +18,7 @@ class Daftarpaketkonsultan extends StatefulWidget {
 }
 
 class DaftarpaketkonsultanState extends State<Daftarpaketkonsultan> {
+  NumberFormat frmt = new NumberFormat(",000");
   List<ClassPaket> arrPaket = new List();
   @override
   void initState() {
@@ -58,136 +62,278 @@ class DaftarpaketkonsultanState extends State<Daftarpaketkonsultan> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: session.warna,
-      appBar: AppBar(
-        title: Text("Daftar Paket Page"),
-      ),
-      body: new ListView.builder(
-          itemCount: arrPaket.length == 0 ? 0 : arrPaket.length,
-          itemBuilder: (context, index) {
-            if (arrPaket.length == 0) {
-              return Card(
-                child: Text("Data empty"),
-              );
-            } else {
-              return GestureDetector(
-                  onTap: () {},
-                  child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+      // appBar: AppBar(
+      //   title: Text("Daftar Paket Page"),
+      // ),
+      body: Column(
+        children: [
+          SizedBox(
+              height: 100,
+              child: Padding(
+                padding: EdgeInsets.only(left: 25, right: 25, top: 50),
+                child: TextField(
+                  // onSubmitted: (String str) {
+                  //   setState(() {
+                  //     search = str;
+                  //   });
+                  //   searchProduk(search);
+                  // },
+                  decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      color: Colors.amber[50],
-                      elevation: 4,
-                      child: Padding(
-                          padding: EdgeInsets.only(
-                              top: 20.0, left: 20.0, right: 20.0),
-                          child: Column(
-                            children: [
-                              Row(children: [
-                                Image.asset(
-                                  "assets/images/logo.png",
-                                  width: 100,
-                                  height: 100,
-                                ),
-                                SizedBox(width: 20.0),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.grey[200]),
+                      ),
+                      contentPadding: EdgeInsets.all(15),
+                      fillColor: Colors.grey[200],
+                      filled: true,
+                      hintText: 'Cari Paket',
+                      hintStyle: TextStyle(
+                          // fontFamily: "Roboto",
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey,
+                          fontSize: 18),
+                      prefixIcon:
+                          Icon(Icons.search, size: 30, color: Colors.black)),
+                ),
+              )),
+          SizedBox(
+            height: MediaQuery.of(context).size.height - 156,
+            child: new ListView.builder(
+                itemCount: arrPaket.length == 0 ? 0 : arrPaket.length,
+                itemBuilder: (context, index) {
+                  if (arrPaket.length == 0) {
+                    return Card(
+                      child: Text("Data empty"),
+                    );
+                  } else {
+                    return GestureDetector(
+                        onTap: () {},
+                        child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            color: Colors.amber[50],
+                            elevation: 4,
+                            child: Padding(
+                                padding: EdgeInsets.only(
+                                    top: 20.0, left: 20.0, right: 20.0),
+                                child: Column(
                                   children: [
-                                    Container(
-                                        padding:
-                                            EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                        child: Text(
-                                          arrPaket[index].nama,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                        child: Text(
-                                            arrPaket[index].durasi + " hari",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.red))),
-                                    Container(
-                                        child: Text(
-                                            "Rp. " +
-                                                arrPaket[index]
-                                                    .harga
-                                                    .toString(),
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black))),
-                                  ],
-                                )
-                              ]),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        child: RaisedButton(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(2),
+                                    Row(children: [
+                                      Image.asset(
+                                        "assets/images/logo.png",
+                                        width: 100,
+                                        height: 100,
+                                      ),
+                                      SizedBox(width: 20.0),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  0, 0, 0, 0),
+                                              child: Text(
+                                                arrPaket[index].nama,
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )),
+                                          Container(
+                                              child: Text(
+                                                  arrPaket[index].durasi +
+                                                      " hari",
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.red))),
+                                          Container(
+                                              child: Text(
+                                                  "Rp. " +
+                                                      frmt.format(int.parse(
+                                                          arrPaket[index]
+                                                              .harga
+                                                              .toString())),
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black))),
+                                          Container(
+                                            child: arrPaket[index].status ==
+                                                    0.toString()
+                                                ? Text("Status : Tidak Aktif",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.grey))
+                                                : arrPaket[index].status ==
+                                                        1.toString()
+                                                    ? Text("Status : Aktif",
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.green))
+                                                    : Text(
+                                                        "Status : Diblokir Admin",
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.red)),
                                           ),
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DetailPaketKonsultan(
-                                                            id: arrPaket[index]
-                                                                .id)));
-                                          },
-                                          color: Colors.lightBlueAccent,
-                                          child: Text(
-                                            'Edit Info Paket',
-                                            style: TextStyle(
-                                                fontSize: 15.0,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
-                                          ),
+                                          Container(
+                                            child: arrPaket[index].status ==
+                                                        2.toString() ||
+                                                    arrPaket[index].status ==
+                                                        0.toString()
+                                                ? Container(
+                                                    child: RaisedButton(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(2),
+                                                      ),
+                                                      onPressed: () {
+                                                        arrPaket[index]
+                                                                    .status ==
+                                                                2.toString()
+                                                            ? Fluttertoast
+                                                                .showToast(
+                                                                    msg:
+                                                                        "Paket Diet Di Blokir Admin")
+                                                            : Fluttertoast
+                                                                .showToast(
+                                                                    msg: "ON");
+                                                      },
+                                                      color: Colors
+                                                          .lightBlueAccent,
+                                                      child: Text(
+                                                        'AKTIFKAN PAKET',
+                                                        style: TextStyle(
+                                                            fontSize: 15.0,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Container(
+                                                    child: RaisedButton(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(2),
+                                                      ),
+                                                      onPressed: () {
+                                                        Fluttertoast.showToast(
+                                                            msg: "OFF");
+                                                      },
+                                                      color: Colors
+                                                          .lightBlueAccent,
+                                                      child: Text(
+                                                        'OFF',
+                                                        style: TextStyle(
+                                                            fontSize: 15.0,
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ),
+                                          )
+                                        ],
+                                      )
+                                    ]),
+                                    Container(
+                                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              child: RaisedButton(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(2),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              DetailPaketKonsultan(
+                                                                  id: arrPaket[
+                                                                          index]
+                                                                      .id)));
+                                                },
+                                                color: Colors.lightBlueAccent,
+                                                child: Text(
+                                                  'Edit Info Paket',
+                                                  style: TextStyle(
+                                                      fontSize: 15.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  10, 0, 0, 0),
+                                              child: RaisedButton(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(2),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              EditJadwalPaket(
+                                                                  id: arrPaket[
+                                                                          index]
+                                                                      .id)));
+                                                },
+                                                color: Colors.lightBlueAccent,
+                                                child: Text(
+                                                  'Edit Jadwal Paket',
+                                                  style: TextStyle(
+                                                      fontSize: 15.0,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            )
+                                          ],
                                         ),
                                       ),
-                                      Container(
-                                        padding:
-                                            EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                        child: RaisedButton(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(2),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EditJadwalPaket(
-                                                            id: arrPaket[index]
-                                                                .id)));
-                                          },
-                                          color: Colors.lightBlueAccent,
-                                          child: Text(
-                                            'Edit Jadwal Paket',
-                                            style: TextStyle(
-                                                fontSize: 15.0,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ))));
-            }
-          }),
+                                    ),
+                                  ],
+                                ))));
+                  }
+                }),
+          )
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, "/tambahpaket");

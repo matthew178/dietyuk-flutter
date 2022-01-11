@@ -24,19 +24,29 @@ class TambahProdukState extends State<TambahProduk> {
   ClassKategoriProduk kategori = null;
   List<ClassKategoriProduk> arrKategori = new List();
 
-  File _image;
+  XFile _image;
 
   void initState() {
     super.initState();
     getKategori();
   }
 
+  // Future getImageFromGallery() async {
+  //   var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     _image = image;
+  //   });
+
+  //   String namaFile = image.path;
+  //   String basenamegallery = basename(namaFile);
+  // }
+
+  final ImagePicker _picker = ImagePicker();
   Future getImageFromGallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _image = image;
     });
-
     String namaFile = image.path;
     String basenamegallery = basename(namaFile);
   }
@@ -75,7 +85,8 @@ class TambahProdukState extends State<TambahProduk> {
     String namaFile = "";
 
     if (_image != null) {
-      base64Image = base64Encode(_image.readAsBytesSync()); //mimage
+      base64Encode(File(_image.path).readAsBytesSync()); //mimage
+      // base64Image = base64Encode(_image.readAsBytesSync()); //mimage
       namaFile = _image.path.split("/").last + ".png"; //mfile
       print("not null");
     } else {
@@ -237,7 +248,7 @@ class TambahProdukState extends State<TambahProduk> {
               child: Center(
                 child: _image == null
                     ? Text('No Image Selected.')
-                    : Image.file(_image),
+                    : Image.file(File(_image.path)),
               ),
             ),
             Container(

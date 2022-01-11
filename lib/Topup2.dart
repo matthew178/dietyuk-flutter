@@ -31,7 +31,7 @@ class Topup2State extends State<Topup2> {
   String nominal;
   ClassUser userprofile = new ClassUser(
       "", "", "", "", "", "", "", "", "", "", "", "", "0", "", "", "", "");
-  File _image;
+  XFile _image;
   String namaFile = "";
   String basenamegallery = "";
 
@@ -43,13 +43,14 @@ class Topup2State extends State<Topup2> {
     print(nominal);
   }
 
+  final ImagePicker _picker = ImagePicker();
   Future getImageFromGallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var image = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _image = image;
-      this.namaFile = image.path;
-      this.basenamegallery = basename(namaFile) + ".png";
     });
+    String namaFile = image.path;
+    String basenamegallery = basename(namaFile);
   }
 
   Future<String> evtConfirm() async {
@@ -57,7 +58,7 @@ class Topup2State extends State<Topup2> {
     String namaFile = "";
 
     if (_image != null) {
-      base64Image = base64Encode(_image.readAsBytesSync()); //mimage
+      base64Image = base64Encode(File(_image.path).readAsBytesSync());
       namaFile = _image.path.split("/").last + ".png"; //mfile
       print("not null");
     } else {

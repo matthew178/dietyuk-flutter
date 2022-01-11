@@ -24,7 +24,7 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   String username1, username2, namalawan;
-  Firestore _firestore = Firestore.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   TextEditingController teksChat = new TextEditingController();
   String channel;
 
@@ -128,20 +128,20 @@ class _ChatState extends State<Chat> {
   }
 
   Widget _buildBody(BuildContext context) {
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection(channel)
-        .getDocuments()
+        .get()
         .then((QuerySnapshot snapshot) {
-      snapshot.documents.forEach((f) => print('${f.data}}'));
+      snapshot.docs.forEach((f) => print('${f.data}}'));
     });
 
     var data =
-        Firestore.instance.collection(channel).orderBy('tanggal').snapshots();
+        FirebaseFirestore.instance.collection(channel).orderBy('tanggal').snapshots();
     return StreamBuilder<QuerySnapshot>(
       stream: data,
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
-        return _buildList(context, snapshot.data.documents);
+        return _buildList(context, snapshot.data.docs);
       },
     );
   }
@@ -268,7 +268,7 @@ class Record {
         foto = map['foto'];
 
   Record.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
+      : this.fromMap(snapshot.data(), reference: snapshot.reference);
 
   @override
   String toString() => "Record<$user1:$user2:$teks:$tanggal:$foto>";
