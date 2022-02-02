@@ -159,27 +159,27 @@ class AwalPaketKonsultanState extends State<AwalPaketKonsultan> {
     });
   }
 
-  Future<ClassPerkembangan> tambahPerkembangan(
-      String id, brt, stts, idbeli, harike) async {
-    Map paramData = {
-      'id': id,
-      'berat': brt,
-      'status': stts,
-      'user': session.userlogin,
-      'idbeli': idbeli,
-      'harike': harike
-    };
-    var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/tambahPerkembangan"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-      getDetail();
-    }).catchError((err) {
-      print(err);
-    });
-  }
+  // Future<ClassPerkembangan> tambahPerkembangan(
+  //     String id, brt, stts, idbeli, harike) async {
+  //   Map paramData = {
+  //     'id': id,
+  //     'berat': brt,
+  //     'status': stts,
+  //     'user': session.userlogin,
+  //     'idbeli': idbeli,
+  //     'harike': harike
+  //   };
+  //   var parameter = json.encode(paramData);
+  //   http
+  //       .post(Uri.parse(session.ipnumber + "/tambahPerkembangan"),
+  //           headers: {"Content-Type": "application/json"}, body: parameter)
+  //       .then((res) {
+  //     print(res.body);
+  //     getDetail();
+  //   }).catchError((err) {
+  //     print(err);
+  //   });
+  // }
 
   Future<void> evtSebelum() async {
     if (int.parse(week) <= 1) {

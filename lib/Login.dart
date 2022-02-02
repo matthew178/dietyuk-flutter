@@ -149,52 +149,56 @@ class LoginState extends State<Login> {
       'token': tokenKu
     };
     var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/login"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      if (res.body.contains("sukses")) {
-        var data = json.decode(res.body);
-        session.userlogin = data[0]['id'];
-        session.role = data[0]['role'];
-        preference.setString("user", data[0]['id'].toString());
-        preference.setString("role", data[0]['role']);
-        preference.setString("berat", data[0]['berat']);
+    if (myUsername.text == "" || myPassword.text == "") {
+      Fluttertoast.showToast(msg: "Inputan tidak boleh kosong");
+    } else {
+      http
+          .post(Uri.parse(session.ipnumber + "/login"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        if (res.body.contains("sukses")) {
+          var data = json.decode(res.body);
+          session.userlogin = data[0]['id'];
+          session.role = data[0]['role'];
+          preference.setString("user", data[0]['id'].toString());
+          preference.setString("role", data[0]['role']);
+          preference.setString("berat", data[0]['berat']);
 
-        if (data[0]['status'] == "Aktif") {
-          // kalau berhasil login maka updateTokenFirebase ke mysql
+          if (data[0]['status'] == "Aktif") {
+            // kalau berhasil login maka updateTokenFirebase ke mysql
 
-          if (data[0]['role'] == "member") {
-            var temp = jsonDecode(
-                preference.getString('cart' + session.userlogin.toString()) ??
-                    "[]");
-            for (var i = 0; i < temp.length; i++) {
-              session.Cart.add(new shoppingcart(
-                  temp[i]["kodeproduk"].toString(),
-                  temp[i]["username"].toString(),
-                  temp[i]["jumlah"].toString(),
-                  temp[i]["konsultan"].toString(),
-                  temp[i]["harga"].toString()));
+            if (data[0]['role'] == "member") {
+              var temp = jsonDecode(
+                  preference.getString('cart' + session.userlogin.toString()) ??
+                      "[]");
+              for (var i = 0; i < temp.length; i++) {
+                session.Cart.add(new shoppingcart(
+                    temp[i]["kodeproduk"].toString(),
+                    temp[i]["username"].toString(),
+                    temp[i]["jumlah"].toString(),
+                    temp[i]["konsultan"].toString(),
+                    temp[i]["harga"].toString()));
+              }
+              print("jumlah cart : " + session.Cart.length.toString());
+              getProdukCart();
+              Fluttertoast.showToast(msg: "Berhasil Login");
+              Navigator.pushNamed(this.context, "/member");
+            } else if (data[0]['role'] == "konsultan") {
+              Navigator.pushNamed(this.context, "/konsultan");
             }
-            print("jumlah cart : " + session.Cart.length.toString());
-            getProdukCart();
-            Fluttertoast.showToast(msg: "Berhasil Login");
-            Navigator.pushNamed(this.context, "/member");
-          } else if (data[0]['role'] == "konsultan") {
-            Navigator.pushNamed(this.context, "/konsultan");
+          } else if (data[0]['status'] == "Tidak Aktif") {
+            Fluttertoast.showToast(
+                msg: "Akun anda di blok. Silahkan hubungi admin");
+          } else {
+            Fluttertoast.showToast(msg: "Akun anda belum aktif");
           }
-        } else if (data[0]['status'] == "Tidak Aktif") {
-          Fluttertoast.showToast(
-              msg: "Akun anda di blok. Silahkan hubungi admin");
         } else {
-          Fluttertoast.showToast(msg: "Akun anda belum aktif");
+          Fluttertoast.showToast(msg: "Gagal Login");
         }
-      } else {
-        Fluttertoast.showToast(msg: "Gagal Login");
-      }
-    }).catchError((err) {
-      print(err);
-    });
+      }).catchError((err) {
+        print(err);
+      });
+    }
     return "";
   }
 

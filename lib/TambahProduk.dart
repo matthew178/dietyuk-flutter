@@ -1,3 +1,4 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'ClassKategoriProduk.dart';
 import 'session.dart' as session;
@@ -93,29 +94,40 @@ class TambahProdukState extends State<TambahProduk> {
       // print("image is null");
       namaFile = "defaultproduct.png";
     }
-    Map paramData = {
-      'konsultan': session.userlogin,
-      'nama': namaProduk.text,
-      'kategori': kategori.kodekategori,
-      'kemasan': kemasanProduk.text,
-      'berat': beratProduk.text,
-      'harga': hargaProduk.text,
-      'deskripsi': deskripsiProduk.text,
-      'varian': varianProduk.text,
-      'm_filename': namaFile,
-      'm_image': base64Image
-    };
-    var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/tambahproduk"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-      // Navigator.of(this.context, rootNavigator: true).pop(true);
-      Navigator.pushNamed(this.context, "/konsultan");
-    }).catchError((err) {
-      print(err);
-    });
+
+    if (namaProduk.text == "" ||
+        kategori == null ||
+        kemasanProduk.text == "" ||
+        beratProduk.text == "" ||
+        hargaProduk.text == "" ||
+        deskripsiProduk.text == "" ||
+        varianProduk.text == "") {
+      Fluttertoast.showToast(msg: "Inputan tidak boleh kosong");
+    } else {
+      Map paramData = {
+        'konsultan': session.userlogin,
+        'nama': namaProduk.text,
+        'kategori': kategori.kodekategori,
+        'kemasan': kemasanProduk.text,
+        'berat': beratProduk.text,
+        'harga': hargaProduk.text,
+        'deskripsi': deskripsiProduk.text,
+        'varian': varianProduk.text,
+        'm_filename': namaFile,
+        'm_image': base64Image
+      };
+      var parameter = json.encode(paramData);
+      http
+          .post(Uri.parse(session.ipnumber + "/tambahproduk"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        print(res.body);
+        // Navigator.of(this.context, rootNavigator: true).pop(true);
+        Navigator.pushNamed(this.context, "/konsultan");
+      }).catchError((err) {
+        print(err);
+      });
+    }
   }
 
   @override

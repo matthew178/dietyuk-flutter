@@ -100,15 +100,25 @@ class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
       'm_image': base64Image
     };
     var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/editProduk"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      Fluttertoast.showToast(msg: "Berhasil edit produk");
-      Navigator.pushNamed(this.context, "/konsultan");
-    }).catchError((err) {
-      print(err);
-    });
+    if (nama.text == "" ||
+        kategori.kodekategori == "" ||
+        kemasan.text == "" ||
+        berat.text == "" ||
+        harga.text == "" ||
+        deskripsi.text == "" ||
+        varian.text == "") {
+      Fluttertoast.showToast(msg: "Inputan tidak boleh kosong");
+    } else {
+      http
+          .post(Uri.parse(session.ipnumber + "/editProduk"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        Fluttertoast.showToast(msg: "Berhasil edit produk");
+        Navigator.pushNamed(this.context, "/konsultan");
+      }).catchError((err) {
+        print(err);
+      });
+    }
 
     return "";
   }

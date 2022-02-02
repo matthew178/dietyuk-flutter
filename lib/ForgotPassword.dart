@@ -42,24 +42,32 @@ class ForgotPasswordState extends State<ForgotPassword> {
       'email': email.text
     };
     var parameter = json.encode(paramData);
-    if (pass.text == konfir.text) {
-      http
-          .post(Uri.parse(session.ipnumber + '/resetPassword'),
-              headers: {'Content-Type': "application/json"}, body: parameter)
-          .then((res) {
-        var data = json.decode(res.body);
-        data = data[0]['pesan'];
-        if (data == "gagal") {
-          Fluttertoast.showToast(msg: "Kode Verifikasi tidak valid");
-        } else {
-          Fluttertoast.showToast(msg: "Berhasil atur ulang kata sandi");
-          Navigator.pushNamed(context, "/");
-        }
-      }).catchError((err) {
-        print(err);
-      });
+    if (otp.text == "" ||
+        pass.text == "" ||
+        konfir.text == "" ||
+        email.text == "") {
+      Fluttertoast.showToast(msg: "Inputan tidak boleh kosong");
     } else {
-      Fluttertoast.showToast(msg: "Password & Konfirmasi Password tidak sama");
+      if (pass.text == konfir.text) {
+        http
+            .post(Uri.parse(session.ipnumber + '/resetPassword'),
+                headers: {'Content-Type': "application/json"}, body: parameter)
+            .then((res) {
+          var data = json.decode(res.body);
+          data = data[0]['pesan'];
+          if (data == "gagal") {
+            Fluttertoast.showToast(msg: "Kode Verifikasi tidak valid");
+          } else {
+            Fluttertoast.showToast(msg: "Berhasil atur ulang kata sandi");
+            Navigator.pushNamed(context, "/");
+          }
+        }).catchError((err) {
+          print(err);
+        });
+      } else {
+        Fluttertoast.showToast(
+            msg: "Password & Konfirmasi Password tidak sama");
+      }
     }
   }
 

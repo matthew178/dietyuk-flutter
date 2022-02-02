@@ -36,6 +36,80 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     getTransaksiBatal();
   }
 
+  void confirmBatal(String id) {
+    AlertDialog dialog = new AlertDialog(
+      content: new Container(
+        width: 600.0,
+        height: 300.0,
+        decoration: new BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: const Color(0xFFFFFF),
+          borderRadius: new BorderRadius.all(new Radius.circular(32.0)),
+        ),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            new Expanded(
+              child: new Container(
+                  child: new Text("Ingin membatalkan pembelian paket ?")),
+              flex: 2,
+            ),
+            new Expanded(
+              child: Row(
+                children: [
+                  SizedBox(width: 30),
+                  Container(
+                    child: new RaisedButton(
+                      onPressed: () {
+                        batalBeliPaket(id);
+                        Navigator.of(context, rootNavigator: true).pop(true);
+                      },
+                      padding: new EdgeInsets.all(16.0),
+                      color: Colors.green,
+                      child: new Text(
+                        'Ya',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontFamily: 'helvetica_neue_light',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Container(
+                    child: new RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop(true);
+                      },
+                      padding: new EdgeInsets.all(16.0),
+                      color: Colors.red,
+                      child: new Text(
+                        'Tidak',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontFamily: 'helvetica_neue_light',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        });
+  }
+
   Future<List<Transaksibelipaket>> getTransaksiBelumSelesai() async {
     List<Transaksibelipaket> arrTrans = new List();
     Map paramData = {'user': session.userlogin};
@@ -765,8 +839,14 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                       child: Column(
                                     children: [
                                       Container(
-                                        child:
-                                            Text(arrTransaksi[index].namapaket),
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                        child: Text(
+                                          arrTransaksi[index].namapaket,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
                                       ),
                                       DateTime.parse(arrTransaksi[index]
                                                       .tanggalbeli)
@@ -824,7 +904,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                                                 .circular(2),
                                                       ),
                                                       onPressed: () {
-                                                        batalBeliPaket(
+                                                        confirmBatal(
                                                             arrTransaksi[index]
                                                                 .id);
                                                       },
@@ -847,7 +927,14 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                           : Container(
                                               child: Row(
                                                 children: [
-                                                  SizedBox(width: 150),
+                                                  Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 10, 0, 10),
+                                                    child: Image.asset(
+                                                        'assets/images/waiting.png'),
+                                                  ),
+                                                  SizedBox(width: 90),
                                                   Container(
                                                     child: RaisedButton(
                                                       shape:

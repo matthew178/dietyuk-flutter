@@ -73,9 +73,11 @@ class AwalPaketState extends State<AwalPaket> {
       var data = returndata[0]['detail'];
       for (int i = 0; i < data.length; i++) {
         week = ((int.parse(data[i]['hari'].toString()) - 1) ~/ 7).toInt() + 1;
+        print("hari : " + data[i]['hari'].toString());
         databaru = ClassAwalPaket("0", data[i]['hari'].toString(),
             data[i]['tanggal'].toString(), week.toString(), "hari");
         arrAwal.add(databaru);
+        print(databaru.hari + " HARI");
       }
       data = returndata[0]['laporan'];
       for (int i = 0; i < data.length; i++) {
@@ -91,6 +93,7 @@ class AwalPaketState extends State<AwalPaket> {
         databaru.setketerangan(data[i]['status'].toString());
         databaru.setidbeli(data[i]['idbeli'].toString());
         arrAwal.add(databaru);
+        print(databaru.hari + " HARI LAPORAN");
       }
       arrAwal.sort((a, b) => int.parse(a.hari).compareTo(int.parse(b.hari)));
 
@@ -109,6 +112,7 @@ class AwalPaketState extends State<AwalPaket> {
     for (int i = 0; i < arrAwal.length; i++) {
       if (arrAwal[i].week == week.toString()) {
         tempDetail.add(arrAwal[i]);
+        print(arrAwal[i].hari + " INI HARI");
       }
     }
     setState(() => this.arrTemp = tempDetail);
@@ -168,15 +172,19 @@ class AwalPaketState extends State<AwalPaket> {
       'harike': harike
     };
     var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/tambahPerkembangan"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-      getDetail();
-    }).catchError((err) {
-      print(err);
-    });
+    if (id != "" || brt != "" || stts != "" || idbeli != "" || harike != "") {
+      http
+          .post(Uri.parse(session.ipnumber + "/tambahPerkembangan"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        print(res.body);
+        getDetail();
+      }).catchError((err) {
+        print(err);
+      });
+    } else {
+      Fluttertoast.showToast(msg: "Inputan ada yang kosong!");
+    }
   }
 
   void cetakdialog(String idsaatini, statussaatini, idbel, hrike) {
@@ -227,19 +235,24 @@ class AwalPaketState extends State<AwalPaket> {
                         padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
                         child: new RaisedButton(
                           onPressed: () {
-                            tambahPerkembangan(idsaatini, timbang.text,
-                                statussaatini, idbel, hrike);
-                            print("idsaatini : " +
-                                idsaatini +
-                                " berat : " +
-                                timbang.text +
-                                " keterangan " +
-                                statussaatini);
-                            // berat.text = "";
-                            Fluttertoast.showToast(
-                                msg: "Berhasil tambah perkembangan");
-                            Navigator.of(context, rootNavigator: true)
-                                .pop(true);
+                            if (timbang.text != "") {
+                              tambahPerkembangan(idsaatini, timbang.text,
+                                  statussaatini, idbel, hrike);
+                              print("idsaatini : " +
+                                  idsaatini +
+                                  " berat : " +
+                                  timbang.text +
+                                  " keterangan " +
+                                  statussaatini);
+                              // berat.text = "";
+                              Fluttertoast.showToast(
+                                  msg: "Berhasil tambah perkembangan");
+                              Navigator.of(context, rootNavigator: true)
+                                  .pop(true);
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Input tidak boleh kosong!");
+                            }
                           },
                           padding: new EdgeInsets.all(16.0),
                           color: Colors.green,
@@ -371,7 +384,7 @@ class AwalPaketState extends State<AwalPaket> {
                                         builder: (context) => JadwalHarian(
                                             week: week,
                                             idbeli: id,
-                                            hari: arrAwal[index].hari,
+                                            hari: arrTemp[index].hari,
                                             tipe: 1)))
                                 : cetakdialog(
                                     arrTemp[index].id,

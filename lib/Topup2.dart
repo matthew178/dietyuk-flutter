@@ -34,6 +34,7 @@ class Topup2State extends State<Topup2> {
   XFile _image;
   String namaFile = "";
   String basenamegallery = "";
+  bool upload = false;
 
   Topup2State(this.bank, this.nominal);
 
@@ -49,6 +50,7 @@ class Topup2State extends State<Topup2> {
     setState(() {
       _image = image;
     });
+
     String namaFile = image.path;
     String basenamegallery = basename(namaFile);
   }
@@ -60,27 +62,31 @@ class Topup2State extends State<Topup2> {
     if (_image != null) {
       base64Image = base64Encode(File(_image.path).readAsBytesSync());
       namaFile = _image.path.split("/").last + ".png"; //mfile
+      upload = true;
       print("not null");
     } else {
+      upload = false;
       print("image is null");
     }
-    Map paramData = {
-      'saldo': nominal,
-      'id_user': session.userlogin.toString(),
-      'bank': bank.nama,
-      'm_filename': namaFile,
-      'm_image': base64Image
-    };
-    var parameter = json.encode(paramData);
+    if (upload) {
+      Map paramData = {
+        'saldo': nominal,
+        'id_user': session.userlogin.toString(),
+        'bank': bank.nama,
+        'm_filename': namaFile,
+        'm_image': base64Image
+      };
+      var parameter = json.encode(paramData);
 
-    http
-        .post(Uri.parse(session.ipnumber + "/topup"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-    }).catchError((err) {
-      print(err);
-    });
+      http
+          .post(Uri.parse(session.ipnumber + "/topup"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        print(res.body);
+      }).catchError((err) {
+        print(err);
+      });
+    }
     return "";
   }
 

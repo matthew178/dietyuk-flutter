@@ -1,3 +1,5 @@
+import 'package:fluttertoast/fluttertoast.dart';
+
 import 'ClassJadwalHarian.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
@@ -27,7 +29,8 @@ class JadwalHarian extends StatefulWidget {
 class JadwalHarianState extends State<JadwalHarian> {
   String week, idbeli, hari;
   int tipe;
-
+  DateTime tglnow = new DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day);
   List<ClassJadwalHarian> pagi = new List();
   List<ClassJadwalHarian> siang = new List();
   List<ClassJadwalHarian> malam = new List();
@@ -40,7 +43,7 @@ class JadwalHarianState extends State<JadwalHarian> {
   void initState() {
     super.initState();
     getJadwalHarian();
-    print(tipe.toString() + " tipe");
+    print(tipe.toString() + " tipe" + hari.toString() + " hari");
   }
 
   void ubahStatus(String id, String status) {
@@ -50,7 +53,7 @@ class JadwalHarianState extends State<JadwalHarian> {
         .post(Uri.parse(session.ipnumber + "/ubahStatusJadwal"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
-      print("sini status = " + status + " id = " + id);
+      // print("sini status = " + status + " id = " + id);
       // getJadwalHarian();
     }).catchError((err) {
       print(err);
@@ -176,23 +179,32 @@ class JadwalHarianState extends State<JadwalHarian> {
                                                       TextStyle(fontSize: 16),
                                                 ),
                                                 onChanged: (bool value) {
-                                                  if (pagi[index].status ==
-                                                      "1") {
-                                                    setState(() => pagi[index]
-                                                        .status = "0");
-                                                    ubahStatus(
-                                                        pagi[index]
-                                                            .id
-                                                            .toString(),
-                                                        "0");
+                                                  if (DateTime.parse(pagi[index]
+                                                              .tanggal)
+                                                          .compareTo(tglnow) >
+                                                      0) {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "Program belum dimulai");
                                                   } else {
-                                                    setState(() => pagi[index]
-                                                        .status = "1");
-                                                    ubahStatus(
-                                                        pagi[index]
-                                                            .id
-                                                            .toString(),
-                                                        "1");
+                                                    if (pagi[index].status ==
+                                                        "1") {
+                                                      setState(() => pagi[index]
+                                                          .status = "0");
+                                                      ubahStatus(
+                                                          pagi[index]
+                                                              .id
+                                                              .toString(),
+                                                          "0");
+                                                    } else {
+                                                      setState(() => pagi[index]
+                                                          .status = "1");
+                                                      ubahStatus(
+                                                          pagi[index]
+                                                              .id
+                                                              .toString(),
+                                                          "1");
+                                                    }
                                                   }
                                                 })
                                             : new CheckboxListTile(
@@ -286,23 +298,35 @@ class JadwalHarianState extends State<JadwalHarian> {
                                                       TextStyle(fontSize: 16),
                                                 ),
                                                 onChanged: (bool value) {
-                                                  if (siang[index].status ==
-                                                      "1") {
-                                                    setState(() => siang[index]
-                                                        .status = "0");
-                                                    ubahStatus(
-                                                        siang[index]
-                                                            .id
-                                                            .toString(),
-                                                        "0");
+                                                  if (DateTime.parse(
+                                                              siang[index]
+                                                                  .tanggal)
+                                                          .compareTo(tglnow) >
+                                                      0) {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "Program belum dimulai");
                                                   } else {
-                                                    setState(() => siang[index]
-                                                        .status = "1");
-                                                    ubahStatus(
-                                                        siang[index]
-                                                            .id
-                                                            .toString(),
-                                                        "1");
+                                                    if (siang[index].status ==
+                                                        "1") {
+                                                      setState(() =>
+                                                          siang[index].status =
+                                                              "0");
+                                                      ubahStatus(
+                                                          siang[index]
+                                                              .id
+                                                              .toString(),
+                                                          "0");
+                                                    } else {
+                                                      setState(() =>
+                                                          siang[index].status =
+                                                              "1");
+                                                      ubahStatus(
+                                                          siang[index]
+                                                              .id
+                                                              .toString(),
+                                                          "1");
+                                                    }
                                                   }
                                                 })
                                             : new CheckboxListTile(
@@ -396,23 +420,39 @@ class JadwalHarianState extends State<JadwalHarian> {
                                                       TextStyle(fontSize: 16),
                                                 ),
                                                 onChanged: (bool value) {
-                                                  if (malam[index].status ==
-                                                      "1") {
-                                                    setState(() => malam[index]
-                                                        .status = "0");
-                                                    ubahStatus(
-                                                        malam[index]
-                                                            .id
-                                                            .toString(),
-                                                        "0");
+                                                  if (DateTime.parse(
+                                                              malam[index]
+                                                                  .tanggal)
+                                                          .compareTo(tglnow) >
+                                                      0) {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "Program belum dimulai");
                                                   } else {
-                                                    setState(() => malam[index]
-                                                        .status = "1");
-                                                    ubahStatus(
-                                                        malam[index]
-                                                            .id
-                                                            .toString(),
-                                                        "1");
+                                                    print("hariini : " +
+                                                        tglnow.toString() +
+                                                        " tglmalam : " +
+                                                        malam[index].tanggal);
+                                                    if (malam[index].status ==
+                                                        "1") {
+                                                      setState(() =>
+                                                          malam[index].status =
+                                                              "0");
+                                                      ubahStatus(
+                                                          malam[index]
+                                                              .id
+                                                              .toString(),
+                                                          "0");
+                                                    } else {
+                                                      setState(() =>
+                                                          malam[index].status =
+                                                              "1");
+                                                      ubahStatus(
+                                                          malam[index]
+                                                              .id
+                                                              .toString(),
+                                                          "1");
+                                                    }
                                                   }
                                                 })
                                             : new CheckboxListTile(
@@ -509,25 +549,36 @@ class JadwalHarianState extends State<JadwalHarian> {
                                                       TextStyle(fontSize: 16),
                                                 ),
                                                 onChanged: (bool value) {
-                                                  if (olahraga[index].status ==
-                                                      "1") {
-                                                    setState(() =>
-                                                        olahraga[index].status =
-                                                            "0");
-                                                    ubahStatus(
-                                                        olahraga[index]
-                                                            .id
-                                                            .toString(),
-                                                        "0");
+                                                  if (DateTime.parse(
+                                                              olahraga[index]
+                                                                  .tanggal)
+                                                          .compareTo(tglnow) >
+                                                      0) {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "Program belum dimulai");
                                                   } else {
-                                                    setState(() =>
-                                                        olahraga[index].status =
-                                                            "1");
-                                                    ubahStatus(
-                                                        olahraga[index]
-                                                            .id
-                                                            .toString(),
-                                                        "1");
+                                                    if (olahraga[index]
+                                                            .status ==
+                                                        "1") {
+                                                      setState(() =>
+                                                          olahraga[index]
+                                                              .status = "0");
+                                                      ubahStatus(
+                                                          olahraga[index]
+                                                              .id
+                                                              .toString(),
+                                                          "0");
+                                                    } else {
+                                                      setState(() =>
+                                                          olahraga[index]
+                                                              .status = "1");
+                                                      ubahStatus(
+                                                          olahraga[index]
+                                                              .id
+                                                              .toString(),
+                                                          "1");
+                                                    }
                                                   }
                                                 })
                                             : new CheckboxListTile(

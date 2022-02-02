@@ -45,27 +45,30 @@ class _ChatState extends State<Chat> {
   void cekPesan() async {
     Map paramData = {'username1': username1, 'username2': username2};
     var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/cekPesan"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-    }).catchError((err) {
-      print(err);
-    });
+    if (username1 != "" && username2 != "") {
+      http
+          .post(Uri.parse(session.ipnumber + "/cekPesan"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        print(res.body);
+      }).catchError((err) {
+        print(err);
+      });
+    }
   }
 
   void sendmessage() async {
     var teks = teksChat.text;
-    teksChat.text = "";
-
-    DocumentReference ref = await _firestore.collection(channel).add({
-      'user1': username1,
-      'user2': username2,
-      'teks': teks,
-      'tanggal': DateTime.now().toString(),
-      'foto': ""
-    });
+    if (teksChat.text != "") {
+      teksChat.text = "";
+      DocumentReference ref = await _firestore.collection(channel).add({
+        'user1': username1,
+        'user2': username2,
+        'teks': teks,
+        'tanggal': DateTime.now().toString(),
+        'foto': ""
+      });
+    }
   }
 
   @override
@@ -135,8 +138,10 @@ class _ChatState extends State<Chat> {
       snapshot.docs.forEach((f) => print('${f.data}}'));
     });
 
-    var data =
-        FirebaseFirestore.instance.collection(channel).orderBy('tanggal').snapshots();
+    var data = FirebaseFirestore.instance
+        .collection(channel)
+        .orderBy('tanggal')
+        .snapshots();
     return StreamBuilder<QuerySnapshot>(
       stream: data,
       builder: (context, snapshot) {

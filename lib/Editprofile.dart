@@ -1,3 +1,5 @@
+import 'package:fluttertoast/fluttertoast.dart';
+
 import 'Kota.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
@@ -130,33 +132,43 @@ class EditprofileState extends State<Editprofile> {
     } else {
       print("image is null");
     }
-    Map paramData = {
-      'nama': nama.text,
-      'username': username.text,
-      'email': email.text,
-      'nomorhp': nomorhp.text,
-      'berat': berat.text,
-      'tinggi': tinggi.text,
-      'id': session.userlogin,
-      'm_filename': namaFile,
-      'm_image': base64Image,
-      'prov': prov.id,
-      'city': city.id
-    };
-    var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/editprofile"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-      if (session.role == "member")
-        Navigator.pushNamed(this.context, "/member");
-      else
-        Navigator.pushNamed(this.context, "/konsultan");
-    }).catchError((err) {
-      print(err);
-    });
-
+    if (nama.text == "" ||
+        username.text == "" ||
+        email.text == "" ||
+        nomorhp.text == "" ||
+        berat.text == "" ||
+        tinggi.text == "" ||
+        prov.id == null ||
+        city.id == null) {
+      Fluttertoast.showToast(msg: "Inputan tidak boleh kosong");
+    } else {
+      Map paramData = {
+        'nama': nama.text,
+        'username': username.text,
+        'email': email.text,
+        'nomorhp': nomorhp.text,
+        'berat': berat.text,
+        'tinggi': tinggi.text,
+        'id': session.userlogin,
+        'm_filename': namaFile,
+        'm_image': base64Image,
+        'prov': prov.id,
+        'city': city.id
+      };
+      var parameter = json.encode(paramData);
+      http
+          .post(Uri.parse(session.ipnumber + "/editprofile"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        print(res.body);
+        if (session.role == "member")
+          Navigator.pushNamed(this.context, "/member");
+        else
+          Navigator.pushNamed(this.context, "/konsultan");
+      }).catchError((err) {
+        print(err);
+      });
+    }
     return "";
   }
 
@@ -250,7 +262,9 @@ class EditprofileState extends State<Editprofile> {
           Container(
             padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
             child: Center(
+              // child: Center(child: Text(userprofile.username)
               child: TextFormField(
+                enabled: false,
                 controller: username,
                 keyboardType: TextInputType.text,
                 autofocus: true,

@@ -76,75 +76,81 @@ class CheckoutState extends State<Checkout> {
       'berat': berat.toString()
     };
     var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/hitungOngkir"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      var data = json.decode(res.body);
-      var datajne = json.decode(data['jne']);
-      int biaya = 0;
-      if (datajne['rajaongkir']['results'][0]['costs'].length > 0) {
-        biaya = (berat / 1000).ceil() *
-            datajne['rajaongkir']['results'][0]['costs'][0]['cost'][0]['value'];
-        kurirBaru = ClassKurir(
-            "JNE",
-            datajne['rajaongkir']['results'][0]['costs'][0]['service']
-                .toString(),
-            datajne['rajaongkir']['results'][0]['costs'][0]['cost'][0]['etd']
-                    .toString() +
-                " hari",
-            biaya,
-            "assets/images/jne.png");
-        arrTemp.add(kurirBaru);
-        print("JNE masuk pak");
-      } else {
-        print("JNE tidak ada layanan pak");
-      }
-      var datapos = json.decode(data['pos']);
-      if (datapos['rajaongkir']['results'][0]['costs'].length > 0) {
-        biaya = (berat / 1000).ceil() *
-            datapos['rajaongkir']['results'][0]['costs'][0]['cost'][0]['value'];
-        kurirBaru = ClassKurir(
-            "Pos Indonesia",
-            datapos['rajaongkir']['results'][0]['costs'][0]['service']
-                .toString(),
-            datapos['rajaongkir']['results'][0]['costs'][0]['cost'][0]['etd']
-                    .toString() +
-                " hari",
-            biaya,
-            "assets/images/pos.png");
-        arrTemp.add(kurirBaru);
-        print("POS juga masuk pak");
-      } else {
-        print("POS tidak ada layanan pak");
-      }
-      var datatiki = json.decode(data['tiki']);
-      if (datatiki['rajaongkir']['results'][0]['costs'].length > 0) {
-        biaya = (berat / 1000).ceil() *
-            datatiki['rajaongkir']['results'][0]['costs'][0]['cost'][0]
-                ['value'];
-        kurirBaru = ClassKurir(
-            "TIKI",
-            datatiki['rajaongkir']['results'][0]['costs'][0]['service']
-                .toString(),
-            datatiki['rajaongkir']['results'][0]['costs'][0]['cost'][0]['etd']
-                    .toString() +
-                " hari",
-            biaya,
-            "assets/images/tiki.png");
-        arrTemp.add(kurirBaru);
-        print("TIKI juga masuk pak");
-      } else {
-        print("TIKI tidak ada layanan pak");
-      }
-      setState(() => kirim = session.alamat);
-      setState(() => this.arrKurir = arrTemp);
-      print(arrKurir.length.toString() + " kurir");
-      print((berat / 1000).ceil().toString() + " kg");
-      return arrTemp;
-    }).catchError((err) {
-      print(err);
-    });
+    if (session.Cart[0].konsultan != "" &&
+        session.alamat.kota != "" &&
+        berat.toString() != "") {
+      http
+          .post(Uri.parse(session.ipnumber + "/hitungOngkir"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        var data = json.decode(res.body);
+        var datajne = json.decode(data['jne']);
+        int biaya = 0;
+        if (datajne['rajaongkir']['results'][0]['costs'].length > 0) {
+          biaya = (berat / 1000).ceil() *
+              datajne['rajaongkir']['results'][0]['costs'][0]['cost'][0]
+                  ['value'];
+          kurirBaru = ClassKurir(
+              "JNE",
+              datajne['rajaongkir']['results'][0]['costs'][0]['service']
+                  .toString(),
+              datajne['rajaongkir']['results'][0]['costs'][0]['cost'][0]['etd']
+                      .toString() +
+                  " hari",
+              biaya,
+              "assets/images/jne.png");
+          arrTemp.add(kurirBaru);
+          print("JNE masuk");
+        } else {
+          print("JNE tidak ada layanan");
+        }
+        var datapos = json.decode(data['pos']);
+        if (datapos['rajaongkir']['results'][0]['costs'].length > 0) {
+          biaya = (berat / 1000).ceil() *
+              datapos['rajaongkir']['results'][0]['costs'][0]['cost'][0]
+                  ['value'];
+          kurirBaru = ClassKurir(
+              "Pos Indonesia",
+              datapos['rajaongkir']['results'][0]['costs'][0]['service']
+                  .toString(),
+              datapos['rajaongkir']['results'][0]['costs'][0]['cost'][0]['etd']
+                      .toString() +
+                  " hari",
+              biaya,
+              "assets/images/pos.png");
+          arrTemp.add(kurirBaru);
+          print("POS juga masuk");
+        } else {
+          print("POS tidak ada layanan");
+        }
+        var datatiki = json.decode(data['tiki']);
+        if (datatiki['rajaongkir']['results'][0]['costs'].length > 0) {
+          biaya = (berat / 1000).ceil() *
+              datatiki['rajaongkir']['results'][0]['costs'][0]['cost'][0]
+                  ['value'];
+          kurirBaru = ClassKurir(
+              "TIKI",
+              datatiki['rajaongkir']['results'][0]['costs'][0]['service']
+                  .toString(),
+              datatiki['rajaongkir']['results'][0]['costs'][0]['cost'][0]['etd']
+                      .toString() +
+                  " hari",
+              biaya,
+              "assets/images/tiki.png");
+          arrTemp.add(kurirBaru);
+          print("TIKI juga masuk");
+        } else {
+          print("TIKI tidak ada layanan");
+        }
+        setState(() => kirim = session.alamat);
+        setState(() => this.arrKurir = arrTemp);
+        print(arrKurir.length.toString() + " kurir");
+        print((berat / 1000).ceil().toString() + " kg");
+        return arrTemp;
+      }).catchError((err) {
+        print(err);
+      });
+    }
   }
 
   void refreshAlamat() {

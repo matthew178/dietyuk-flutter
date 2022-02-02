@@ -1,3 +1,5 @@
+import 'package:fluttertoast/fluttertoast.dart';
+
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -20,26 +22,34 @@ class TambahpaketState extends State<Tambahpaket> {
   List<ClassJenisPaket> jenispaket = new List();
 
   Future<String> tambahPaket() async {
-    Map paramData = {
-      'nama': namaPaket.text,
-      'jenis': jp.id,
-      'desc': descPaket.text,
-      'estimasi': estimasi.text,
-      'harga': harga.text,
-      'durasi': durasi.text,
-      'konsultan': session.userlogin
-    };
-    var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/tambahpaket"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-      Navigator.pushNamed(context, "/konsultan");
-    }).catchError((err) {
-      print(err);
-    });
-
+    if (namaPaket.text == "" ||
+        jp == null ||
+        descPaket.text == "" ||
+        estimasi.text == "" ||
+        harga.text == "" ||
+        durasi.text == "") {
+      Fluttertoast.showToast(msg: "Inputan tidak boleh kosong");
+    } else {
+      Map paramData = {
+        'nama': namaPaket.text,
+        'jenis': jp.id,
+        'desc': descPaket.text,
+        'estimasi': estimasi.text,
+        'harga': harga.text,
+        'durasi': durasi.text,
+        'konsultan': session.userlogin
+      };
+      var parameter = json.encode(paramData);
+      http
+          .post(Uri.parse(session.ipnumber + "/tambahpaket"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        print(res.body);
+        Navigator.pushNamed(context, "/konsultan");
+      }).catchError((err) {
+        print(err);
+      });
+    }
     return "";
   }
 
@@ -95,30 +105,32 @@ class TambahpaketState extends State<Tambahpaket> {
               ),
             ),
           ),
-          DropdownButton<ClassJenisPaket>(
-            // style: Theme.of(context).textTheme.title,
-            hint: Text("Jenis Paket"),
-            value: jp,
-            onChanged: (ClassJenisPaket value) {
-              setState(() => {this.jp = value});
-            },
-            items: jenispaket.map((ClassJenisPaket jenis) {
-              return DropdownMenuItem<ClassJenisPaket>(
-                value: jenis,
-                child: Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 10,
+          Container(
+              padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
+              child: DropdownButton<ClassJenisPaket>(
+                // style: Theme.of(context).textTheme.title,
+                hint: Text("Jenis Paket"),
+                value: jp,
+                onChanged: (ClassJenisPaket value) {
+                  setState(() => {this.jp = value});
+                },
+                items: jenispaket.map((ClassJenisPaket jenis) {
+                  return DropdownMenuItem<ClassJenisPaket>(
+                    value: jenis,
+                    child: Row(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          jenis.nama,
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
                     ),
-                    Text(
-                      jenis.nama,
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
+                  );
+                }).toList(),
+              )),
           Container(
             padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
             child: Center(

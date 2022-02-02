@@ -37,18 +37,26 @@ class TambahAlamatState extends State<TambahAlamat> {
       'nohp': nomortelepon.text
     };
     var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/tambahAlamat"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      var data = json.decode(res.body);
-      data = data[0]['status'];
-      Fluttertoast.showToast(msg: data);
-      Navigator.pop(context);
-      return data;
-    }).catchError((err) {
-      print(err);
-    });
+    if (detail.text == "" ||
+        penerima.text == "" ||
+        nomortelepon.text == "" ||
+        city.id == "" ||
+        prov.id == "") {
+      Fluttertoast.showToast(msg: "Inputan tidak boleh kosong");
+    } else {
+      http
+          .post(Uri.parse(session.ipnumber + "/tambahAlamat"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        var data = json.decode(res.body);
+        data = data[0]['status'];
+        Fluttertoast.showToast(msg: data);
+        Navigator.pop(context);
+        return data;
+      }).catchError((err) {
+        print(err);
+      });
+    }
   }
 
   Future<List<Provinsi>> getProvinsi() async {

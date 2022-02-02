@@ -38,21 +38,22 @@ class TopupState extends State<Topup> {
   }
 
   Future<String> evtTopup() async {
-    Map paramData = {
-      'saldo': nominaltopup.text,
-      'id_user': session.userlogin.toString(),
-      'bank': bankyangdipilih.nama
-    };
-    var parameter = json.encode(paramData);
-
-    http
-        .post(Uri.parse(session.ipnumber + "/topup"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-    }).catchError((err) {
-      print(err);
-    });
+    if (bankyangdipilih == null || nominaltopup.text == "") {
+      Map paramData = {
+        'saldo': nominaltopup.text,
+        'id_user': session.userlogin.toString(),
+        'bank': bankyangdipilih.nama
+      };
+      var parameter = json.encode(paramData);
+      http
+          .post(Uri.parse(session.ipnumber + "/topup"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        print(res.body);
+      }).catchError((err) {
+        print(err);
+      });
+    }
     return "";
   }
 

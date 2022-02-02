@@ -1,17 +1,11 @@
 import 'package:dietyukapp/ListChat.dart';
-
 import 'PilihOrder.dart';
 import 'session.dart' as session;
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
 import 'DaftarPaketKonsultan.dart';
-import 'Daftartransaksi.dart';
 import 'Myprofile.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'session.dart';
 import 'DaftarProduk.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class Dashkonsultan extends StatefulWidget {
   @override
@@ -40,6 +34,7 @@ class DashkonsultanState extends State<Dashkonsultan> {
     return Scaffold(
       body: bottomBar.elementAt(index),
       bottomNavigationBar: BottomNavigationBar(
+        showUnselectedLabels: false,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.list), title: Text("Paket")),
           BottomNavigationBarItem(

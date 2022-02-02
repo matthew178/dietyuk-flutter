@@ -234,19 +234,23 @@ class EditJadwalBeliState extends State<EditJadwalBeli> {
       'takaran': takaran.text
     };
     var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/tambahSpek"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-      getJadwal();
-      sesuaikanJadwal(waktu, hari);
-      deskripsi.text = "";
-      takaran.text = "";
-      Fluttertoast.showToast(msg: "Berhasil tambah jadwal!");
-    }).catchError((err) {
-      print(err);
-    });
+    if (this.id == "" || deskripsi.text == "" || takaran.text == "") {
+      Fluttertoast.showToast(msg: "Inputan tidak boleh kosong");
+    } else {
+      http
+          .post(Uri.parse(session.ipnumber + "/tambahSpek"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        print(res.body);
+        getJadwal();
+        sesuaikanJadwal(waktu, hari);
+        deskripsi.text = "";
+        takaran.text = "";
+        Fluttertoast.showToast(msg: "Berhasil tambah jadwal!");
+      }).catchError((err) {
+        print(err);
+      });
+    }
   }
 
   @override

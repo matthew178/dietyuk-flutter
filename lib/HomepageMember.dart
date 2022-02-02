@@ -294,25 +294,29 @@ class HomePageMemberState extends State<HomePageMember> {
                             ),
                           ),
                         ),
-                        Card(
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset(
-                                "assets/images/report.png",
-                                height: 128,
+                        GestureDetector(
+                            onTap: () {
+                              Fluttertoast.showToast(msg: "Laporan");
+                            },
+                            child: Card(
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Image.asset(
+                                    "assets/images/report.png",
+                                    height: 128,
+                                  ),
+                                  SizedBox(height: 3),
+                                  Text(
+                                    "Laporan",
+                                    style: session.cardStyle,
+                                  )
+                                ],
                               ),
-                              SizedBox(height: 3),
-                              Text(
-                                "Laporan",
-                                style: session.cardStyle,
-                              )
-                            ],
-                          ),
-                        )
+                            ))
                       ],
                     ),
                   )

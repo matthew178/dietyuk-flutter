@@ -204,7 +204,7 @@ class DetailPaketState extends State<DetailPaket> {
                             ],
                           ),
                         ),
-                  int.parse(paketsekarang.harga.toString()) > 1000
+                  int.parse(paketsekarang.harga.toString()) > 999
                       ? Container(
                           child: Row(
                             children: [
@@ -236,8 +236,10 @@ class DetailPaketState extends State<DetailPaket> {
                           ),
                         ),
                   Container(
-                    child: Text("-----------------------------"),
-                  )
+                      // child: Text("-----------------------------"),
+                      child: Divider(
+                    color: Colors.black,
+                  ))
                 ],
               )),
             ),
@@ -506,7 +508,7 @@ class DetailPaketState extends State<DetailPaket> {
                       child: ListView(
                         children: [
                           Container(
-                            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
                             child: Text(
                               "Deskripsi : ",
                               // paketsekarang.deskripsi,
@@ -517,7 +519,7 @@ class DetailPaketState extends State<DetailPaket> {
                             ),
                           ),
                           Container(
-                            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
                             child: Text(
                               // "Deskripsi : " + paketsekarang.deskripsi,
                               paketsekarang.deskripsi,
@@ -585,7 +587,7 @@ class DetailPaketState extends State<DetailPaket> {
                           // ),
                           SizedBox(height: 15),
                           Container(
-                              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
                               child: SizedBox(
                                 height: 190,
                                 child: new ListView.builder(
@@ -620,7 +622,7 @@ class DetailPaketState extends State<DetailPaket> {
                       child: ListView(
                         children: [
                           Container(
-                            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
                             child: Text(
                               "Testimoni : ",
                               // paketsekarang.deskripsi,
@@ -631,7 +633,7 @@ class DetailPaketState extends State<DetailPaket> {
                             ),
                           ),
                           Container(
-                            padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                            padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
                             child: Text(
                               // "Deskripsi : " + paketsekarang.deskripsi,
                               // paketsekarang.deskripsi,

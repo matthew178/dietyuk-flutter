@@ -35,6 +35,7 @@ class DaftarpaketkonsultanState extends State<Daftarpaketkonsultan> {
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
       var data = json.decode(res.body);
+      print(data);
       data = data[0]['paket'];
       for (int i = 0; i < data.length; i++) {
         ClassPaket databaru = ClassPaket(
@@ -103,7 +104,7 @@ class DaftarpaketkonsultanState extends State<Daftarpaketkonsultan> {
           SizedBox(
             height: MediaQuery.of(context).size.height - 156,
             child: new ListView.builder(
-                itemCount: arrPaket.length == 0 ? 0 : arrPaket.length,
+                itemCount: arrPaket.length == 0 ? 1 : arrPaket.length,
                 itemBuilder: (context, index) {
                   if (arrPaket.length == 0) {
                     return Card(
@@ -185,78 +186,97 @@ class DaftarpaketkonsultanState extends State<Daftarpaketkonsultan> {
                                                                 FontWeight.bold,
                                                             color:
                                                                 Colors.green))
-                                                    : Text(
-                                                        "Status : Diblokir Admin",
-                                                        style: TextStyle(
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.red)),
+                                                    : arrPaket[index].status ==
+                                                            2.toString()
+                                                        ? Text("Status : Diblokir Admin",
+                                                            style: TextStyle(
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color:
+                                                                    Colors.red))
+                                                        : Text(
+                                                            "Status : Belum Siap",
+                                                            style: TextStyle(
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight.bold,
+                                                                color: Colors.grey[700])),
                                           ),
                                           Container(
-                                            child: arrPaket[index].status ==
-                                                        2.toString() ||
-                                                    arrPaket[index].status ==
-                                                        0.toString()
-                                                ? Container(
-                                                    child: RaisedButton(
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(2),
+                                              child: arrPaket[index].status ==
+                                                          2.toString() ||
+                                                      arrPaket[index].status ==
+                                                          0.toString()
+                                                  ? Container(
+                                                      child: RaisedButton(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(2),
+                                                        ),
+                                                        onPressed: () {
+                                                          arrPaket[index]
+                                                                      .status ==
+                                                                  2.toString()
+                                                              ? Fluttertoast
+                                                                  .showToast(
+                                                                      msg:
+                                                                          "Paket Diet Di Blokir Admin")
+                                                              : Fluttertoast
+                                                                  .showToast(
+                                                                      msg:
+                                                                          "ON");
+                                                        },
+                                                        color: Colors
+                                                            .lightBlueAccent,
+                                                        child: Text(
+                                                          'AKTIFKAN PAKET',
+                                                          style: TextStyle(
+                                                              fontSize: 15.0,
+                                                              color:
+                                                                  Colors.black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
                                                       ),
-                                                      onPressed: () {
-                                                        arrPaket[index]
-                                                                    .status ==
-                                                                2.toString()
-                                                            ? Fluttertoast
-                                                                .showToast(
-                                                                    msg:
-                                                                        "Paket Diet Di Blokir Admin")
-                                                            : Fluttertoast
-                                                                .showToast(
-                                                                    msg: "ON");
-                                                      },
-                                                      color: Colors
-                                                          .lightBlueAccent,
-                                                      child: Text(
-                                                        'AKTIFKAN PAKET',
-                                                        style: TextStyle(
-                                                            fontSize: 15.0,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Container(
-                                                    child: RaisedButton(
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(2),
-                                                      ),
-                                                      onPressed: () {
-                                                        Fluttertoast.showToast(
-                                                            msg: "OFF");
-                                                      },
-                                                      color: Colors
-                                                          .lightBlueAccent,
-                                                      child: Text(
-                                                        'OFF',
-                                                        style: TextStyle(
-                                                            fontSize: 15.0,
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ),
-                                                  ),
-                                          )
+                                                    )
+                                                  : arrPaket[index].status ==
+                                                          1.toString()
+                                                      ? Container(
+                                                          child: RaisedButton(
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          2),
+                                                            ),
+                                                            onPressed: () {
+                                                              Fluttertoast
+                                                                  .showToast(
+                                                                      msg:
+                                                                          "OFF");
+                                                            },
+                                                            color: Colors
+                                                                .lightBlueAccent,
+                                                            child: Text(
+                                                              'OFF',
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      15.0,
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : SizedBox())
                                         ],
                                       )
                                     ]),

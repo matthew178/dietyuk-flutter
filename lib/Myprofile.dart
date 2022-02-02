@@ -38,7 +38,7 @@ class MyprofileState extends State<Myprofile> {
         context: context,
         initialDate: tglawal,
         firstDate: DateTime.now(),
-        lastDate: DateTime(2021, 12));
+        lastDate: DateTime(2050, 12));
     //lastDate: DateTime( .year, date.month - 1, date.day));
     if (picked != null && picked != tglawal)
       setState(() {
@@ -52,7 +52,7 @@ class MyprofileState extends State<Myprofile> {
         context: context,
         initialDate: tglakhir,
         firstDate: DateTime.now(),
-        lastDate: DateTime(2021, 12));
+        lastDate: DateTime(2050, 12));
     //lastDate: DateTime( .year, date.month - 1, date.day));
     if (picked != null && picked != tglakhir)
       setState(() {
@@ -744,7 +744,7 @@ class MyprofileState extends State<Myprofile> {
                                     borderRadius: BorderRadius.circular(15)),
                                 color: Colors.white,
                                 onPressed: () {
-                                  Fluttertoast.showToast(msg: "Dompet saya");
+                                  Navigator.pushNamed(context, "/saldo");
                                 },
                                 child: Row(
                                   children: [

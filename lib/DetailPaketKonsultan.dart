@@ -80,16 +80,25 @@ class DetailPaketKonsultanState extends State<DetailPaketKonsultan> {
       'id': id
     };
     var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/updatepaket"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-      Fluttertoast.showToast(msg: "Berhasil Update Paket");
-      Navigator.pushNamed(context, "/konsultan");
-    }).catchError((err) {
-      print(err);
-    });
+    if (nama.text == "" ||
+        deskripsi.text == "" ||
+        estimasi.text == "" ||
+        harga.text == "" ||
+        durasi.text == "" ||
+        id == "") {
+      Fluttertoast.showToast(msg: "Inputan tidak boleh kosong");
+    } else {
+      http
+          .post(Uri.parse(session.ipnumber + "/updatepaket"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        print(res.body);
+        Fluttertoast.showToast(msg: "Berhasil Update Paket");
+        Navigator.pushNamed(context, "/konsultan");
+      }).catchError((err) {
+        print(err);
+      });
+    }
 
     return "";
   }

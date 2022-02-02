@@ -142,30 +142,35 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
         .post(Uri.parse(session.ipnumber + "/cariInformasi"),
             headers: {"Content-Type": "application/json"}, body: parameter)
         .then((res) {
+      print("sebelum : " + res.body);
       var data = json.decode(res.body);
-      print(data);
+      print("sesudah " + data);
       data = json.decode(data);
-      data = data['foods']['food'];
-      var kalori = "";
-      var arrtemp = [];
-      var node = [];
-      var node1 = [];
-      var node2 = [];
-      for (int i = 0; i < data.length; i++) {
-        arrtemp = data[i]['food_description'].toString().split(" | ");
-        node = arrtemp[0].toString().split("-");
-        node1 = node[1].toString().split(":");
-        node2 = node1[1].toString().split(" ");
-        tempMakanan = ClassMakanan(
-            data[i]['brand_name'].toString(),
-            data[i]['food_name'].toString(),
-            data[i]['food_description'].toString(),
-            data[i]['food_url'].toString(),
-            node2[1].toString());
-        arrTemp.add(tempMakanan);
+      if (data['foods']['total_results'] != "0") {
+        data = data['foods']['food'];
+        var kalori = "";
+        var arrtemp = [];
+        var node = [];
+        var node1 = [];
+        var node2 = [];
+        for (int i = 0; i < data.length; i++) {
+          arrtemp = data[i]['food_description'].toString().split(" | ");
+          node = arrtemp[0].toString().split("-");
+          node1 = node[1].toString().split(":");
+          node2 = node1[1].toString().split(" ");
+          tempMakanan = ClassMakanan(
+              data[i]['brand_name'].toString(),
+              data[i]['food_name'].toString(),
+              data[i]['food_description'].toString(),
+              data[i]['food_url'].toString(),
+              node2[1].toString());
+          arrTemp.add(tempMakanan);
+        }
+        setState(() => this.arrMakanan = arrTemp);
+        print(arrMakanan.length.toString() + " makanan");
+      } else {
+        Fluttertoast.showToast(msg: "Makanan tidak ditemukan");
       }
-      setState(() => this.arrMakanan = arrTemp);
-      print(arrMakanan.length.toString() + " makanan");
       return arrTemp;
     }).catchError((err) {
       print(err);
@@ -265,19 +270,23 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
       'takaran': takaran.text
     };
     var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/tambahjadwal"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      print(res.body);
-      getJadwal();
-      sesuaikanJadwal(waktu, hari);
-      deskripsi.text = "";
-      takaran.text = "";
-      Fluttertoast.showToast(msg: "Berhasil tambah jadwal!");
-    }).catchError((err) {
-      print(err);
-    });
+    if (id == "" || deskripsi.text == "" || takaran.text == "") {
+      Fluttertoast.showToast(msg: "Inputan tidak boleh kosong");
+    } else {
+      http
+          .post(Uri.parse(session.ipnumber + "/tambahjadwal"),
+              headers: {"Content-Type": "application/json"}, body: parameter)
+          .then((res) {
+        print(res.body);
+        getJadwal();
+        sesuaikanJadwal(waktu, hari);
+        deskripsi.text = "";
+        takaran.text = "";
+        Fluttertoast.showToast(msg: "Berhasil tambah jadwal!");
+      }).catchError((err) {
+        print(err);
+      });
+    }
   }
 
   @override
@@ -507,7 +516,7 @@ class EditJadwalPaketState extends State<EditJadwalPaket> {
                               decoration:
                                   InputDecoration(labelText: "Cari Makanan"))
                       // : DropdownButton<ClassProduk>(
-                      //     style: Theme.of(context).textTheme.title,
+                      //     // style: Theme.of(context).textTheme.title,
                       //     hint: Text("Daftar Produk"),
                       //     value: produkyangdipilih,
                       //     onChanged: (ClassProduk Value) {

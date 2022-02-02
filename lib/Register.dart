@@ -40,26 +40,56 @@ class RegisterState extends State<Register> {
       'jk': jk
     };
     var parameter = json.encode(paramData);
-    if (myPassword.text == confirmPassword.text) {
-      http
-          .post(Uri.parse(session.ipnumber + "/register"),
-              headers: {"Content-Type": "application/json"}, body: parameter)
-          .then((res) {
-        print(res.body);
-        var data = json.decode(res.body);
-        data = data[0]['status'];
-        if (data.toString() == "sukses") {
-          Fluttertoast.showToast(
-              msg: "Berhasil daftar. Silahkan cek email anda");
-          Navigator.pushNamed(context, '/');
+    if (myUsername.text == "" ||
+        myPassword.text == "" ||
+        confirmPassword.text == "" ||
+        myEmail.text == "" ||
+        myNumber.text == "") {
+      Fluttertoast.showToast(msg: "Inputan tidak boleh kosong");
+    } else {
+      if (myPassword.text.length < 8) {
+        Fluttertoast.showToast(msg: "Panjang password minimal 8 karakter");
+      } else if (myNumber.text.length < 10 && myNumber.text.length > 12) {
+        Fluttertoast.showToast(msg: "Nomor HP tidak valid");
+      } else {
+        if (myPassword.text == confirmPassword.text) {
+          http
+              .post(Uri.parse(session.ipnumber + "/register"),
+                  headers: {"Content-Type": "application/json"},
+                  body: parameter)
+              .then((res) {
+            print(res.body);
+            var data = json.decode(res.body);
+            data = data[0]['status'];
+            if (data.toString() == "sukses") {
+              if (status != true) {
+                Map paramData = {'email': myEmail.text};
+                var parameter = json.encode(paramData);
+                http
+                    .post(Uri.parse(session.ipnumber + "/kirimEmailAktivasi"),
+                        headers: {"Content-Type": "application/json"},
+                        body: parameter)
+                    .then((res) {
+                  print(res.body);
+                  Fluttertoast.showToast(
+                      msg: "Berhasil daftar. Silahkan cek email anda");
+                  Navigator.pushNamed(context, '/');
+                }).catchError((err) {
+                  print(err);
+                });
+              }
+            } else {
+              Fluttertoast.showToast(
+                  msg:
+                      "Email/Username sudah terdaftar. Silahkan masuk dengan email tersebut");
+            }
+          }).catchError((err) {
+            print(err);
+          });
         } else {
-          Fluttertoast.showToast(
-              msg:
-                  "Email sudah terdaftar. Silahkan masuk dengan email tersebut");
+          Fluttertoast.showToast(msg: "Password tidak sama");
         }
-      }).catchError((err) {
-        print(err);
-      });
+      }
     }
     return "";
   }
@@ -358,6 +388,7 @@ class RegisterState extends State<Register> {
                               child: Center(
                                 child: TextField(
                                   controller: myPassword,
+                                  obscureText: true,
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       prefixIcon: Padding(
@@ -384,6 +415,7 @@ class RegisterState extends State<Register> {
                               child: Center(
                                 child: TextField(
                                   controller: confirmPassword,
+                                  obscureText: true,
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       prefixIcon: Padding(
