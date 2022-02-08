@@ -7,7 +7,7 @@ import 'ClassAlamat.dart';
 import 'Kota.dart';
 import 'Provinsi.dart';
 
-String ipnumber = "http://192.168.1.12/dietyuk/public";
+String ipnumber = "https://dieyukyuk.com/public";
 int userlogin = 0;
 String role = "";
 int berat = 0;
