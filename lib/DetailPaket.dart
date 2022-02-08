@@ -1,3 +1,5 @@
+import 'package:dietyukapp/ClassReview.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -26,8 +28,9 @@ class DetailPaketState extends State<DetailPaket> {
   String id, konsultan;
   ClassPaket paketsekarang = new ClassPaket("id", "estimasi", "0", "durasi",
       "status", "", "konsultan", "namapaket1", "deskripsi", "default.jpg");
-  List<ClassJadwal> arrJadwal = new List();
-  List<ClassJadwal> allJadwal = new List();
+  List<ClassJadwal> arrJadwal = [];
+  List<ClassReview> arrReview = [];
+  List<ClassJadwal> allJadwal = [];
   NumberFormat frmt = new NumberFormat(',000');
   int hari = 1;
   int mode = 0;
@@ -60,6 +63,7 @@ class DetailPaketState extends State<DetailPaket> {
     getPaket();
     getJadwal();
     getProfile();
+    getReview();
   }
 
   // Future<void> evtSebelum() async {
@@ -87,6 +91,55 @@ class DetailPaketState extends State<DetailPaket> {
   //   }
   //   sesuaikanJadwal(hari);
   // }
+
+  Widget cetakbintang(x, y) {
+    if (x <= y) {
+      return Image.asset("assets/images/bfull.png",
+          width: 15, height: 15, fit: BoxFit.cover);
+    } else if (x > y && x < y + 1) {
+      return Image.asset("assets/images/bstengah.png",
+          width: 15, height: 15, fit: BoxFit.cover);
+    } else {
+      return Image.asset("assets/images/bkosong.png",
+          width: 15, height: 15, fit: BoxFit.cover);
+    }
+  }
+
+  Future<List<ClassReview>> getReview() async {
+    List<ClassReview> arrTemp = [];
+    Map paramData = {'id': this.id};
+    var parameter = json.encode(paramData);
+    http
+        .post(Uri.parse(session.ipnumber + "/getreviewpaket"),
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      print(res.body);
+      var data = json.decode(res.body);
+      data = data[0]['review'];
+
+      for (int i = 0; i < data.length; i++) {
+        ClassReview review = new ClassReview(
+            data[i]['id'].toString(),
+            data[i]['idbeli'].toString(),
+            data[i]['konsultan'].toString(),
+            data[i]['paket'].toString(),
+            data[i]['ratingkonsultan'].toString(),
+            data[i]['ratingpaket'].toString(),
+            data[i]['review_konsultan'].toString(),
+            data[i]['review_paket'].toString());
+        review.namauser = data[i]['username'].toString();
+        arrTemp.add(review);
+      }
+      setState(() {
+        arrReview = arrTemp;
+      });
+      print("panjang arr review : " + arrReview.length.toString());
+    }).catchError((err) {
+      print(err);
+    });
+
+    return arrTemp;
+  }
 
   Future<ClassUser> getProfile() async {
     ClassUser userlog = new ClassUser(
@@ -494,7 +547,7 @@ class DetailPaketState extends State<DetailPaket> {
                       ),
                       Tab(
                         // icon: Icon(Icons.list_alt),
-                        text: "Testimoni",
+                        text: "Review",
                       ),
                     ],
                   ),
@@ -510,7 +563,7 @@ class DetailPaketState extends State<DetailPaket> {
                           Container(
                             padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
                             child: Text(
-                              "Deskripsi : ",
+                              "Deskripsi Paket : ",
                               // paketsekarang.deskripsi,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -622,28 +675,121 @@ class DetailPaketState extends State<DetailPaket> {
                       child: ListView(
                         children: [
                           Container(
-                            padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
-                            child: Text(
-                              "Testimoni : ",
-                              // paketsekarang.deskripsi,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  fontFamily: "Biryani"),
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
-                            child: Text(
-                              // "Deskripsi : " + paketsekarang.deskripsi,
-                              // paketsekarang.deskripsi,
-                              "ini harusnya ambil dari db review",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  fontFamily: "Biryani"),
-                            ),
-                          ),
+                              padding: EdgeInsets.fromLTRB(10, 15, 10, 10),
+                              child: SizedBox(
+                                  height: 200,
+                                  width: 150,
+                                  child: new ListView.builder(
+                                      itemCount: arrReview.length == 0
+                                          ? 1
+                                          : arrReview.length,
+                                      itemBuilder: (context, index) {
+                                        if (arrReview.length == 0) {
+                                          return Image.asset(
+                                              "assets/images/nodata.png");
+                                        } else {
+                                          return Card(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            10, 10, 10, 10),
+                                                    child: Image.asset(
+                                                      "assets/images/avatar.png",
+                                                      height: 75,
+                                                      width: 75,
+                                                    )),
+                                                Container(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Container(
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(20, 10,
+                                                                  10, 0),
+                                                          child: Text(
+                                                            arrReview[index]
+                                                                .namauser,
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          )),
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                20, 10, 10, 0),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            cetakbintang(
+                                                                1,
+                                                                double.parse(
+                                                                    arrReview[
+                                                                            index]
+                                                                        .rtpaket)),
+                                                            cetakbintang(
+                                                                2,
+                                                                double.parse(
+                                                                    arrReview[
+                                                                            index]
+                                                                        .rtpaket)),
+                                                            cetakbintang(
+                                                                3,
+                                                                double.parse(
+                                                                    arrReview[
+                                                                            index]
+                                                                        .rtpaket)),
+                                                            cetakbintang(
+                                                                4,
+                                                                double.parse(
+                                                                    arrReview[
+                                                                            index]
+                                                                        .rtpaket)),
+                                                            cetakbintang(
+                                                                5,
+                                                                double.parse(
+                                                                    arrReview[
+                                                                            index]
+                                                                        .rtpaket)),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                20, 10, 10, 10),
+                                                        child: Text(
+                                                            '"' +
+                                                                arrReview[index]
+                                                                    .rvpaket +
+                                                                '"',
+                                                            style: TextStyle(
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }
+                                      }))),
                         ],
                       ),
                     ),

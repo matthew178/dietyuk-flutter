@@ -256,7 +256,7 @@ class LoginState extends State<Login> {
                                 color: kWhite,
                               ),
                             ),
-                            hintText: "Nama Pengguna",
+                            hintText: "Username/email",
                             hintStyle: kBodyText),
                         style: kBodyText,
                         keyboardType: TextInputType.text,

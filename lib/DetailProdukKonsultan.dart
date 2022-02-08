@@ -81,8 +81,7 @@ class DetailProdukKonsultanState extends State<DetailProdukKonsultan> {
 
     if (_image != null) {
       base64Image = base64Encode(File(_image.path).readAsBytesSync());
-      // base64Image = base64Encode(_image.readAsBytesSync()); //mimage
-      namaFile = _image.path.split("/").last + ".png"; //mfile
+      namaFile = _image.path.split("/").last + ".png";
       print("not null");
     } else {
       print("image is null");

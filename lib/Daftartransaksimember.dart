@@ -110,6 +110,27 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
         });
   }
 
+  void submitRatingReview(String idbeli, paket, ratingpaket, ratingkonsul,
+      revpaket, revkonsul) async {
+    Map paramData = {
+      'idbeli': idbeli,
+      'paket': paket,
+      'ratingpaket': ratingpaket,
+      'ratingkonsultan': ratingkonsul,
+      'reviewpaket': revpaket,
+      'reviewkonsultan': revkonsul
+    };
+    var parameter = json.encode(paramData);
+    http
+        .post(Uri.parse(session.ipnumber + '/kirimRating'),
+            headers: {"Content-Type": "application/json"}, body: parameter)
+        .then((res) {
+      Fluttertoast.showToast(msg: "Berhasil kirim rating");
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
   Future<List<Transaksibelipaket>> getTransaksiBelumSelesai() async {
     List<Transaksibelipaket> arrTrans = new List();
     Map paramData = {'user': session.userlogin};
@@ -144,26 +165,26 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
     });
   }
 
-  void kirimRating(String paket) async {
-    Map paramData = {
-      'user': session.userlogin,
-      'paket': paket,
-      'ratingkonsultan': ratingkonsultan,
-      'ratingpaket': ratingpaket,
-      'reviewpaket': reviewpaket.text,
-      'reviewkonsultan': reviewkonsultan.text
-    };
-    var parameter = json.encode(paramData);
-    http
-        .post(Uri.parse(session.ipnumber + "/kirimRating"),
-            headers: {"Content-Type": "application/json"}, body: parameter)
-        .then((res) {
-      var data = json.decode(res.body);
-      data = data[0]['transaksi'];
-    }).catchError((err) {
-      print(err);
-    });
-  }
+  // void kirimRating(String paket) async {
+  //   Map paramData = {
+  //     'user': session.userlogin,
+  //     'paket': paket,
+  //     'ratingkonsultan': ratingkonsultan,
+  //     'ratingpaket': ratingpaket,
+  //     'reviewpaket': reviewpaket.text,
+  //     'reviewkonsultan': reviewkonsultan.text
+  //   };
+  //   var parameter = json.encode(paramData);
+  //   http
+  //       .post(Uri.parse(session.ipnumber + "/kirimRating"),
+  //           headers: {"Content-Type": "application/json"}, body: parameter)
+  //       .then((res) {
+  //     var data = json.decode(res.body);
+  //     data = data[0]['transaksi'];
+  //   }).catchError((err) {
+  //     print(err);
+  //   });
+  // }
 
   // void ratingReview(String paket) {
   //   AlertDialog dialog = new AlertDialog(
@@ -306,7 +327,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
   //       });
   // }
 
-  void ratingReview(String paket) {
+  void ratingReview(String paket, idbeli) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -401,7 +422,7 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                             SizedBox(height: 15),
                             Container(
                                 child: Center(
-                                    child: Text("Review untuk Konsultan",
+                                    child: Text("Review untuk Paket Diet",
                                         style: TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.bold)))),
@@ -422,10 +443,18 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                       Container(
                         child: new RaisedButton(
                           onPressed: () {
-                            kirimRating(paket);
+                            // kirimRating(paket);
                             Navigator.of(context, rootNavigator: true)
                                 .pop(true);
                             setState(() {
+                              submitRatingReview(
+                                  idbeli,
+                                  paket,
+                                  ratingpaket,
+                                  ratingkonsultan,
+                                  reviewpaket.text,
+                                  reviewkonsultan.text);
+                              getTransaksiSelesai();
                               ratingpaket = 0;
                               ratingkonsultan = 0;
                               reviewpaket.text = "";
@@ -1053,7 +1082,8 @@ class DaftartransaksimemberState extends State<Daftartransaksimember> {
                                             msg: selesai[index]
                                                 .status
                                                 .toString())
-                                        : ratingReview(selesai[index].idpaket);
+                                        : ratingReview(selesai[index].idpaket,
+                                            selesai[index].id);
                                   },
                                   child: selesai[index].status == "2"
                                       // ? Card(

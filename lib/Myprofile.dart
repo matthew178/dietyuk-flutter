@@ -546,12 +546,33 @@ class MyprofileState extends State<Myprofile> {
                                   child: Column(
                                     children: [
                                       SizedBox(height: 80),
-                                      Text(
-                                        userprofile.nama,
-                                        style: TextStyle(
-                                            color:
-                                                Color.fromRGBO(128, 101, 22, 1),
-                                            fontSize: 20),
+                                      Container(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              child: Text(
+                                                userprofile.nama,
+                                                style: TextStyle(
+                                                    color: Color.fromRGBO(
+                                                        128, 101, 22, 1),
+                                                    fontSize: 20),
+                                              ),
+                                            ),
+                                            // Container(
+                                            //   child: IconButton(
+                                            //     onPressed: () {
+                                            //       Navigator.pushNamed(
+                                            //           context, "/editprofile");
+                                            //     },
+                                            //     icon: Icon(AntDesign.edit,
+                                            //         size: 20,
+                                            //         color: Colors.yellow[900]),
+                                            //   ),
+                                            // ),
+                                          ],
+                                        ),
                                       ),
                                       Container(
                                         padding:
@@ -687,8 +708,8 @@ class MyprofileState extends State<Myprofile> {
                                           //                 color: Colors.white)),
                                           //         color: Color(0xFFF5F6F9),
                                           //         onPressed: () {
-                                          //           // Navigator.pushNamed(context,
-                                          //           //     "/editprofile");
+                                          //           Navigator.pushNamed(context,
+                                          //               "/editprofile");
                                           //         },
                                           //         child: Icon(
                                           //           AntDesign.edit,

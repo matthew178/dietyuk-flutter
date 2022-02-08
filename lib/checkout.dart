@@ -9,7 +9,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'shoppingcart.dart';
 import 'ProdukDetail.dart';
 import 'session.dart' as session;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,8 +21,8 @@ class Checkout extends StatefulWidget {
 class CheckoutState extends State<Checkout> {
   NumberFormat frmt = new NumberFormat(",000");
   // List<ClassProduk> arrProduk = new List();
-  List<shoppingcart> cartshop = new List();
-  List<ClassKurir> arrKurir = new List();
+  List<shoppingcart> cartshop = [];
+  List<ClassKurir> arrKurir = [];
   int jumlah = 0;
   int total = 0;
   int berat = 0;
@@ -67,7 +66,7 @@ class CheckoutState extends State<Checkout> {
   Future<List<ClassKurir>> getOngkir() async {
     kurir = null;
     setState(() => grandtotal = total);
-    List<ClassKurir> arrTemp = new List();
+    List<ClassKurir> arrTemp = [];
     ClassKurir kurirBaru = new ClassKurir(
         "kurir", 'service', "deskripsi", 0, "assets/images/jne.png");
     Map paramData = {
@@ -146,11 +145,11 @@ class CheckoutState extends State<Checkout> {
         setState(() => this.arrKurir = arrTemp);
         print(arrKurir.length.toString() + " kurir");
         print((berat / 1000).ceil().toString() + " kg");
-        return arrTemp;
       }).catchError((err) {
         print(err);
       });
     }
+    return arrTemp;
   }
 
   void refreshAlamat() {
@@ -259,7 +258,7 @@ class CheckoutState extends State<Checkout> {
   }
 
   Future<List<ClassProduk>> getArrProduk() async {
-    List<ClassProduk> tempProduk = new List();
+    List<ClassProduk> tempProduk = [];
     Map paramData = {'id': 'all'};
     var parameter = json.encode(paramData);
     http
@@ -298,10 +297,10 @@ class CheckoutState extends State<Checkout> {
       }
       // setState(() => this.arrProduk = tempProduk);
       hitungTotal();
-      return tempProduk;
     }).catchError((err) {
       print(err);
     });
+    return tempProduk;
   }
 
   Future<ClassUser> getProfile() async {
@@ -335,13 +334,13 @@ class CheckoutState extends State<Checkout> {
           "",
           "");
       setState(() => this.userprofile = userlog);
-      return userlog;
     }).catchError((err) {
       print(err);
     });
+    return userlog;
   }
 
-  Future<List<ClassProduk>> checkOut() async {
+  void checkOut() async {
     String data = jsonEncode(session.Cart);
     Map paramData = {
       'data': data,
@@ -694,9 +693,9 @@ class CheckoutState extends State<Checkout> {
                       // style: Theme.of(context).textTheme.title,
                       hint: Text("Pilih Kurir"),
                       value: kurir,
-                      onChanged: (ClassKurir Value) {
+                      onChanged: (ClassKurir value) {
                         setState(() {
-                          kurir = Value;
+                          kurir = value;
                           hitungTotal();
                         });
                       },

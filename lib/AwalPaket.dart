@@ -1,6 +1,4 @@
-import 'ClassPerkembangan.dart';
 import 'JadwalHarian.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'ClassAwalPaket.dart';
 import 'session.dart' as session;
@@ -9,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'ClassPaket.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'ClassDetailPaket.dart';
 import 'dart:math';
 
 class AwalPaket extends StatefulWidget {
@@ -31,8 +28,8 @@ class AwalPaketState extends State<AwalPaket> {
   // List<DetailBeli> detail = new List();
   // List<DetailBeli> tempDetail = new List();
   // List<ClassPerkembangan> arrLaporan = new List();
-  List<ClassAwalPaket> arrTemp = new List();
-  List<ClassAwalPaket> arrAwal = new List();
+  List<ClassAwalPaket> arrTemp = [];
+  List<ClassAwalPaket> arrAwal = [];
   TextEditingController timbang = new TextEditingController();
   int durasi = 5;
   int tmp = 1;
@@ -98,17 +95,16 @@ class AwalPaketState extends State<AwalPaket> {
       arrAwal.sort((a, b) => int.parse(a.hari).compareTo(int.parse(b.hari)));
 
       sesuaikanHari(1);
-
-      return arrAwal;
     }).catchError((err) {
       print(err);
     });
+    return arrAwal;
   }
 
   void sesuaikanHari(int week) {
-    List<ClassAwalPaket> tempDetail = new List();
-    ClassAwalPaket databaru =
-        new ClassAwalPaket("id", "id_paket", "hari", "waktu", "");
+    List<ClassAwalPaket> tempDetail = [];
+    // ClassAwalPaket databaru =
+    //     new ClassAwalPaket("id", "id_paket", "hari", "waktu", "");
     for (int i = 0; i < arrAwal.length; i++) {
       if (arrAwal[i].week == week.toString()) {
         tempDetail.add(arrAwal[i]);
@@ -155,14 +151,13 @@ class AwalPaketState extends State<AwalPaket> {
         durasi = int.parse(data[0]['durasi'].toString()) ~/ 7 + 1;
       }
       setState(() => this.paketsekarang = arrPaket);
-      return arrPaket;
     }).catchError((err) {
       print(err);
     });
+    return arrPaket;
   }
 
-  Future<ClassPerkembangan> tambahPerkembangan(
-      String id, brt, stts, idbeli, harike) async {
+  void tambahPerkembangan(String id, brt, stts, idbeli, harike) async {
     Map paramData = {
       'id': id,
       'berat': brt,

@@ -1,7 +1,5 @@
-import 'ClassPerkembangan.dart';
 import 'EditJadwalBeli.dart';
 import 'JadwalHarian.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'ClassAwalPaket.dart';
 import 'session.dart' as session;
@@ -10,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'ClassPaket.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'ClassDetailPaket.dart';
 import 'dart:math';
 
 class AwalPaketKonsultan extends StatefulWidget {
@@ -33,8 +30,8 @@ class AwalPaketKonsultanState extends State<AwalPaketKonsultan> {
   // List<DetailBeli> detail = new List();
   // List<DetailBeli> tempDetail = new List();
   // List<ClassPerkembangan> arrLaporan = new List();
-  List<ClassAwalPaket> arrTemp = new List();
-  List<ClassAwalPaket> arrAwal = new List();
+  List<ClassAwalPaket> arrTemp = [];
+  List<ClassAwalPaket> arrAwal = [];
   TextEditingController timbang = new TextEditingController();
   int durasi = 5;
   int tmp = 1;
@@ -97,17 +94,16 @@ class AwalPaketKonsultanState extends State<AwalPaketKonsultan> {
       arrAwal.sort((a, b) => int.parse(a.hari).compareTo(int.parse(b.hari)));
 
       sesuaikanHari(1);
-
-      return arrAwal;
     }).catchError((err) {
       print(err);
     });
+    return arrAwal;
   }
 
   void sesuaikanHari(int week) {
-    List<ClassAwalPaket> tempDetail = new List();
-    ClassAwalPaket databaru =
-        new ClassAwalPaket("id", "id_paket", "hari", "waktu", "");
+    List<ClassAwalPaket> tempDetail = [];
+    // ClassAwalPaket databaru =
+    //     new ClassAwalPaket("id", "id_paket", "hari", "waktu", "");
     for (int i = 0; i < arrAwal.length; i++) {
       if (arrAwal[i].week == week.toString()) {
         tempDetail.add(arrAwal[i]);
@@ -153,10 +149,10 @@ class AwalPaketKonsultanState extends State<AwalPaketKonsultan> {
         durasi = int.parse(data[0]['durasi'].toString()) ~/ 7 + 1;
       }
       setState(() => this.paketsekarang = arrPaket);
-      return arrPaket;
     }).catchError((err) {
       print(err);
     });
+    return arrPaket;
   }
 
   // Future<ClassPerkembangan> tambahPerkembangan(
@@ -267,11 +263,29 @@ class AwalPaketKonsultanState extends State<AwalPaketKonsultan> {
               ),
             ),
             Expanded(
-                flex: 1,
+                flex: 2,
                 child: Row(
                   children: [
-                    Expanded(flex: 2, child: SizedBox()),
                     Expanded(
+                        flex: 10,
+                        child: SizedBox(
+                          height: 500,
+                          child: Container(
+                              // padding: EdgeInsets.fromLTRB(100, 10, 100, 10),
+                              // margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              child: Container(
+                                child: Column(
+                                  children: [Text("Nama : ")],
+                                ),
+                              )),
+                        )),
+                    Expanded(child: SizedBox(), flex: 1),
+                    Expanded(
+                      flex: 9,
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(2),
@@ -314,7 +328,7 @@ class AwalPaketKonsultanState extends State<AwalPaketKonsultan> {
                                         builder: (context) => JadwalHarian(
                                             week: week,
                                             idbeli: id,
-                                            hari: arrAwal[index].hari,
+                                            hari: arrTemp[index].hari,
                                             tipe: 2)))
                                 : arrTemp[index].keterangan == "3"
                                     ? Fluttertoast.showToast(

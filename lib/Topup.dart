@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'Topup2.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,6 +10,7 @@ import 'dart:convert';
 import 'ClassUser.dart';
 import 'ClassBank.dart';
 import 'package:intl/intl.dart';
+import 'ShowHtmlPage.dart';
 
 class Topup extends StatefulWidget {
   @override
@@ -94,6 +96,48 @@ class TopupState extends State<Topup> {
     });
   }
 
+  Future openXendit(double amount) async {
+    print("masuk open xendit");
+    var uname =
+        'xnd_development_tU93YGYMu0kc4YrPAipFA0OcAsR2TIvWhprXbRQWduq7Sj6QsvEJq28IMnYCO9x';
+    var pword = '';
+    var authn = 'Basic ' + base64Encode(utf8.encode('$uname:'));
+    print(uname);
+    print("-----------------------------------------------------------------");
+    print(authn);
+    var data = {
+      'external_id': "testing",
+      'payer_email': "testing@gmail.com",
+      'description': 'Top Up Rp. ' + amount.toString(),
+      'amount': amount.toString(),
+    };
+    var res = await http.post(Uri.parse("https://api.xendit.co/v2/invoices"),
+        headers: {'Authorization': authn}, body: data);
+    if (res.statusCode != 200)
+      throw Exception('post error: statusCode= ${res.statusCode}');
+    var resData = jsonDecode(res.body);
+    print(resData);
+    print("invoice url = " + resData["invoice_url"]);
+    /*
+    databaseReference.child("TopUp/${_userProfile.key}/${resData["id"]}").update({
+      'amount': amount,
+      'status': "PENDING",
+      'url': resData["invoice_url"],
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+    */
+    //launchWebViewExample(resData["invoice_url"].toString());
+    //updatesaldo();
+    String url = resData["invoice_url"].toString();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ShowHtmlPage(url: url),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,58 +175,59 @@ class TopupState extends State<Topup> {
               ),
             ),
             SizedBox(height: 30),
-            Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Container(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey, width: 1),
-                    borderRadius: BorderRadius.circular(15)),
-                child: SizedBox(
-                  height: 50,
-                  width: 200,
-                  child: DropdownButton<ClassBank>(
-                    // style: Theme.of(context).textTheme.title,
-                    hint: Text("Pilih Bank"),
-                    value: bankyangdipilih,
-                    onChanged: (ClassBank Value) {
-                      setState(() {
-                        bankyangdipilih = Value;
-                      });
-                    },
-                    items: arrBank.map((ClassBank bank) {
-                      return DropdownMenuItem<ClassBank>(
-                        value: bank,
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 5,
-                            ),
-                            bank.foto != ""
-                                ? SizedBox(
-                                    height: 50,
-                                    width: 50,
-                                    child: Image.asset(
-                                      bank.foto,
-                                      fit: BoxFit.contain,
-                                    ))
-                                : SizedBox(
-                                    height: 50,
-                                    width: 50,
-                                  ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            new Text(bank.nama)
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
-            ),
+            // Container(
+            //   padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            //   child: Container(
+            //     padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            //     width: MediaQuery.of(context).size.width,
+            //     decoration: BoxDecoration(
+            //         border: Border.all(color: Colors.grey, width: 1),
+            //         borderRadius: BorderRadius.circular(15)),
+            //     child: SizedBox(
+            //       height: 50,
+            //       width: 200,
+            //       child: DropdownButton<ClassBank>(
+            //         // style: Theme.of(context).textTheme.title,
+            //         hint: Text("Pilih Bank"),
+            //         value: bankyangdipilih,
+            //         onChanged: (ClassBank Value) {
+            //           setState(() {
+            //             bankyangdipilih = Value;
+            //           });
+            //         },
+            //         items: arrBank.map((ClassBank bank) {
+            //           return DropdownMenuItem<ClassBank>(
+            //             value: bank,
+            //             child: Row(
+            //               children: <Widget>[
+            //                 SizedBox(
+            //                   width: 5,
+            //                 ),
+            //                 bank.foto != ""
+            //                     ? SizedBox(
+            //                         height: 50,
+            //                         width: 50,
+            //                         child: Image.asset(
+            //                           bank.foto,
+            //                           fit: BoxFit.contain,
+            //                         ))
+            //                     : SizedBox(
+            //                         height: 50,
+            //                         width: 50,
+            //                       ),
+            //                 SizedBox(
+            //                   width: 10,
+            //                 ),
+            //                 new Text(bank.nama)
+            //               ],
+            //             ),
+            //           );
+            //         }).toList(),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+
             SizedBox(height: 30),
             Container(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -226,15 +271,17 @@ class TopupState extends State<Topup> {
                     color: session.kBlue),
                 child: FlatButton(
                   onPressed: () {
-                    if (nominaltopup.text != "" && bankyangdipilih.nama != "") {
+                    // if (nominaltopup.text != "" && bankyangdipilih.nama != "") {
+                    if (nominaltopup.text != "") {
                       if (int.parse(nominaltopup.text) >= 20000) {
                         // evtTopup();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Topup2(
-                                    bank: bankyangdipilih,
-                                    nominal: nominaltopup.text.toString())));
+                        openXendit(double.parse(nominaltopup.text.toString()));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => Topup2(
+                        //             bank: bankyangdipilih,
+                        //             nominal: nominaltopup.text.toString())));
                       } else {
                         Fluttertoast.showToast(
                             msg:

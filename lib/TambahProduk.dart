@@ -140,7 +140,7 @@ class TambahProdukState extends State<TambahProduk> {
         child: ListView(
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
               child: TextFormField(
                 controller: namaProduk,
                 keyboardType: TextInputType.text,
@@ -150,32 +150,34 @@ class TambahProdukState extends State<TambahProduk> {
                     value.isEmpty ? "Nama tidak boleh kosong" : null,
               ),
             ),
-            DropdownButton<ClassKategoriProduk>(
-              // style: Theme.of(context).textTheme.title,
-              hint: Text("Kategori Produk"),
-              value: kategori,
-              onChanged: (ClassKategoriProduk value) {
-                setState(() => {this.kategori = value});
-              },
-              items: arrKategori.map((ClassKategoriProduk kategori) {
-                return DropdownMenuItem<ClassKategoriProduk>(
-                  value: kategori,
-                  child: Row(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        kategori.namakategori,
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
-            ),
             Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
+                child: DropdownButton<ClassKategoriProduk>(
+                  // style: Theme.of(context).textTheme.title,
+                  hint: Text("Kategori Produk"),
+                  value: kategori,
+                  onChanged: (ClassKategoriProduk value) {
+                    setState(() => {this.kategori = value});
+                  },
+                  items: arrKategori.map((ClassKategoriProduk kategori) {
+                    return DropdownMenuItem<ClassKategoriProduk>(
+                      value: kategori,
+                      child: Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            kategori.namakategori,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                )),
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
               child: TextFormField(
                 controller: kemasanProduk,
                 keyboardType: TextInputType.text,
@@ -186,7 +188,7 @@ class TambahProdukState extends State<TambahProduk> {
               ),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
               child: TextFormField(
                 controller: beratProduk,
                 keyboardType: TextInputType.number,
@@ -197,7 +199,7 @@ class TambahProdukState extends State<TambahProduk> {
               ),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
               child: TextFormField(
                 controller: hargaProduk,
                 keyboardType: TextInputType.number,
@@ -208,7 +210,7 @@ class TambahProdukState extends State<TambahProduk> {
               ),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
               child: TextFormField(
                 controller: deskripsiProduk,
                 keyboardType: TextInputType.text,
@@ -221,7 +223,7 @@ class TambahProdukState extends State<TambahProduk> {
               ),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              padding: EdgeInsets.fromLTRB(20, 10, 10, 0),
               child: TextFormField(
                 controller: varianProduk,
                 keyboardType: TextInputType.text,
